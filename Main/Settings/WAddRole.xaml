@@ -1,0 +1,932 @@
+﻿<Window x:Class="GestionComerce.Main.Settings.WAddRole"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Configuration des Permissions" Height="700" Width="600"
+        Background="#F8FAFC" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" WindowStyle="None">
+
+    <Window.Resources>
+        <!-- Action Button Style -->
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Toggle Button Style -->
+        <Style x:Key="ToggleButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.9"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Small Toggle Button Style -->
+        <Style x:Key="SmallToggleButtonStyle" TargetType="Button" BasedOn="{StaticResource ToggleButtonStyle}">
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="FontSize" Value="10"/>
+        </Style>
+
+        <!-- Role Section Style -->
+        <Style x:Key="RoleSectionStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="BorderBrush" Value="#E5E7EB"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Input TextBox Style -->
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="CaretBrush" Value="#1F2937"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                        Margin="{TemplateBinding Padding}"
+                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#3B82F6"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" Value="#9CA3AF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern CheckBox Style -->
+        <Style x:Key="ModernCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="Padding" Value="8,0,0,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <StackPanel Orientation="Horizontal">
+                            <Border x:Name="CheckBorder"
+                                    Width="20" Height="20"
+                                    Background="White"
+                                    BorderBrush="#D1D5DB"
+                                    BorderThickness="2"
+                                    CornerRadius="4"
+                                    VerticalAlignment="Center">
+                                <Path x:Name="CheckPath"
+                                      Data="M 2 6 L 6 10 L 14 2"
+                                      Stroke="#3B82F6"
+                                      StrokeThickness="2.5"
+                                      Visibility="Collapsed"
+                                      Margin="2"/>
+                            </Border>
+                            <ContentPresenter Margin="{TemplateBinding Padding}"
+                                            VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CheckPath" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="CheckBorder" Property="Background" Value="#EFF6FF"/>
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#3B82F6"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CheckBorder" Property="BorderBrush" Value="#3B82F6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Close Button Style -->
+        <Style x:Key="CloseButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#9CA3AF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="6">
+                            <TextBlock Text="×"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      FontSize="20"
+                                      FontWeight="Bold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F3F4F6"/>
+                                <Setter Property="Foreground" Value="#EF4444"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="White" CornerRadius="16" Margin="0">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" Direction="270" ShadowDepth="10" BlurRadius="30" Opacity="0.15"/>
+        </Border.Effect>
+
+        <Grid Margin="32" x:Name="Container">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Close Button -->
+            <Button Name="CloseButton"
+                    Style="{StaticResource CloseButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,-8,-8,0"
+                    Click="CloseButton_Click"/>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                <TextBlock Text="Configuration des Permissions" 
+                          FontWeight="Bold" 
+                          FontSize="22" 
+                          Foreground="#1F2937"
+                          Margin="0,0,56,6" Width="480"/>
+                <TextBlock Text="Gérer les permissions par type d'utilisateur" 
+                          FontSize="13" 
+                          Foreground="#6B7280"/>
+            </StackPanel>
+
+            <!-- Global Toggle Buttons -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,16">
+                <Button x:Name="ToutActiverBtn" Content="Tout activer" 
+                        Style="{StaticResource ToggleButtonStyle}" 
+                        Background="#10B981" 
+                        Foreground="White"
+                        Margin="0,0,8,0" 
+                        Click="ToutActiverBtn_Click"/>
+                <Button x:Name="ToutDesactiverBtn" Content="Tout désactiver" 
+                        Style="{StaticResource ToggleButtonStyle}" 
+                        Background="#EF4444" 
+                        Foreground="White"
+                        Click="ToutDesactiverBtn_Click"/>
+            </StackPanel>
+
+            <!-- Role Name -->
+            <Border Grid.Row="2" Style="{StaticResource RoleSectionStyle}">
+                <StackPanel>
+                    <TextBlock Text="Nom du Rôle" 
+                              FontWeight="SemiBold" 
+                              FontSize="14" 
+                              Foreground="#374151" 
+                              Margin="0,0,0,10"/>
+                    <TextBox x:Name="RoleName" MaxLength="100"
+                            Style="{StaticResource InputTextBoxStyle}"
+                            Text=""/>
+                </StackPanel>
+            </Border>
+
+            <!-- Permissions -->
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Margin="0,0,0,16">
+                <StackPanel>
+
+                    <!-- Pages Access -->
+                    <Border x:Name="PagesSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Accès aux Pages" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverPages_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverPages_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ViewClientsPage" Content="Page Clients" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewFournisseurPage" Content="Page Fournisseurs" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewInventory" Content="Page Inventaire" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewVente" Content="Page Vente" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Client Permissions -->
+                    <Border x:Name="ClientSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Permissions Client" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverClient_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverClient_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="CreateClient" Content="Créer Client" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ModifyClient" Content="Modifier Client" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="DeleteClient" Content="Supprimer Client" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewClient" Content="Voir Client" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewOperationClient" Content="Voir Opérations" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="2" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="PayeClient" Content="Payer Client" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="2" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewCreditClient" Content="Voir Crédit Client" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="3" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Fournisseur Permissions -->
+                    <Border x:Name="FournisseurSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Permissions Fournisseur" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverFournisseur_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverFournisseur_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="CreateFournisseur" Content="Créer Fournisseur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ModifyFournisseur" Content="Modifier Fournisseur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="DeleteFournisseur" Content="Supprimer Fournisseur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewFournisseur" Content="Voir Fournisseur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewOperationFournisseur" Content="Voir Opérations" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="2" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="PayeFournisseur" Content="Payer Fournisseur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="2" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewCreditFournisseur" Content="Voir Crédit Fournisseur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="3" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Operations / Movements -->
+                    <Border x:Name="OperationsSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Opérations et Mouvements" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverOperations_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverOperations_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ReverseOperation" Content="Annuler Opération" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ReverseMouvment" Content="Annuler Mouvement" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewOperation" Content="Voir Opérations" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewMouvment" Content="Voir Mouvements" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Management & Settings -->
+                    <Border x:Name="ManagementSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Gestion et Paramètres" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverManagement_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverManagement_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ViewProjectManagment" Content="Voir Gestion Projets" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewSettings" Content="Voir Paramètres" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ModifyTicket" Content="Modifier Tickets" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Users & Roles -->
+                    <Border x:Name="UsersSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Utilisateurs et Rôles" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverUsers_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverUsers_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ViewUsers" Content="Voir Utilisateurs" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="AddUsers" Content="Ajouter Utilisateurs" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="EditUsers" Content="Modifier Utilisateurs" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="DeleteUsers" Content="Supprimer Utilisateurs" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewRoles" Content="Voir Rôles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="2" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="AddRoles" Content="Ajouter Rôles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="2" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="DeleteRoles" Content="Supprimer Rôles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="3" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Familly -->
+                    <Border x:Name="FamillySection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Familles" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverFamilly_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverFamilly_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ViewFamilly" Content="Voir Familles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="AddFamilly" Content="Ajouter Familles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="EditFamilly" Content="Modifier Familles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="DeleteFamilly" Content="Supprimer Familles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Articles -->
+                    <Border x:Name="ArticlesSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Articles" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverArticles_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverArticles_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ViewArticle" Content="Voir Articles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="AddArticle" Content="Ajouter Articles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="EditArticle" Content="Modifier Articles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="DeleteArticle" Content="Supprimer Articles" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Reports & Tickets -->
+                    <Border x:Name="ReportsSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Rapports et Tickets" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverReports_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverReports_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="Repport" Content="Voir Rapports" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="Ticket" Content="Voir Tickets" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ViewFacture" Content="Voir Factures" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Settlements -->
+                    <Border x:Name="SettlementsSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Règlements" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverSettlements_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverSettlements_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="SolderFournisseur" Content="Solder Fournisseur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="SolderClient" Content="Solder Client" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="CashClient" Content="Cash Client" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="CashFournisseur" Content="Cash Fournisseur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Invoice Settings -->
+                    <Border x:Name="InvoiceSettingsSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Paramètres Factures" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverInvoiceSettings_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverInvoiceSettings_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ViewFactureSettings" Content="Voir Paramètres" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ModifyFactureSettings" Content="Modifier Paramètres" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Payment Methods -->
+                    <Border x:Name="PaymentMethodsSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Méthodes de Paiement" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverPaymentMethods_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverPaymentMethods_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ViewPaymentMethod" Content="Voir Méthodes" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="AddPaymentMethod" Content="Ajouter Méthodes" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ModifyPaymentMethod" Content="Modifier Méthodes" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="DeletePaymentMethod" Content="Supprimer Méthodes" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- System Actions -->
+                    <Border x:Name="SystemActionsSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Actions Système" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverSystemActions_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverSystemActions_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="ViewApropos" Content="Voir À Propos" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="Logout" Content="Déconnexion" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="Exit" Content="Quitter Application" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="ShutDown" Content="Arrêter Système" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Footer Buttons -->
+            <Grid Grid.Row="4" Margin="0,16,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="12"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0" x:Name="AnnulerButton" Content="Annuler"
+                        Style="{StaticResource ActionButtonStyle}" 
+                        Background="#F3F4F6" 
+                        Foreground="#374151"
+                        Click="AnnulerButton_Click"/>
+
+                <Button Grid.Column="2" x:Name="AppliquerButton" Content="Appliquer"
+                        Style="{StaticResource ActionButtonStyle}" 
+                        Background="#3B82F6" 
+                        Foreground="White"
+                        Click="AppliquerButton_Click"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

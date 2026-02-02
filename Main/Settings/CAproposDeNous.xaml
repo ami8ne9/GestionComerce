@@ -1,0 +1,420 @@
+﻿<UserControl x:Class="GestionComerce.Main.Settings.CAproposDeNous"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GestionComerce.Main.Settings"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="#F8FAFC">
+
+    <UserControl.Resources>
+        <!-- Color Palette -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#3B82F6"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#8B5CF6"/>
+        <SolidColorBrush x:Key="SuccessBrush" Color="#10B981"/>
+        <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#E2E8F0"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#0F172A"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#64748B"/>
+        <SolidColorBrush x:Key="HoverBrush" Color="#F1F5F9"/>
+
+        <!-- Card Style -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="32"/>
+            <Setter Property="Margin" Value="0,0,0,24"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Title Style -->
+        <Style x:Key="TitleStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        </Style>
+
+        <!-- Subtitle Style -->
+        <Style x:Key="SubtitleStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+
+        <!-- Body Text Style -->
+        <Style x:Key="BodyTextStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+            <Setter Property="LineHeight" Value="24"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <!-- Contact Button Style -->
+        <Style x:Key="ContactButtonStyle" TargetType="Button">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,12,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="10" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Feature Card Style -->
+        <Style x:Key="FeatureCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource HoverBrush}"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,16,16"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="40,32">
+        <StackPanel MaxWidth="1000">
+
+            <!-- Header Section -->
+            <Border Style="{StaticResource CardStyle}" Background="#EEF2FF">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Logo Icon -->
+                        <Border Background="White" Padding="8"
+                                CornerRadius="8" 
+                                Height="70"
+                                Margin="0,0,24,0"
+                                Grid.Column="0"
+                                VerticalAlignment="Center">
+
+                            <Image Source="/Main/images/A.png" Stretch="Uniform"/>
+                        </Border>
+
+                        <!-- Company Name and Tagline -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="A&amp;A Software Solution" 
+                                       Style="{StaticResource TitleStyle}"
+                                       Foreground="{StaticResource PrimaryBrush}"/>
+                            <TextBlock Text="Votre partenaire technologique de confiance" 
+                                       FontSize="18"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- About Section -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Background="#DBEAFE" 
+                                CornerRadius="10" 
+                                Padding="10"
+                                Margin="0,0,12,0"
+                                Grid.Column="0">
+                            <TextBlock Text="ℹ️" FontSize="20"/>
+                        </Border>
+                        <TextBlock Text="À Propos de Notre Solution" 
+                                   Style="{StaticResource SubtitleStyle}"
+                                   VerticalAlignment="Center"
+                                   Margin="0"
+                                   Grid.Column="1"/>
+                    </Grid>
+
+                    <TextBlock Style="{StaticResource BodyTextStyle}" Margin="0,16,0,16">
+                        Bienvenue chez <Bold>A&amp;A Software Solution</Bold>, votre partenaire de confiance pour les solutions de gestion commerciale. 
+                        Notre système de point de vente (POS) est conçu pour simplifier et optimiser la gestion de votre commerce, 
+                        quelle que soit sa taille.
+                    </TextBlock>
+
+                    <TextBlock Style="{StaticResource BodyTextStyle}">
+                        Nous comprenons les défis quotidiens auxquels font face les commerçants modernes. C'est pourquoi nous avons 
+                        développé une solution complète, intuitive et performante qui vous permet de vous concentrer sur l'essentiel : 
+                        développer votre activité et satisfaire vos clients.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <!-- Features Section -->
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Background="#DCFCE7" 
+                                CornerRadius="10" 
+                                Padding="10"
+                                Margin="0,0,12,0"
+                                Grid.Column="0">
+                            <TextBlock Text="✨" FontSize="20"/>
+                        </Border>
+                        <TextBlock Text="Fonctionnalités Principales" 
+                                   Style="{StaticResource SubtitleStyle}"
+                                   VerticalAlignment="Center"
+                                   Margin="0"
+                                   Grid.Column="1"/>
+                    </Grid>
+
+                    <Grid Margin="0,16,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Feature 1 -->
+                        <Border Style="{StaticResource FeatureCardStyle}" Grid.Column="0" Grid.Row="0">
+                            <StackPanel>
+                                <TextBlock Text="📊 Gestion des Ventes" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="Traitement rapide des transactions avec une interface intuitive" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Feature 2 -->
+                        <Border Style="{StaticResource FeatureCardStyle}" Grid.Column="1" Grid.Row="0">
+                            <StackPanel>
+                                <TextBlock Text="📦 Gestion des Stocks" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="Suivi en temps réel de votre inventaire et alertes automatiques" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Feature 3 -->
+                        <Border Style="{StaticResource FeatureCardStyle}" Grid.Column="0" Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock Text="👥 Gestion des Clients" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="Base de données client complète et historique des achats" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Feature 4 -->
+                        <Border Style="{StaticResource FeatureCardStyle}" Grid.Column="1" Grid.Row="1">
+                            <StackPanel>
+                                <TextBlock Text="📄 Facturation Automatique" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="Création et impression de factures professionnelles en un clic" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Feature 5 -->
+                        <Border Style="{StaticResource FeatureCardStyle}" Grid.Column="0" Grid.Row="2">
+                            <StackPanel>
+                                <TextBlock Text="📈 Rapports Détaillés" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="Analyses approfondies pour prendre des décisions éclairées" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Feature 6 -->
+                        <Border Style="{StaticResource FeatureCardStyle}" Grid.Column="1" Grid.Row="2">
+                            <StackPanel>
+                                <TextBlock Text="🔒 Sécurité Avancée" 
+                                           FontSize="16" 
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           Margin="0,0,0,8"/>
+                                <TextBlock Text="Protection des données avec gestion des droits d'accès" 
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Contact Section -->
+            <Border Style="{StaticResource CardStyle}" Background="#FEF3C7">
+                <StackPanel>
+                    <Grid Margin="0,0,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Background="#FCD34D" 
+                                CornerRadius="10" 
+                                Padding="10"
+                                Margin="0,0,12,0"
+                                Grid.Column="0">
+                            <TextBlock Text="📞" FontSize="20"/>
+                        </Border>
+                        <TextBlock Text="Contactez-Nous" 
+                                   Style="{StaticResource SubtitleStyle}"
+                                   VerticalAlignment="Center"
+                                   Margin="0"
+                                   Grid.Column="1"/>
+                    </Grid>
+
+                    <TextBlock Style="{StaticResource BodyTextStyle}" Margin="0,0,0,24">
+                        Notre équipe est à votre disposition pour répondre à toutes vos questions, vous accompagner dans 
+                        l'utilisation de notre solution et vous fournir un support technique de qualité.
+                    </TextBlock>
+
+                    <!-- Contact Information -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Phone 1 -->
+                        <Border Background="{StaticResource SurfaceBrush}"
+                                CornerRadius="12"
+                                Padding="24,20"
+                                Margin="0,0,12,0"
+                                Grid.Column="0"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="📱 Contact Principal" 
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           Margin="0,0,0,12"/>
+                                <TextBlock Text="06 17 23 29 32" 
+                                           FontSize="22"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource PrimaryBrush}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Phone 2 -->
+                        <Border Background="{StaticResource SurfaceBrush}"
+                                CornerRadius="12"
+                                Padding="24,20"
+                                Margin="12,0,0,0"
+                                Grid.Column="1"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1">
+                            <StackPanel>
+                                <TextBlock Text="📱 Contact Secondaire" 
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           Margin="0,0,0,12"/>
+                                <TextBlock Text="06 04 48 17 65" 
+                                           FontSize="22"
+                                           FontWeight="Bold"
+                                           Foreground="{StaticResource SuccessBrush}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Call to Action -->
+                    <Border Background="{StaticResource SurfaceBrush}"
+                            CornerRadius="12"
+                            Padding="24"
+                            Margin="0,16,0,0"
+                            BorderBrush="{StaticResource BorderBrush}"
+                            BorderThickness="1">
+                        <StackPanel HorizontalAlignment="Center">
+                            <TextBlock Text="Nous sommes disponibles du Lundi au Vendredi" 
+                                       FontSize="14"
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,0,0,4"/>
+                            <TextBlock Text="De 9h00 à 18h00" 
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+
+            <!-- Footer -->
+            <Border Background="{StaticResource SurfaceBrush}"
+                    CornerRadius="12"
+                    Padding="32"
+                    Margin="0,0,0,24"
+                    BorderBrush="{StaticResource BorderBrush}"
+                    BorderThickness="1">
+                <StackPanel HorizontalAlignment="Center">
+                    <TextBlock Text="© 2024 A&amp;A Software Solution" 
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TextPrimaryBrush}"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,8"/>
+                    <TextBlock Text="Tous droits réservés - Solution de gestion commerciale professionnelle" 
+                               FontSize="13"
+                               Foreground="{StaticResource TextSecondaryBrush}"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,519 @@
+﻿<Window x:Class="GestionComerce.Main.Vente.WSelectCient"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sélection du Client" 
+        Height="750"
+        Width="900"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        Background="Transparent"
+        FontFamily="Segoe UI"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Window.Resources>
+        <!-- Modern Button Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#3B82F6"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="6"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#2563EB"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#1D4ED8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" TargetName="border" Value="#9CA3AF"/>
+                                <Setter Property="Cursor" Value="No"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Secondary Button Style -->
+        <Style x:Key="SecondaryButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#475569"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#F8FAFC"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="#CBD5E1"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#F1F5F9"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#F1F5F9"/>
+                                <Setter Property="Foreground" Value="#94A3B8"/>
+                                <Setter Property="Cursor" Value="No"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Icon Button Style -->
+        <Style x:Key="IconButton" TargetType="Button">
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="#F1F5F9"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern TextBox Style - FIXED -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="CaretBrush" Value="#3B82F6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                SnapsToDevicePixels="True">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                                              Focusable="false"
+                                              HorizontalScrollBarVisibility="Hidden"
+                                              VerticalScrollBarVisibility="Hidden"
+                                              Margin="{TemplateBinding Padding}"
+                                              VerticalAlignment="Center"
+                                              Background="Transparent"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="BorderBrush" TargetName="border" Value="#CBD5E1"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="BorderBrush" TargetName="border" Value="#3B82F6"/>
+                                <Setter Property="BorderThickness" TargetName="border" Value="2"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" TargetName="border" Value="#F8FAFC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern DataGrid Style -->
+        <Style x:Key="ModernDataGrid" TargetType="DataGrid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#F1F5F9"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#F8FAFC"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="SelectionMode" Value="Single"/>
+            <Setter Property="SelectionUnit" Value="FullRow"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="RowHeight" Value="48"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <!-- DataGrid Column Header Style -->
+        <Style x:Key="ModernColumnHeader" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- DataGrid Row Style -->
+        <Style x:Key="ModernDataGridRow" TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#F8FAFC"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#EBF4FF"/>
+                    <Setter Property="BorderBrush" Value="#3B82F6"/>
+                    <Setter Property="BorderThickness" Value="0,1,0,1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- DataGrid Cell Style -->
+        <Style x:Key="ModernDataGridCell" TargetType="DataGridCell">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="16,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="#0F172A"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="White" 
+            CornerRadius="12" 
+            Margin="20">
+        <Border.Effect>
+            <DropShadowEffect Color="#0F172A" 
+                              Opacity="0.15" 
+                              BlurRadius="40" 
+                              ShadowDepth="8" 
+                              Direction="270"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header with Close Button -->
+            <Border Grid.Row="0" 
+                    Background="White" 
+                    CornerRadius="12,12,0,0"
+                    Padding="32,24"
+                    BorderBrush="#E2E8F0"
+                    BorderThickness="0,0,0,1">
+                <Grid>
+                    <StackPanel>
+                        <TextBlock Text="Sélection du Client" 
+                                   FontSize="24" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#0F172A"
+                                   Margin="0,0,0,6"/>
+                        <TextBlock Text="Recherchez un client existant, ajoutez-en un nouveau, ou continuez sans client" 
+                                   FontSize="14" 
+                                   Foreground="#64748B"/>
+                    </StackPanel>
+
+                    <!-- Close Button -->
+                    <Button Content="✕" 
+                            Style="{StaticResource IconButton}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Click="CancelButton_Click"
+                            FontSize="16"
+                            Foreground="#64748B"/>
+                </Grid>
+            </Border>
+
+            <!-- Search and Quick Actions Section -->
+            <Grid Grid.Row="1" Margin="32,24">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="16"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Search Bar -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="White" CornerRadius="6" 
+                            BorderBrush="#E2E8F0" BorderThickness="1" Height="40">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="🔍" FontSize="16" 
+                                      Foreground="#94A3B8" Margin="12,0,8,0" 
+                                      VerticalAlignment="Center"/>
+                            <TextBox Grid.Column="1" Name="SearchTextBox" 
+                                    Background="Transparent" 
+                                    BorderThickness="0"
+                                    Padding="0,0,12,0" 
+                                    FontSize="14" 
+                                    VerticalAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Foreground="#0F172A"
+                                    CaretBrush="#3B82F6"
+                                    TextChanged="SearchTextBox_TextChanged"
+                                    MaxLength="100"/>
+                        </Grid>
+                    </Border>
+
+                    <Button Grid.Column="2"
+                            Style="{StaticResource ModernButton}"
+                            Content="Rechercher"
+                            Click="SearchButton_Click"
+                            MinWidth="100"/>
+                </Grid>
+
+                <!-- Quick Actions -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Discount Input -->
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Remise" 
+               FontSize="12" 
+               FontWeight="Medium" 
+               Foreground="#64748B" 
+               Margin="0,0,0,6"/>
+                        <TextBox Name="Remise" 
+             Width="140"
+             Height="40"
+             MaxLength="18"
+             FontSize="14"
+             Padding="12,10"
+             Background="White"
+             Foreground="Black"
+             BorderBrush="#E2E8F0"
+             BorderThickness="1"
+             VerticalContentAlignment="Center"
+             PreviewTextInput="NumberOnly_PreviewTextInput">
+                            <TextBox.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="6"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                    </StackPanel>
+
+                    <!-- Credit Input -->
+                    <StackPanel Grid.Column="2" x:Name="Creditt">
+                        <TextBlock Text="Crédit" 
+               FontSize="12" 
+               FontWeight="Medium" 
+               Foreground="#64748B" 
+               Margin="0,0,0,6"/>
+                        <TextBox Name="Credittext" 
+             Width="140"
+             Height="40"
+             MaxLength="18"
+             FontSize="14"
+             Padding="12,10"
+             Background="White"
+             Foreground="Black"
+             BorderBrush="#E2E8F0"
+             BorderThickness="1"
+             VerticalContentAlignment="Center"
+             PreviewTextInput="NumberOnly_PreviewTextInput">
+                            <TextBox.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="6"/>
+                                </Style>
+                            </TextBox.Resources>
+                        </TextBox>
+                    </StackPanel>
+                    <!-- New Client Button -->
+                    <StackPanel Grid.Column="4" VerticalAlignment="Bottom">
+                        <Button Name="AddClient"
+                                Style="{StaticResource SecondaryButton}"
+                                Click="NewClientButton_Click"
+                                MinWidth="140">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="+" FontSize="16" Margin="0,0,6,0" 
+                                          VerticalAlignment="Center"/>
+                                <TextBlock Text="Nouveau Client" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+
+                    <!-- No Client Button -->
+                    <StackPanel Grid.Column="6" VerticalAlignment="Bottom">
+                        <Button Name="NoClient"
+                                Style="{StaticResource SecondaryButton}"
+                                Click="NoClientButton_Click"
+                                MinWidth="140">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="⊘" FontSize="14" Margin="0,0,6,0" 
+                                          VerticalAlignment="Center"/>
+                                <TextBlock Text="Sans Client" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <!-- Results Section -->
+            <Border Grid.Row="2" 
+                    Margin="32,0,32,24"
+                    Background="White"
+                    CornerRadius="8"
+                    BorderBrush="#E2E8F0"
+                    BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Results Header -->
+                    <Border Grid.Row="0" 
+                            Background="#F8FAFC" 
+                            CornerRadius="8,8,0,0"
+                            Padding="20,16"
+                            BorderBrush="#E2E8F0"
+                            BorderThickness="0,0,0,1">
+                        <TextBlock Text="Résultats de Recherche" 
+                                   FontSize="14" 
+                                   FontWeight="SemiBold" 
+                                   Foreground="#475569"/>
+                    </Border>
+
+                    <!-- Results Content -->
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  Padding="0">
+                        <StackPanel Name="ClientContainer" Margin="0"/>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <!-- Footer Actions -->
+            <Border Grid.Row="3" 
+                    Background="#F8FAFC" 
+                    CornerRadius="0,0,12,12"
+                    Padding="32,20"
+                    BorderBrush="#E2E8F0"
+                    BorderThickness="0,1,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Selected Client Info -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="Client Sélectionné" 
+                                   FontSize="11" 
+                                   FontWeight="Medium" 
+                                   Foreground="#94A3B8"
+                                   Margin="0,0,0,4"/>
+                        <TextBlock Name="SelectedClient" 
+                                   Text="Aucun client sélectionné" 
+                                   FontSize="14" 
+                                   FontWeight="Medium" 
+                                   Foreground="#475569"/>
+                    </StackPanel>
+
+                    <!-- Action Buttons -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Style="{StaticResource SecondaryButton}"
+                                Content="Annuler"
+                                Click="CancelButton_Click"
+                                Margin="0,0,12,0"
+                                MinWidth="100"/>
+                        <Button Name="ValidateButton"
+                                Style="{StaticResource ModernButton}"
+                                Content="Confirmer"
+                                Click="ValidateButton_Click"
+                                MinWidth="120"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

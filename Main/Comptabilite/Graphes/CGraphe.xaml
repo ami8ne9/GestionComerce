@@ -1,0 +1,335 @@
+﻿<UserControl x:Class="Superete.Main.Comptabilite.Graphes.CGraphe"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Superete.Main.Comptabilite.Graphes"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900"
+             Background="Transparent">
+
+    <UserControl.Resources>
+        <!-- Settings Card Style -->
+        <Style x:Key="SettingsCard" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="15" ShadowDepth="3" Direction="270"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#F7FAFC"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Modern TextBox Style -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#F7FAFC"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Modern DatePicker Style -->
+        <Style x:Key="ModernDatePicker" TargetType="DatePicker">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Background" Value="#F7FAFC"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Modern CheckBox Style -->
+        <Style x:Key="ModernCheckBox" TargetType="CheckBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#4A5568"/>
+            <Setter Property="Margin" Value="0,0,16,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Apply Button Style -->
+        <Style x:Key="ApplyButton" TargetType="Button">
+            <Setter Property="Background" Value="#667EEA"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Padding" Value="32,0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#5568D3"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#4C51BF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Label Style -->
+        <Style x:Key="SettingsLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#4A5568"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <!-- Section Title Style -->
+        <Style x:Key="SectionTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#2D3748"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Settings Panel -->
+            <StackPanel Grid.Row="0">
+
+                <!-- Main Settings Card -->
+                <Border Style="{StaticResource SettingsCard}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Section 1: Graph Type and Date Range -->
+                        <Grid Grid.Row="0" Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Graph Type -->
+                            <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                <TextBlock Text="Type de Graphe" Style="{StaticResource SettingsLabel}"/>
+                                <ComboBox x:Name="GraphTypeComboBox" 
+                                          Style="{StaticResource ModernComboBox}"
+                                          SelectionChanged="GraphTypeComboBox_SelectionChanged">
+                                    <ComboBoxItem Content="Ligne" IsSelected="True"/>
+                                    <ComboBoxItem Content="Barres"/>
+                                    <ComboBoxItem Content="Camembert"/>
+                                    <ComboBoxItem Content="Aires"/>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- Start Date -->
+                            <StackPanel Grid.Column="1" Margin="0,0,12,0">
+                                <TextBlock Text="Date de Début" Style="{StaticResource SettingsLabel}"/>
+                                <DatePicker x:Name="StartDatePicker" 
+                                            Style="{StaticResource ModernDatePicker}"/>
+                            </StackPanel>
+
+                            <!-- End Date -->
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Date de Fin" Style="{StaticResource SettingsLabel}"/>
+                                <DatePicker x:Name="EndDatePicker" 
+                                            Style="{StaticResource ModernDatePicker}"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Section 2: Data Source Selection with Basé sur beside -->
+                        <Grid Grid.Row="1" Margin="0,0,0,20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" 
+                                       Text="Source des Données" 
+                                       Style="{StaticResource SectionTitle}"/>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Entity Type Selection -->
+                                <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                                    <TextBlock Text="Type d'Entité" Style="{StaticResource SettingsLabel}"/>
+                                    <ComboBox x:Name="EntityTypeComboBox" 
+                                              Style="{StaticResource ModernComboBox}"
+                                              >
+                                        <ComboBoxItem Content="Article" IsSelected="True"/>
+                                        <ComboBoxItem Content="Client"/>
+                                        <ComboBoxItem Content="Fournisseur"/>
+                                        <ComboBoxItem Content="Utilisateur"/>
+                                        <ComboBoxItem Content="Opération"/>
+                                        <ComboBoxItem Content="Facture"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <!-- Right side: Search and Basé sur -->
+                                <Grid Grid.Column="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Search Box (for Article, Client, Fournisseur, User) -->
+                                    <StackPanel Grid.Column="0" x:Name="SearchPanel" Margin="0,0,12,0">
+                                        <TextBlock Text="Rechercher" Style="{StaticResource SettingsLabel}"/>
+                                        <Grid>
+                                            <TextBox x:Name="SearchTextBox" 
+                                                     Style="{StaticResource ModernTextBox}"/>
+                                            <TextBlock Text="🔍" 
+                                                       FontSize="16"
+                                                       Foreground="#A0AEC0"
+                                                       IsHitTestVisible="False"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,0,12,0"/>
+                                        </Grid>
+
+                                        <!-- Search Results Dropdown -->
+                                        <ListBox x:Name="SearchResultsListBox"
+                                                 MaxHeight="150"
+                                                 Margin="0,4,0,0"
+                                                 Visibility="Collapsed"
+                                                 Background="White"
+                                                 BorderBrush="#E2E8F0"
+                                                 BorderThickness="1"/>
+                                    </StackPanel>
+
+                                    <!-- Basé sur -->
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Basé sur" Style="{StaticResource SettingsLabel}"/>
+                                        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                                            <StackPanel Orientation="Horizontal" Margin="0,12,0,8">
+                                                <CheckBox x:Name="OperationsCheckBox" 
+                                                          Content="Opérations" 
+                                                          Style="{StaticResource ModernCheckBox}"/>
+
+                                                <CheckBox x:Name="FacturesCheckBox" 
+                                                          Content="Factures" 
+                                                          Style="{StaticResource ModernCheckBox}"
+                                                          />
+                                            </StackPanel>
+
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <!-- Section 3: Operation/Facture Specific Settings -->
+                        <Grid Grid.Row="2" x:Name="OperationFacturePanel" Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" 
+                                       Text="Paramètres Supplémentaires" 
+                                       Style="{StaticResource SectionTitle}"/>
+
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Select Client for Operation/Facture -->
+                                <StackPanel Grid.Column="0" Margin="0,0,12,0" x:Name="ClientSelectionPanel">
+                                    <TextBlock Text="Sélectionner Client" Style="{StaticResource SettingsLabel}"/>
+                                    <ComboBox x:Name="ClientComboBox" 
+                                              Style="{StaticResource ModernComboBox}"/>
+                                </StackPanel>
+
+                                <!-- Select Fournisseur for Operation/Facture -->
+                                <StackPanel Grid.Column="1" x:Name="FournisseurSelectionPanel">
+                                    <TextBlock Text="Sélectionner Fournisseur" Style="{StaticResource SettingsLabel}"/>
+                                    <ComboBox x:Name="FournisseurComboBox" 
+                                              Style="{StaticResource ModernComboBox}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- Apply Button Card -->
+                <Border Background="Transparent" Padding="0" Margin="0,0,0,16">
+                    <Button Content="Générer le Graphe" 
+                            Style="{StaticResource ApplyButton}"
+                            HorizontalAlignment="Right"
+                            Click="ApplyButton_Click"/>
+                </Border>
+            </StackPanel>
+
+            <!-- Graph Display Area -->
+            <Border Grid.Row="1" Style="{StaticResource SettingsCard}" Margin="0,0,0,16">
+                <Grid>
+                    <!-- Title -->
+                    <TextBlock x:Name="GraphTitle"
+                               Text="Graphique des Données"
+                               FontSize="20"
+                               FontWeight="SemiBold"
+                               Foreground="#1A202C"
+                               Margin="0,0,0,20"
+                               VerticalAlignment="Top"/>
+
+                    <!-- Graph Canvas -->
+                    <Canvas x:Name="GraphCanvas" 
+                            Margin="0,50,0,0"
+                            Background="#FAFBFC"
+                            MinHeight="400"/>
+
+                    <!-- Loading/Empty State -->
+                    <StackPanel x:Name="EmptyState"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Visibility="Visible">
+                        <TextBlock Text="📊" 
+                                  FontSize="64"
+                                  HorizontalAlignment="Center"
+                                  Opacity="0.3"/>
+                        <TextBlock Text="Configurez les paramètres et cliquez sur 'Générer le Graphe'"
+                                  FontSize="16"
+                                  Foreground="#718096"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,12,0,0"
+                                  TextAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>
