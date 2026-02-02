@@ -165,7 +165,7 @@
                             </StackPanel>
                         </Grid>
 
-                        <!-- Section 2: Data Source Selection with Basé sur beside -->
+                        <!-- Section 2: Data Source Selection -->
                         <Grid Grid.Row="1" Margin="0,0,0,20">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -187,7 +187,7 @@
                                     <TextBlock Text="Type d'Entité" Style="{StaticResource SettingsLabel}"/>
                                     <ComboBox x:Name="EntityTypeComboBox" 
                                               Style="{StaticResource ModernComboBox}"
-                                              >
+                                              SelectionChanged="EntityTypeComboBox_SelectionChanged">
                                         <ComboBoxItem Content="Article" IsSelected="True"/>
                                         <ComboBoxItem Content="Client"/>
                                         <ComboBoxItem Content="Fournisseur"/>
@@ -197,19 +197,20 @@
                                     </ComboBox>
                                 </StackPanel>
 
-                                <!-- Right side: Search and Basé sur -->
+                                <!-- Right side: Search and Graph Metric -->
                                 <Grid Grid.Column="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- Search Box (for Article, Client, Fournisseur, User) -->
+                                    <!-- Search Box -->
                                     <StackPanel Grid.Column="0" x:Name="SearchPanel" Margin="0,0,12,0">
                                         <TextBlock Text="Rechercher" Style="{StaticResource SettingsLabel}"/>
                                         <Grid>
                                             <TextBox x:Name="SearchTextBox" 
-                                                     Style="{StaticResource ModernTextBox}"/>
+                                                     Style="{StaticResource ModernTextBox}"
+                                                     TextChanged="SearchTextBox_TextChanged"/>
                                             <TextBlock Text="🔍" 
                                                        FontSize="16"
                                                        Foreground="#A0AEC0"
@@ -224,64 +225,34 @@
                                                  MaxHeight="150"
                                                  Margin="0,4,0,0"
                                                  Visibility="Collapsed"
+                                                 SelectionChanged="SearchResultsListBox_SelectionChanged"
                                                  Background="White"
                                                  BorderBrush="#E2E8F0"
                                                  BorderThickness="1"/>
                                     </StackPanel>
 
-                                    <!-- Basé sur -->
-                                    <StackPanel Grid.Column="1">
-                                        <TextBlock Text="Basé sur" Style="{StaticResource SettingsLabel}"/>
-                                        <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                                            <StackPanel Orientation="Horizontal" Margin="0,12,0,8">
-                                                <CheckBox x:Name="OperationsCheckBox" 
-                                                          Content="Opérations" 
-                                                          Style="{StaticResource ModernCheckBox}"/>
-
-                                                <CheckBox x:Name="FacturesCheckBox" 
-                                                          Content="Factures" 
-                                                          Style="{StaticResource ModernCheckBox}"
-                                                          />
-                                            </StackPanel>
-
-                                        </StackPanel>
+                                    <!-- Graph Metric Selection -->
+                                    <StackPanel Grid.Column="1" x:Name="MetricPanel">
+                                        <TextBlock Text="Métrique" Style="{StaticResource SettingsLabel}"/>
+                                        <ComboBox x:Name="MetricComboBox" 
+                                                  Style="{StaticResource ModernComboBox}"/>
                                     </StackPanel>
                                 </Grid>
                             </Grid>
                         </Grid>
 
-                        <!-- Section 3: Operation/Facture Specific Settings -->
-                        <Grid Grid.Row="2" x:Name="OperationFacturePanel" Visibility="Collapsed">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <TextBlock Grid.Row="0" 
-                                       Text="Paramètres Supplémentaires" 
-                                       Style="{StaticResource SectionTitle}"/>
-
-                            <Grid Grid.Row="1">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Select Client for Operation/Facture -->
-                                <StackPanel Grid.Column="0" Margin="0,0,12,0" x:Name="ClientSelectionPanel">
-                                    <TextBlock Text="Sélectionner Client" Style="{StaticResource SettingsLabel}"/>
-                                    <ComboBox x:Name="ClientComboBox" 
-                                              Style="{StaticResource ModernComboBox}"/>
-                                </StackPanel>
-
-                                <!-- Select Fournisseur for Operation/Facture -->
-                                <StackPanel Grid.Column="1" x:Name="FournisseurSelectionPanel">
-                                    <TextBlock Text="Sélectionner Fournisseur" Style="{StaticResource SettingsLabel}"/>
-                                    <ComboBox x:Name="FournisseurComboBox" 
-                                              Style="{StaticResource ModernComboBox}"/>
-                                </StackPanel>
-                            </Grid>
-                        </Grid>
+                        <!-- Section 3: Operation Checkbox -->
+                        <!-- Section 3: Operation and Facture Checkboxes -->
+                        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,0">
+                            <CheckBox x:Name="OperationsCheckBox" 
+              Content="Inclure les Opérations" 
+              Style="{StaticResource ModernCheckBox}"
+              IsChecked="True"/>
+                            <CheckBox x:Name="FacturesCheckBox" 
+              Content="Inclure les Factures" 
+              Style="{StaticResource ModernCheckBox}"
+              IsChecked="False"/>
+                        </StackPanel>
                     </Grid>
                 </Border>
 
@@ -295,38 +266,45 @@
             </StackPanel>
 
             <!-- Graph Display Area -->
+            <!-- Graph Display Area -->
             <Border Grid.Row="1" Style="{StaticResource SettingsCard}" Margin="0,0,0,16">
                 <Grid>
                     <!-- Title -->
                     <TextBlock x:Name="GraphTitle"
-                               Text="Graphique des Données"
-                               FontSize="20"
-                               FontWeight="SemiBold"
-                               Foreground="#1A202C"
-                               Margin="0,0,0,20"
-                               VerticalAlignment="Top"/>
+                   Text="Graphique des Données"
+                   FontSize="20"
+                   FontWeight="SemiBold"
+                   Foreground="#1A202C"
+                   Margin="0,0,0,20"
+                   VerticalAlignment="Top"/>
 
-                    <!-- Graph Canvas -->
-                    <Canvas x:Name="GraphCanvas" 
-                            Margin="0,50,0,0"
-                            Background="#FAFBFC"
-                            MinHeight="400"/>
+                    <!-- Graph Canvas with ScrollViewer -->
+                    <ScrollViewer Margin="0,50,0,0"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      Background="#FAFBFC">
+                        <Canvas x:Name="GraphCanvas" 
+                    Background="Transparent"
+                    MinHeight="400"
+                    MinWidth="600"
+                    SizeChanged="GraphCanvas_SizeChanged"/>
+                    </ScrollViewer>
 
                     <!-- Loading/Empty State -->
                     <StackPanel x:Name="EmptyState"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               Visibility="Visible">
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visibility="Visible">
                         <TextBlock Text="📊" 
-                                  FontSize="64"
-                                  HorizontalAlignment="Center"
-                                  Opacity="0.3"/>
+                      FontSize="64"
+                      HorizontalAlignment="Center"
+                      Opacity="0.3"/>
                         <TextBlock Text="Configurez les paramètres et cliquez sur 'Générer le Graphe'"
-                                  FontSize="16"
-                                  Foreground="#718096"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,12,0,0"
-                                  TextAlignment="Center"/>
+                      FontSize="16"
+                      Foreground="#718096"
+                      HorizontalAlignment="Center"
+                      Margin="0,12,0,0"
+                      TextAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </Border>

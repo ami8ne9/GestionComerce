@@ -1,1 +1,221 @@
-﻿
+﻿<UserControl x:Class="Superete.Main.Comptabilite.CMainCo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Superete.Main.Comptabilite"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="#FAFBFC">
+
+    <UserControl.Resources>
+        <!-- Modern Menu Button Style -->
+        <Style x:Key="ModernMenuButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#2D3748"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="24,16"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="12,4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}" 
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="12">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EDF2F7"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#E2E8F0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="AIButtonStyle" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#667EEA" Offset="0"/>
+                        <GradientStop Color="#764BA2" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="24,16"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="12,4"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                        Background="{TemplateBinding Background}" 
+                        Padding="{TemplateBinding Padding}"
+                        CornerRadius="12">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#667EEA" Opacity="0.4" BlurRadius="15" ShadowDepth="0"/>
+                            </Border.Effect>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="✨" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#7C8FF5" Offset="0"/>
+                                            <GradientStop Color="#8B5FC7" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Back Button Style -->
+        <Style x:Key="BackButton" TargetType="Button">
+            <Setter Property="Background" Value="#F7FAFC"/>
+            <Setter Property="Foreground" Value="#4A5568"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="10">
+                            <TextBlock Text="←" 
+                                     FontSize="20" 
+                                     Foreground="{TemplateBinding Foreground}"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"
+                                     FontWeight="Bold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EDF2F7"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#E2E8F0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Modern Header -->
+        <Border Grid.Row="0" 
+                Background="White">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" 
+                                Opacity="0.06" 
+                                BlurRadius="12" 
+                                ShadowDepth="2"
+                                Direction="270"/>
+            </Border.Effect>
+
+            <Grid Margin="30,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Back Button -->
+                <Button Grid.Column="0" 
+                        Style="{StaticResource BackButton}"
+                        VerticalAlignment="Center" Click="Button_Click"/>
+
+                <!-- Centered Title -->
+                <TextBlock Grid.Column="1"
+                           Text="Accountability" 
+                           FontSize="28" 
+                           FontWeight="SemiBold"
+                           Foreground="#1A202C"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Row="1" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Sidebar with Glass Effect -->
+            <Border Grid.Column="0" 
+                    Background="White"
+                    CornerRadius="16"
+                    Margin="16,0,8,16">
+                <Border.Effect>
+                    <DropShadowEffect Color="#000000" 
+                                    Opacity="0.05" 
+                                    BlurRadius="20" 
+                                    ShadowDepth="4"
+                                    Direction="270"/>
+                </Border.Effect>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                            Padding="8"
+                            Margin="0,16">
+                    <StackPanel>
+                        <Button Content="Graphes" Style="{StaticResource ModernMenuButton}"/>
+                        <Button Content="Geration des Salaire" Style="{StaticResource ModernMenuButton}"/>
+                        <Button Content="Rapport et Statistiques" Style="{StaticResource ModernMenuButton}"/>
+                        <Button Content="Expences" Style="{StaticResource ModernMenuButton}"/>
+                        <Button Content="Comptable A.I" Style="{StaticResource AIButtonStyle}"/>
+                        <Button Content="Expectation et Projection" Style="{StaticResource ModernMenuButton}"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Right Content Area with Card Design -->
+            <Border Grid.Column="1" 
+                    Background="White"
+                    CornerRadius="16"
+                    Margin="8,0,16,16">
+                <Border.Effect>
+                    <DropShadowEffect Color="#000000" 
+                                    Opacity="0.05" 
+                                    BlurRadius="20" 
+                                    ShadowDepth="4"
+                                    Direction="270"/>
+                </Border.Effect>
+
+                <ContentControl x:Name="MainContentArea"
+                              Margin="32"/>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
