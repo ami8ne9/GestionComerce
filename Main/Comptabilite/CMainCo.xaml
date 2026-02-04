@@ -42,6 +42,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
         <Style x:Key="AIButtonStyle" TargetType="Button">
             <Setter Property="Background">
                 <Setter.Value>
@@ -91,6 +92,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
         <!-- Back Button Style -->
         <Style x:Key="BackButton" TargetType="Button">
             <Setter Property="Background" Value="#F7FAFC"/>
@@ -190,12 +192,28 @@
                             Padding="8"
                             Margin="0,16">
                     <StackPanel>
-                        <Button Content="Graphes" Style="{StaticResource ModernMenuButton}"/>
-                        <Button Content="Geration des Salaire" Style="{StaticResource ModernMenuButton}"/>
-                        <Button Content="Rapport et Statistiques" Style="{StaticResource ModernMenuButton}"/>
-                        <Button Content="Expences" Style="{StaticResource ModernMenuButton}"/>
-                        <Button Content="Comptable A.I" Style="{StaticResource AIButtonStyle}"/>
-                        <Button Content="Expectation et Projection" Style="{StaticResource ModernMenuButton}"/>
+                        <Button x:Name="GraphesButton" 
+                                Content="Graphes" 
+                                Style="{StaticResource ModernMenuButton}"
+                                Click="Graphes_Click"
+                                Background="#4299E1"
+                                Foreground="White"/>
+                        <Button x:Name="SalaireButton" 
+                                Content="Geration des Salaire" 
+                                Style="{StaticResource ModernMenuButton}"/>
+                        <Button x:Name="RapportButton" 
+                                Content="Rapport et Statistiques" 
+                                Style="{StaticResource ModernMenuButton}"
+                                Click="RapportStats_Click"/>
+                        <Button x:Name="ExpencesButton" 
+                                Content="Expences" 
+                                Style="{StaticResource ModernMenuButton}"/>
+                        <Button x:Name="AIButton" 
+                                Content="Comptable A.I" 
+                                Style="{StaticResource AIButtonStyle}"/>
+                        <Button x:Name="ExpectationButton" 
+                                Content="Expectation et Projection" 
+                                Style="{StaticResource ModernMenuButton}"/>
                     </StackPanel>
                 </ScrollViewer>
             </Border>

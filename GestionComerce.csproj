@@ -111,6 +111,9 @@
     <Compile Include="Main\Comptabilite\Graphes\CGraphe.xaml.cs">
       <DependentUpon>CGraphe.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Main\Comptabilite\Rapport\CMainR.xaml.cs">
+      <DependentUpon>CMainR.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Main\Comptabilite\services\EmployeModel.cs" />
     <Compile Include="Main\Comptabilite\services\EmployeService.cs" />
     <Compile Include="Main\Comptabilite\services\SalaireModel.cs" />
@@ -256,6 +259,7 @@
     <Compile Include="Main\Delivery\LivreurManagementWindow.xaml.cs">
       <DependentUpon>LivreurManagementWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Main\IOperationHost.cs" />
     <Compile Include="Main\Settings\CAproposDeNous.xaml.cs">
       <DependentUpon>CAproposDeNous.xaml</DependentUpon>
     </Compile>
@@ -429,6 +433,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Main\Comptabilite\Graphes\CGraphe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main\Comptabilite\Rapport\CMainR.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -862,7 +870,6 @@
     <Folder Include="Main\Comptabilite\Comptable\" />
     <Folder Include="Main\Comptabilite\Expectation\" />
     <Folder Include="Main\Comptabilite\Expences\" />
-    <Folder Include="Main\Comptabilite\Rapport\" />
     <Folder Include="Main\Comptabilite\Salaire\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

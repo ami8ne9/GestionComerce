@@ -1,0 +1,695 @@
+﻿<UserControl x:Class="GestionComerce.Main.ProjectManagment.CMainR"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F5F7FA">
+
+    <UserControl.Resources>
+        <!-- Report Filter Button Style -->
+        <Style x:Key="FilterButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#F0F4FF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#4A90E2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Report Stat Card Style -->
+        <Style x:Key="StatCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" ShadowDepth="1" Opacity="0.08" Color="Black"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Secondary Button Style -->
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#F3F4F6"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="6"
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                        VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#E5E7EB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header with Back Button -->
+        <Border Grid.Row="0" Background="White" BorderBrush="#E5E7EB" BorderThickness="0,0,0,1" Padding="16">
+            <Button Content="← Retour" 
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    x:Name="RetourButton"
+                    Click="RetourButton_Click"
+                    HorizontalAlignment="Left"
+                    Width="99"/>
+        </Border>
+
+        <!-- Page Title -->
+        <TextBlock Grid.Row="1" 
+                   Text="Rapports" 
+                   FontSize="28" 
+                   FontWeight="Bold" 
+                   Foreground="#2C3E50"
+                   Margin="30,30,30,20"/>
+
+        <!-- Filter Buttons -->
+        <Border Grid.Row="2" 
+                Background="White" 
+                CornerRadius="12" 
+                Margin="30,0,30,20"
+                Padding="24"
+                BorderThickness="1"
+                BorderBrush="#E8E8E8">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" 
+                                 Opacity="0.05" 
+                                 BlurRadius="20" 
+                                 ShadowDepth="0"/>
+            </Border.Effect>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="DayButton" 
+                        Grid.Column="0"
+                        Click="DayButton_Click"
+                        Height="50"
+                        Background="#4F46E5"
+                        BorderBrush="#4F46E5"
+                        Foreground="White"
+                        BorderThickness="2"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8"
+                                    Padding="12">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" 
+                              Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                              Stretch="Uniform" 
+                              Width="18" 
+                              Height="18" 
+                              Margin="0,0,8,0"/>
+                        <TextBlock Text="Jour" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="MonthButton" 
+                        Grid.Column="2"
+                        Click="MonthButton_Click"
+                        Height="50"
+                        Background="White"
+                        BorderBrush="#E2E8F0"
+                        Foreground="#64748B"
+                        BorderThickness="2"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8"
+                                    Padding="12">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" 
+                              Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                              Stretch="Uniform" 
+                              Width="18" 
+                              Height="18" 
+                              Margin="0,0,8,0"/>
+                        <TextBlock Text="Mois" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="YearButton" 
+                        Grid.Column="4"
+                        Click="YearButton_Click"
+                        Height="50"
+                        Background="White"
+                        BorderBrush="#E2E8F0"
+                        Foreground="#64748B"
+                        BorderThickness="2"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8"
+                                    Padding="12">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z" 
+                              Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                              Stretch="Uniform" 
+                              Width="18" 
+                              Height="18" 
+                              Margin="0,0,8,0"/>
+                        <TextBlock Text="Année" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="CustomButton" 
+                        Grid.Column="6"
+                        Click="CustomButton_Click"
+                        Height="50"
+                        Background="White"
+                        BorderBrush="#E2E8F0"
+                        Foreground="#64748B"
+                        BorderThickness="2"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8"
+                                    Padding="12">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                    <StackPanel Orientation="Horizontal">
+                        <Path Data="M11 17c0 .55.45 1 1 1s1-.45 1-1-.45-1-1-1-1 .45-1 1zm0-14v4h2V5.08c3.39.49 6 3.39 6 6.92 0 3.87-3.13 7-7 7s-7-3.13-7-7c0-1.68.59-3.22 1.58-4.42L12 13l1.41-1.41-6.8-6.8v.02C4.42 6.45 3 9.05 3 12c0 4.97 4.02 9 9 9 4.97 0 9-4.03 9-9s-4.03-9-9-9h-1zm7 9c0-.55-.45-1-1-1s-1 .45-1 1 .45 1 1 1 1-.45 1-1zM6 12c0 .55.45 1 1 1s1-.45 1-1-.45-1-1-1-1 .45-1 1z" 
+                              Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                              Stretch="Uniform" 
+                              Width="18" 
+                              Height="18" 
+                              Margin="0,0,8,0"/>
+                        <TextBlock Text="Personnalisé" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Date Pickers Section -->
+                <Border Background="White" 
+                        CornerRadius="12" 
+                        Margin="30,0,30,20"
+                        Padding="24"
+                        BorderThickness="1"
+                        BorderBrush="#E8E8E8">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#000000" 
+                                         Opacity="0.05" 
+                                         BlurRadius="20" 
+                                         ShadowDepth="0"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <!-- Day View (Full Date) -->
+                        <StackPanel x:Name="DayView" Visibility="Visible">
+                            <TextBlock Text="Sélectionner une date" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#64748B"
+                                       Margin="0,0,0,12"/>
+                            <DatePicker x:Name="DayDatePicker" 
+                                        Height="48"
+                                        FontSize="14"
+                                        SelectedDateChanged="DatePicker_Changed"
+                                        Background="#F8FAFC"
+                                        BorderBrush="#E2E8F0"
+                                        BorderThickness="1.5"
+                                        Padding="14,12">
+                                <DatePicker.Resources>
+                                    <Style TargetType="DatePickerTextBox">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                        <Setter Property="Foreground" Value="#1E293B"/>
+                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                    </Style>
+                                    <Style TargetType="DatePicker">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="DatePicker">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="8"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <DatePickerTextBox x:Name="PART_TextBox" 
+                                                                             Grid.Column="0"
+                                                                             Focusable="True"/>
+                                                            <Button x:Name="PART_Button" 
+                                                                    Grid.Column="1"
+                                                                    Width="30"
+                                                                    Background="Transparent"
+                                                                    BorderThickness="0"
+                                                                    Focusable="False">
+                                                                <Path Data="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"
+                                                                      Fill="#94A3B8"
+                                                                      Stretch="Uniform"
+                                                                      Width="18"
+                                                                      Height="18"/>
+                                                            </Button>
+                                                            <Popup x:Name="PART_Popup" 
+                                                                   AllowsTransparency="True" 
+                                                                   Placement="Bottom" 
+                                                                   PlacementTarget="{Binding ElementName=PART_TextBox}"
+                                                                   StaysOpen="False"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DatePicker.Resources>
+                            </DatePicker>
+                        </StackPanel>
+
+                        <!-- Month View (Month and Year) -->
+                        <StackPanel x:Name="MonthView" Visibility="Collapsed">
+                            <TextBlock Text="Sélectionner un mois" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#64748B"
+                                       Margin="0,0,0,12"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ComboBox x:Name="MonthComboBox" 
+                                          Grid.Column="0"
+                                          Height="48"
+                                          FontSize="14"
+                                          SelectedIndex="0"
+                                          SelectionChanged="DatePicker_Changed"
+                                          VerticalContentAlignment="Center"
+                                          Background="#F8FAFC"
+                                          BorderBrush="#E2E8F0"
+                                          BorderThickness="1.5">
+                                    <ComboBoxItem>Janvier</ComboBoxItem>
+                                    <ComboBoxItem>Février</ComboBoxItem>
+                                    <ComboBoxItem>Mars</ComboBoxItem>
+                                    <ComboBoxItem>Avril</ComboBoxItem>
+                                    <ComboBoxItem>Mai</ComboBoxItem>
+                                    <ComboBoxItem>Juin</ComboBoxItem>
+                                    <ComboBoxItem>Juillet</ComboBoxItem>
+                                    <ComboBoxItem>Août</ComboBoxItem>
+                                    <ComboBoxItem>Septembre</ComboBoxItem>
+                                    <ComboBoxItem>Octobre</ComboBoxItem>
+                                    <ComboBoxItem>Novembre</ComboBoxItem>
+                                    <ComboBoxItem>Décembre</ComboBoxItem>
+                                </ComboBox>
+
+                                <ComboBox x:Name="MonthYearComboBox" 
+                                          Grid.Column="2"
+                                          Height="48"
+                                          FontSize="14"
+                                          SelectionChanged="DatePicker_Changed"
+                                          VerticalContentAlignment="Center"
+                                          Background="#F8FAFC"
+                                          BorderBrush="#E2E8F0"
+                                          BorderThickness="1.5"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Year View (Year Only) -->
+                        <StackPanel x:Name="YearView" Visibility="Collapsed">
+                            <TextBlock Text="Sélectionner une année" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#64748B"
+                                       Margin="0,0,0,12"/>
+                            <ComboBox x:Name="YearComboBox" 
+                                      Height="48"
+                                      FontSize="14"
+                                      SelectionChanged="DatePicker_Changed"
+                                      VerticalContentAlignment="Center"
+                                      Background="#F8FAFC"
+                                      BorderBrush="#E2E8F0"
+                                      BorderThickness="1.5"/>
+                        </StackPanel>
+
+                        <!-- Custom View (Date Range) -->
+                        <StackPanel x:Name="CustomView" Visibility="Collapsed">
+                            <TextBlock Text="Période personnalisée" 
+                                       FontSize="13" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="#64748B"
+                                       Margin="0,0,0,12"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="24"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="24"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Date de début" 
+                                               FontSize="11" 
+                                               FontWeight="Medium"
+                                               Foreground="#94A3B8"
+                                               Margin="0,0,0,8"/>
+                                    <DatePicker x:Name="StartDatePicker" 
+                                                Height="48"
+                                                FontSize="14"
+                                                SelectedDateChanged="DatePicker_Changed1"
+                                                Background="#F8FAFC"
+                                                BorderBrush="#E2E8F0"
+                                                BorderThickness="1.5"
+                                                Padding="14,12"/>
+                                </StackPanel>
+
+                                <Viewbox Grid.Column="2" 
+                                         Width="20"
+                                         Height="20"
+                                         VerticalAlignment="Bottom"
+                                         Margin="0,0,0,14">
+                                    <Path Data="M5 12 L19 12 M12 5 L19 12 L12 19" 
+                                          Stroke="#CBD5E1"
+                                          StrokeThickness="2"
+                                          Stretch="Uniform"/>
+                                </Viewbox>
+
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="Date de fin" 
+                                               FontSize="11" 
+                                               FontWeight="Medium"
+                                               Foreground="#94A3B8"
+                                               Margin="0,0,0,8"/>
+                                    <DatePicker x:Name="EndDatePicker" 
+                                                Height="48"
+                                                FontSize="14"
+                                                SelectedDateChanged="DatePicker_Changed1"
+                                                Background="#F8FAFC"
+                                                BorderBrush="#E2E8F0"
+                                                BorderThickness="1.5"
+                                                Padding="14,12"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- KPI Cards Grid -->
+                <Grid Margin="30,0,30,30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Revenue Card -->
+                    <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Revenu" FontSize="13" Foreground="#999999" Margin="0,0,0,12" FontWeight="Medium"/>
+                            <TextBlock x:Name="RevenueText" Text="0.00 DH" FontSize="28" FontWeight="Bold" Foreground="#4CAF50" Margin="0,0,0,8"/>
+                            <TextBlock Text="Ventes totales" FontSize="12" Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Bought Card -->
+                    <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Acheté" FontSize="13" Foreground="#999999" Margin="0,0,0,12" FontWeight="Medium"/>
+                            <TextBlock x:Name="BoughtText" Text="0.00 DH" FontSize="28" FontWeight="Bold" Foreground="#2196F3" Margin="0,0,0,8"/>
+                            <TextBlock Text="Achats totaux" FontSize="12" Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sold Card -->
+                    <Border Grid.Column="4" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Vendu" FontSize="13" Foreground="#999999" Margin="0,0,0,12" FontWeight="Medium"/>
+                            <TextBlock x:Name="SoldText" Text="0.00 DH" FontSize="28" FontWeight="Bold" Foreground="#FF9800" Margin="0,0,0,8"/>
+                            <TextBlock Text="Montant des ventes" FontSize="12" Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Difference Card -->
+                    <Border Grid.Column="6" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Reverse" FontSize="13" Foreground="#999999" Margin="0,0,0,12" FontWeight="Medium"/>
+                            <TextBlock x:Name="DifferenceText" Text="0.00 DH" FontSize="28" FontWeight="Bold" Foreground="#9C27B0" Margin="0,0,0,8"/>
+                            <TextBlock Text="perdu à cause d'un revers" FontSize="12" Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Article and Operation Stats -->
+                <Grid Margin="30,0,30,30">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="15"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Articles Sold -->
+                    <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Articles Vendus" FontSize="13" Foreground="#999999" Margin="0,0,0,12" FontWeight="Medium"/>
+                            <TextBlock x:Name="ArticlesSoldText" Text="0" FontSize="28" FontWeight="Bold" Foreground="#4CAF50" Margin="0,0,0,8"/>
+                            <TextBlock Text="Nombre total" FontSize="12" Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Articles Bought -->
+                    <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Articles Achetés" FontSize="13" Foreground="#999999" Margin="0,0,0,12" FontWeight="Medium"/>
+                            <TextBlock x:Name="ArticlesBoughtText" Text="0" FontSize="28" FontWeight="Bold" Foreground="#2196F3" Margin="0,0,0,8"/>
+                            <TextBlock Text="Nombre total" FontSize="12" Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Sold Operations -->
+                    <Border Grid.Column="4" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Opérations Vente" FontSize="13" Foreground="#999999" Margin="0,0,0,12" FontWeight="Medium"/>
+                            <TextBlock x:Name="SoldOpsText" Text="0" FontSize="28" FontWeight="Bold" Foreground="#FF9800" Margin="0,0,0,8"/>
+                            <TextBlock Text="Nombre total" FontSize="12" Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Bought Operations -->
+                    <Border Grid.Column="6" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
+                        <Border.Effect>
+                            <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                        </Border.Effect>
+                        <StackPanel>
+                            <TextBlock Text="Opérations Achat" FontSize="13" Foreground="#999999" Margin="0,0,0,12" FontWeight="Medium"/>
+                            <TextBlock x:Name="BoughtOpsText" Text="0" FontSize="28" FontWeight="Bold" Foreground="#9C27B0" Margin="0,0,0,8"/>
+                            <TextBlock Text="Nombre total" FontSize="12" Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Operations List Section -->
+                <Border Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8" Margin="30,0,30,30">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="Liste des Opérations" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,20"/>
+                        <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <StackPanel x:Name="RevenueOperationsContainer"/>
+
+                                <Border Height="27" Margin="0,12,0,0" Name="SeeMoreContainer2" Visibility="Collapsed">
+                                    <Button HorizontalAlignment="Center" VerticalAlignment="Top"
+                                            Background="Transparent" BorderThickness="0" Cursor="Hand"
+                                            Padding="12,6" Click="Button2_Click" Height="30">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="{TemplateBinding Background}" 
+                                                                    Padding="{TemplateBinding Padding}">
+                                                                <ContentPresenter HorizontalAlignment="Center" 
+                                                                                VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="#2563EB"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <TextBlock Text="View More" Foreground="#3B82F6" 
+                                                   FontSize="14" FontWeight="Medium"/>
+                                    </Button>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+
+                <!-- Articles List Section -->
+                <Border Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8" Margin="30,0,30,30">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
+                    </Border.Effect>
+                    <StackPanel>
+                        <TextBlock Text="Liste des Articles" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" Margin="0,0,0,20"/>
+                        <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <StackPanel x:Name="RevenueArticlesContainer"/>
+
+                                <Border Height="27" Margin="0,12,0,0" Name="SeeMoreContainer3" Visibility="Collapsed">
+                                    <Button HorizontalAlignment="Center" VerticalAlignment="Top"
+                                            Background="Transparent" BorderThickness="0" Cursor="Hand"
+                                            Padding="12,6" Click="Button3_Click" Height="30">
+                                        <Button.Style>
+                                            <Style TargetType="Button">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="Button">
+                                                            <Border Background="{TemplateBinding Background}" 
+                                                                    Padding="{TemplateBinding Padding}">
+                                                                <ContentPresenter HorizontalAlignment="Center" 
+                                                                                VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Foreground" Value="#2563EB"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                        <TextBlock Text="View More" Foreground="#3B82F6" 
+                                                   FontSize="14" FontWeight="Medium"/>
+                                    </Button>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

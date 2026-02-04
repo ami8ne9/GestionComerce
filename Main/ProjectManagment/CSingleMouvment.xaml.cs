@@ -25,6 +25,7 @@ namespace GestionComerce.Main.ProjectManagment
             InitializeComponent();
             this.main = main;
             this.opa = opa;
+
             if (opa.Reversed == true)
             {
                 ReverseButton.IsEnabled = false;
@@ -40,18 +41,18 @@ namespace GestionComerce.Main.ProjectManagment
             }
             foreach (Operation o in main.main.lo)
             {
-                if (o.OperationID== opa.OperationID)
+                if (o.OperationID == opa.OperationID)
                 {
                     OperationType.Text = o.OperationType + " • ";
-                    OperationId.Text=o.OperationID.ToString();
-                    
+                    OperationId.Text = o.OperationID.ToString();
+
                     if (o.OperationType.StartsWith("A"))
                     {
-                        foreach(Fournisseur f in main.main.lfo)
+                        foreach (Fournisseur f in main.main.lfo)
                         {
-                            if(o.FournisseurID== f.FournisseurID)
+                            if (o.FournisseurID == f.FournisseurID)
                             {
-                                Fournisseur.Text=f.Nom;
+                                Fournisseur.Text = f.Nom;
                                 break;
                             }
                         }
@@ -61,7 +62,7 @@ namespace GestionComerce.Main.ProjectManagment
                     }
                     else if (o.OperationType.StartsWith("V"))
                     {
-                        if(o.ClientID!= null)
+                        if (o.ClientID != null)
                         {
                             foreach (Client c in main.main.lc)
                             {
@@ -79,7 +80,8 @@ namespace GestionComerce.Main.ProjectManagment
                         IndicatorBorder.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#10B981"));
                         IndicatorIcon.Text = "🏷️";
                         Quantity.Text = "- " + opa.QteArticle.ToString();
-                    }else if (o.OperationType.StartsWith("M"))
+                    }
+                    else if (o.OperationType.StartsWith("M"))
                     {
                         foreach (User u in main.main.lu)
                         {
@@ -112,9 +114,108 @@ namespace GestionComerce.Main.ProjectManagment
                     break;
                 }
             }
-            
         }
-        public CMainP main; public OperationArticle opa;
+
+        // New constructor for CMainR
+        public CSingleMouvment(CMainR mainR, OperationArticle opa)
+        {
+            InitializeComponent();
+            this.mainR = mainR;
+            this.opa = opa;
+
+            if (opa.Reversed == true)
+            {
+                ReverseButton.IsEnabled = false;
+            }
+            foreach (Article a in mainR.main.laa)
+            {
+                if (a.ArticleID == opa.ArticleID)
+                {
+                    ArticleName.Text = a.ArticleName;
+                    if (a.Etat == false) ArticleName.Text += " (Supprime)";
+                    break;
+                }
+            }
+            foreach (Operation o in mainR.main.lo)
+            {
+                if (o.OperationID == opa.OperationID)
+                {
+                    OperationType.Text = o.OperationType + " • ";
+                    OperationId.Text = o.OperationID.ToString();
+
+                    if (o.OperationType.StartsWith("A"))
+                    {
+                        foreach (Fournisseur f in mainR.main.lfo)
+                        {
+                            if (o.FournisseurID == f.FournisseurID)
+                            {
+                                Fournisseur.Text = f.Nom;
+                                break;
+                            }
+                        }
+                        IndicatorBorder.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#ff7614"));
+                        IndicatorIcon.Text = "🛒";
+                        Quantity.Text = "+ " + opa.QteArticle.ToString();
+                    }
+                    else if (o.OperationType.StartsWith("V"))
+                    {
+                        if (o.ClientID != null)
+                        {
+                            foreach (Client c in mainR.main.lc)
+                            {
+                                if (o.ClientID == c.ClientID)
+                                {
+                                    Fournisseur.Text = c.Nom;
+                                    break;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Fournisseur.Text = "No Client";
+                        }
+                        IndicatorBorder.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#10B981"));
+                        IndicatorIcon.Text = "🏷️";
+                        Quantity.Text = "- " + opa.QteArticle.ToString();
+                    }
+                    else if (o.OperationType.StartsWith("M"))
+                    {
+                        foreach (User u in mainR.main.lu)
+                        {
+                            if (o.UserID == u.UserID)
+                            {
+                                Fournisseur.Text = u.UserName;
+                                break;
+                            }
+                        }
+                        IndicatorBorder.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#2d42fc"));
+                        IndicatorIcon.Text = "✏️";
+                        Quantity.Visibility = Visibility.Collapsed;
+                        Quantite.Visibility = Visibility.Collapsed;
+                    }
+                    else if (o.OperationType.StartsWith("D"))
+                    {
+                        foreach (User u in mainR.main.lu)
+                        {
+                            if (o.UserID == u.UserID)
+                            {
+                                Fournisseur.Text = u.UserName;
+                                break;
+                            }
+                        }
+                        IndicatorBorder.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#828181"));
+                        IndicatorIcon.Text = "🗑️";
+                        Quantity.Visibility = Visibility.Collapsed;
+                        Quantite.Visibility = Visibility.Collapsed;
+                    }
+                    break;
+                }
+            }
+        }
+
+        public CMainP main;
+        public CMainR mainR;
+        public OperationArticle opa;
 
         private void ReverseButton_Click(object sender, RoutedEventArgs e)
         {

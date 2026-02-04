@@ -1,5 +1,6 @@
 ﻿using GestionComerce;
 using Superete.Main.Comptabilite.Graphes;
+using GestionComerce.Main.ProjectManagment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,13 +23,14 @@ namespace Superete.Main.Comptabilite
     /// </summary>
     public partial class CMainCo : UserControl
     {
-        public CMainCo(User u,MainWindow main)
+        public CMainCo(User u, MainWindow main)
         {
             InitializeComponent();
             this.u = u;
             this.main = main;
             LoadGraphes();
         }
+
         User u;
         MainWindow main;
 
@@ -36,13 +38,49 @@ namespace Superete.Main.Comptabilite
         {
             main.load_main(u);
         }
+
         private void Graphes_Click(object sender, RoutedEventArgs e)
         {
+            ResetButtonStyles();
+            SetSelectedButtonStyle((Button)sender);
             LoadGraphes();
         }
+
+        private void RapportStats_Click(object sender, RoutedEventArgs e)
+        {
+            ResetButtonStyles();
+            SetSelectedButtonStyle((Button)sender);
+            LoadRapportStats();
+        }
+
         private void LoadGraphes()
         {
             MainContentArea.Content = new CGraphe(u, main);
+        }
+
+        private void LoadRapportStats()
+        {
+            MainContentArea.Content = new CMainR(u, main);
+        }
+
+        private void ResetButtonStyles()
+        {
+            // Reset all menu buttons to default style
+            GraphesButton.Style = (Style)FindResource("ModernMenuButton");
+            SalaireButton.Style = (Style)FindResource("ModernMenuButton");
+            RapportButton.Style = (Style)FindResource("ModernMenuButton");
+            ExpencesButton.Style = (Style)FindResource("ModernMenuButton");
+            AIButton.Style = (Style)FindResource("AIButtonStyle");
+            ExpectationButton.Style = (Style)FindResource("ModernMenuButton");
+        }
+
+        private void SetSelectedButtonStyle(Button button)
+        {
+            // Don't change AI button style
+            if (button == AIButton) return;
+
+            button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4299E1"));
+            button.Foreground = new SolidColorBrush(Colors.White);
         }
     }
 }
