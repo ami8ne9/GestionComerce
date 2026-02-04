@@ -68,6 +68,10 @@
     <Compile Include="Client.cs" />
     <Compile Include="Credit.cs" />
     <Compile Include="DatabaseSetup.cs" />
+    <Compile Include="DBHelper.cs" />
+    <Compile Include="ExpenseCategories.cs" />
+    <Compile Include="ExpensePayment.cs" />
+    <Compile Include="Expenses.cs" />
     <Compile Include="Facture.cs" />
     <Compile Include="FactureEnregistrees.cs" />
     <Compile Include="FactureSettings.cs" />
@@ -107,6 +111,10 @@
     <Compile Include="Main\Comptabilite\Graphes\CGraphe.xaml.cs">
       <DependentUpon>CGraphe.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Main\Comptabilite\services\EmployeModel.cs" />
+    <Compile Include="Main\Comptabilite\services\EmployeService.cs" />
+    <Compile Include="Main\Comptabilite\services\SalaireModel.cs" />
+    <Compile Include="Main\Comptabilite\services\SalaireService.cs" />
     <Compile Include="Main\Delivery\DeliveryTicketWindow.xaml.cs">
       <DependentUpon>DeliveryTicketWindow.xaml</DependentUpon>
     </Compile>
