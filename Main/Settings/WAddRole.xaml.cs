@@ -19,20 +19,20 @@ namespace GestionComerce.Main.Settings
     /// </summary>
     public partial class WAddRole : Window
     {
-        public WAddRole(WRoles roles, List<Role> lr,Role r,int s)
+        public WAddRole(WRoles roles, List<Role> lr, Role r, int s)
         {
             InitializeComponent();
             this.lr = lr;
             this.roles = roles;
-            this.s= s;
+            this.s = s;
             this.rr = r;
             if (s == 1)
             {
-                foreach(Role rr in lr)
+                foreach (Role rr in lr)
                 {
                     if (rr.RoleID == r.RoleID)
                     {
-                        RoleName.Text =r.RoleName;
+                        RoleName.Text = r.RoleName;
                         if (r.ViewClientsPage) checkit(ViewClientsPage);
                         if (r.ViewFournisseurPage) checkit(ViewFournisseurPage);
                         if (r.ViewInventrory) checkit(ViewInventory);
@@ -65,7 +65,6 @@ namespace GestionComerce.Main.Settings
                         // Management & Settings
                         if (r.ViewProjectManagment) checkit(ViewProjectManagment);
                         if (r.ViewSettings) checkit(ViewSettings);
-                        // if (r.ModifyTicket) checkit(ModifyTicket);
 
                         // Users & Roles
                         if (r.ViewUsers) checkit(ViewUsers);
@@ -90,8 +89,8 @@ namespace GestionComerce.Main.Settings
 
                         // Reports & Tickets
                         if (r.Repport) checkit(Repport);
-                        if (r.Ticket) checkit(Ticket);
-                        if (r.ViewFacture) checkit(ViewFacture);
+                        //if (r.Ticket) checkit(Ticket);
+                        //if (r.ViewFacture) checkit(ViewFacture);
 
                         // Settlements
                         if (r.SolderFournisseur) checkit(SolderFournisseur);
@@ -114,12 +113,24 @@ namespace GestionComerce.Main.Settings
                         if (r.Logout) checkit(Logout);
                         if (r.ViewExit) checkit(Exit);
                         if (r.ViewShutDown) checkit(ShutDown);
+
+                        // NEW: Facturation Permissions
+                        if (r.AccessFacturation) checkit(AccessFacturation);
+                        if (r.CreateFacture) checkit(CreateFacture);
+                        if (r.HistoriqueFacture) checkit(HistoriqueFacture);
+                        if (r.HistoryCheck) checkit(HistoryCheck);
+                        if (r.FactureEnregistrees) checkit(FactureEnregistrees);
+
+                        // NEW: Livraison Permissions
+                        if (r.AccessLivraison) checkit(AccessLivraison);
+                        if (r.CreationLivraison) checkit(CreationLivraison);
+                        if (r.GestionLivreur) checkit(GestionLivreur);
                     }
                 }
             }
         }
 
-        List<Role> lr;int s;Role rr;
+        List<Role> lr; int s; Role rr;
         WRoles roles;
 
         private void AnnulerButton_Click(object sender, RoutedEventArgs e)
@@ -269,6 +280,68 @@ namespace GestionComerce.Main.Settings
             SetSectionCheckboxes(SystemActionsSection, false);
         }
 
+        // NEW: Facturation Section Toggle Buttons
+        private void ActiverFacturation_Click(object sender, RoutedEventArgs e)
+        {
+            SetSectionCheckboxes(FacturationSection, true);
+        }
+
+        private void DesactiverFacturation_Click(object sender, RoutedEventArgs e)
+        {
+            SetSectionCheckboxes(FacturationSection, false);
+        }
+
+        // NEW: Livraison Section Toggle Buttons
+        private void ActiverLivraison_Click(object sender, RoutedEventArgs e)
+        {
+            SetSectionCheckboxes(LivraisonSection, true);
+        }
+
+        private void DesactiverLivraison_Click(object sender, RoutedEventArgs e)
+        {
+            SetSectionCheckboxes(LivraisonSection, false);
+        }
+
+        // NEW: AccessFacturation dependency logic
+        private void AccessFacturation_Checked(object sender, RoutedEventArgs e)
+        {
+            // When AccessFacturation is checked, check if all child permissions are checked
+            UpdateAccessCheckbox(AccessFacturation, CreateFacture, HistoriqueFacture, HistoryCheck, FactureEnregistrees);
+        }
+
+        private void AccessFacturation_Unchecked(object sender, RoutedEventArgs e)
+        {
+            // When AccessFacturation is unchecked, uncheck all child permissions
+            CreateFacture.IsChecked = false;
+            HistoriqueFacture.IsChecked = false;
+            HistoryCheck.IsChecked = false;
+            FactureEnregistrees.IsChecked = false;
+        }
+
+        // NEW: AccessLivraison dependency logic
+        private void AccessLivraison_Checked(object sender, RoutedEventArgs e)
+        {
+            // When AccessLivraison is checked, check if all child permissions are checked
+            UpdateAccessCheckbox(AccessLivraison, CreationLivraison, GestionLivreur);
+        }
+
+        private void AccessLivraison_Unchecked(object sender, RoutedEventArgs e)
+        {
+            // When AccessLivraison is unchecked, uncheck all child permissions
+            CreationLivraison.IsChecked = false;
+            GestionLivreur.IsChecked = false;
+        }
+
+        // Helper method to update parent access checkbox based on children
+        private void UpdateAccessCheckbox(CheckBox accessCheckbox, params CheckBox[] childCheckboxes)
+        {
+            bool allChecked = childCheckboxes.All(cb => cb.IsChecked == true);
+            if (allChecked && accessCheckbox.IsChecked == false)
+            {
+                accessCheckbox.IsChecked = true;
+            }
+        }
+
         // Helper method to set all checkboxes in a container
         private void SetAllCheckboxes(DependencyObject parent, bool isChecked)
         {
@@ -304,9 +377,6 @@ namespace GestionComerce.Main.Settings
                     return;
                 }
 
-                
-
-                
                 if (s == 0)
                 {
                     Role newRole = new Role
@@ -346,7 +416,6 @@ namespace GestionComerce.Main.Settings
                         // Management & Settings
                         ViewProjectManagment = check(ViewProjectManagment),
                         ViewSettings = check(ViewSettings),
-                        //ModifyTicket = check(ModifyTicket),
 
                         // Users & Roles
                         ViewUsers = check(ViewUsers),
@@ -371,8 +440,8 @@ namespace GestionComerce.Main.Settings
 
                         // Reports & Tickets
                         Repport = check(Repport),
-                        Ticket = check(Ticket),
-                        ViewFacture = check(ViewFacture),
+                        //Ticket = check(Ticket),
+                        //ViewFacture = check(ViewFacture),
 
                         // Settlements
                         SolderFournisseur = check(SolderFournisseur),
@@ -394,7 +463,19 @@ namespace GestionComerce.Main.Settings
                         ViewApropos = check(ViewApropos),
                         Logout = check(Logout),
                         ViewExit = check(Exit),
-                        ViewShutDown = check(ShutDown)
+                        ViewShutDown = check(ShutDown),
+
+                        // NEW: Facturation Permissions
+                        AccessFacturation = check(AccessFacturation),
+                        CreateFacture = check(CreateFacture),
+                        HistoriqueFacture = check(HistoriqueFacture),
+                        HistoryCheck = check(HistoryCheck),
+                        FactureEnregistrees = check(FactureEnregistrees),
+
+                        // NEW: Livraison Permissions
+                        AccessLivraison = check(AccessLivraison),
+                        CreationLivraison = check(CreationLivraison),
+                        GestionLivreur = check(GestionLivreur)
                     };
                     foreach (Role r in lr)
                     {
@@ -445,7 +526,6 @@ namespace GestionComerce.Main.Settings
                     // Management & Settings
                     rr.ViewProjectManagment = check(ViewProjectManagment);
                     rr.ViewSettings = check(ViewSettings);
-                    //rr.ModifyTicket = check(ModifyTicket);
 
                     // Users & Roles
                     rr.ViewUsers = check(ViewUsers);
@@ -470,8 +550,8 @@ namespace GestionComerce.Main.Settings
 
                     // Reports & Tickets
                     rr.Repport = check(Repport);
-                    rr.Ticket = check(Ticket);
-                    rr.ViewFacture = check(ViewFacture);
+                    //rr.Ticket = check(Ticket);
+                    //rr.ViewFacture = check(ViewFacture);
 
                     // Settlements
                     rr.SolderFournisseur = check(SolderFournisseur);
@@ -494,6 +574,18 @@ namespace GestionComerce.Main.Settings
                     rr.Logout = check(Logout);
                     rr.ViewExit = check(Exit);
                     rr.ViewShutDown = check(ShutDown);
+
+                    // NEW: Facturation Permissions
+                    rr.AccessFacturation = check(AccessFacturation);
+                    rr.CreateFacture = check(CreateFacture);
+                    rr.HistoriqueFacture = check(HistoriqueFacture);
+                    rr.HistoryCheck = check(HistoryCheck);
+                    rr.FactureEnregistrees = check(FactureEnregistrees);
+
+                    // NEW: Livraison Permissions
+                    rr.AccessLivraison = check(AccessLivraison);
+                    rr.CreationLivraison = check(CreationLivraison);
+                    rr.GestionLivreur = check(GestionLivreur);
 
                     foreach (Role r in lr)
                     {
@@ -543,7 +635,7 @@ namespace GestionComerce.Main.Settings
             }
             catch (Exception ex)
             {
-                if(s== 0)
+                if (s == 0)
                 {
                     WCongratulations wCongratulations = new WCongratulations("Ajout échoué", "l'ajout n'a pas ete effectue: " + ex.Message, 0);
                     wCongratulations.ShowDialog();
@@ -638,7 +730,19 @@ namespace GestionComerce.Main.Settings
                 a.ViewApropos == b.ViewApropos &&
                 a.Logout == b.Logout &&
                 a.ViewExit == b.ViewExit &&
-                a.ViewShutDown == b.ViewShutDown;
+                a.ViewShutDown == b.ViewShutDown &&
+
+                // NEW: Facturation Permissions
+                a.AccessFacturation == b.AccessFacturation &&
+                a.CreateFacture == b.CreateFacture &&
+                a.HistoriqueFacture == b.HistoriqueFacture &&
+                a.HistoryCheck == b.HistoryCheck &&
+                a.FactureEnregistrees == b.FactureEnregistrees &&
+
+                // NEW: Livraison Permissions
+                a.AccessLivraison == b.AccessLivraison &&
+                a.CreationLivraison == b.CreationLivraison &&
+                a.GestionLivreur == b.GestionLivreur;
         }
 
 

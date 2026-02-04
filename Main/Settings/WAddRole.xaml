@@ -505,9 +505,6 @@
                                 <CheckBox x:Name="ViewSettings" Content="Voir Paramètres" 
                                          Style="{StaticResource ModernCheckBoxStyle}" 
                                          Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
-                                <CheckBox x:Name="ModifyTicket" Content="Modifier Tickets" 
-                                         Style="{StaticResource ModernCheckBoxStyle}" 
-                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -674,7 +671,7 @@
                     <Border x:Name="ReportsSection" Style="{StaticResource RoleSectionStyle}">
                         <StackPanel>
                             <Grid Margin="0,0,0,12">
-                                <TextBlock Text="Rapports et Tickets" 
+                                <TextBlock Text="Rapports " 
                                           FontWeight="SemiBold" 
                                           FontSize="15" 
                                           Foreground="#1F2937" 
@@ -706,12 +703,12 @@
                                 <CheckBox x:Name="Repport" Content="Voir Rapports" 
                                          Style="{StaticResource ModernCheckBoxStyle}" 
                                          Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"/>
-                                <CheckBox x:Name="Ticket" Content="Voir Tickets" 
+                                <!--<CheckBox x:Name="Ticket" Content="Voir Tickets" 
                                          Style="{StaticResource ModernCheckBoxStyle}" 
                                          Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
                                 <CheckBox x:Name="ViewFacture" Content="Voir Factures" 
                                          Style="{StaticResource ModernCheckBoxStyle}" 
-                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>-->
                             </Grid>
                         </StackPanel>
                     </Border>
@@ -769,7 +766,7 @@
                     <Border x:Name="InvoiceSettingsSection" Style="{StaticResource RoleSectionStyle}">
                         <StackPanel>
                             <Grid Margin="0,0,0,12">
-                                <TextBlock Text="Paramètres Factures" 
+                                <TextBlock Text="Paramètres Ticket" 
                                           FontWeight="SemiBold" 
                                           FontSize="15" 
                                           Foreground="#1F2937" 
@@ -852,6 +849,109 @@
                                 <CheckBox x:Name="DeletePaymentMethod" Content="Supprimer Méthodes" 
                                          Style="{StaticResource ModernCheckBoxStyle}" 
                                          Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- NEW: Facturation Section -->
+                    <Border x:Name="FacturationSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Facturation" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverFacturation_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverFacturation_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="AccessFacturation" Content="Accès au Facturation" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"
+                                         Checked="AccessFacturation_Checked"
+                                         Unchecked="AccessFacturation_Unchecked"/>
+                                <CheckBox x:Name="CreateFacture" Content="Créer Facture" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="HistoriqueFacture" Content="Historique de Facture" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="HistoryCheck" Content="History de Check" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="1" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="FactureEnregistrees" Content="Facture Enregistrées" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="2" Margin="0,0,0,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- NEW: Livraison Section -->
+                    <Border x:Name="LivraisonSection" Style="{StaticResource RoleSectionStyle}">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Livraison" 
+                                          FontWeight="SemiBold" 
+                                          FontSize="15" 
+                                          Foreground="#1F2937" 
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Content="Activer" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#10B981" 
+                                            Foreground="White"
+                                            Margin="0,0,4,0" 
+                                            Click="ActiverLivraison_Click"/>
+                                    <Button Content="Désactiver" 
+                                            Style="{StaticResource SmallToggleButtonStyle}" 
+                                            Background="#EF4444" 
+                                            Foreground="White"
+                                            Click="DesactiverLivraison_Click"/>
+                                </StackPanel>
+                            </Grid>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <CheckBox x:Name="AccessLivraison" Content="Accès au Livraison" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="0" Margin="0,0,0,10"
+                                         Checked="AccessLivraison_Checked"
+                                         Unchecked="AccessLivraison_Unchecked"/>
+                                <CheckBox x:Name="CreationLivraison" Content="Création de Livraison" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="1" Grid.Row="0" Margin="0,0,0,10"/>
+                                <CheckBox x:Name="GestionLivreur" Content="Gestion de Livreur" 
+                                         Style="{StaticResource ModernCheckBoxStyle}" 
+                                         Grid.Column="0" Grid.Row="1" Margin="0,0,0,10"/>
                             </Grid>
                         </StackPanel>
                     </Border>

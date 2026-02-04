@@ -89,8 +89,20 @@ namespace GestionComerce
         public bool ViewCreditFournisseur { get; set; }
         public bool ViewLivraison { get; set; }
 
+        // ✅ Facturation Permissions
+        public bool AccessFacturation { get; set; }
+        public bool CreateFacture { get; set; }
+        public bool HistoriqueFacture { get; set; }
+        public bool HistoryCheck { get; set; }
+        public bool FactureEnregistrees { get; set; }
+
+        // ✅ Livraison Permissions
+        public bool AccessLivraison { get; set; }
+        public bool CreationLivraison { get; set; }
+        public bool GestionLivreur { get; set; }
+
         private static readonly string ConnectionString =
-			"Server=localhost\\SQLEXPRESS;Database=GESTIONCOMERCEP;Trusted_Connection=True;";
+            "Server=localhost\\SQLEXPRESS;Database=GESTIONCOMERCEP;Trusted_Connection=True;";
 
         // ✅ Get All Roles
         public async Task<List<Role>> GetRolesAsync()
@@ -170,7 +182,7 @@ namespace GestionComerce
                             ViewExit = Convert.ToBoolean(reader["ViewExit"]),
                             ViewShutDown = Convert.ToBoolean(reader["ViewShutDown"]),
 
-                            // ✅ NEW FIELDS
+                            // ✅ EXISTING NEW FIELDS
                             ViewClientsPage = Convert.ToBoolean(reader["ViewClientsPage"]),
                             ViewFournisseurPage = Convert.ToBoolean(reader["ViewFournisseurPage"]),
                             ViewInventrory = Convert.ToBoolean(reader["ViewInventrory"]),
@@ -178,7 +190,19 @@ namespace GestionComerce
                             CashClient = Convert.ToBoolean(reader["CashClient"]),
                             CashFournisseur = Convert.ToBoolean(reader["CashFournisseur"]),
                             ViewCreditClient = Convert.ToBoolean(reader["ViewCreditClient"]),
-                            ViewCreditFournisseur = Convert.ToBoolean(reader["ViewCreditFournisseur"])
+                            ViewCreditFournisseur = Convert.ToBoolean(reader["ViewCreditFournisseur"]),
+
+                            // ✅ NEW FACTURATION FIELDS
+                            AccessFacturation = Convert.ToBoolean(reader["AccessFacturation"]),
+                            CreateFacture = Convert.ToBoolean(reader["CreateFacture"]),
+                            HistoriqueFacture = Convert.ToBoolean(reader["HistoriqueFacture"]),
+                            HistoryCheck = Convert.ToBoolean(reader["HistoryCheck"]),
+                            FactureEnregistrees = Convert.ToBoolean(reader["FactureEnregistrees"]),
+
+                            // ✅ NEW LIVRAISON FIELDS
+                            AccessLivraison = Convert.ToBoolean(reader["AccessLivraison"]),
+                            CreationLivraison = Convert.ToBoolean(reader["CreationLivraison"]),
+                            GestionLivreur = Convert.ToBoolean(reader["GestionLivreur"])
                         };
                         roles.Add(role);
                     }
@@ -203,7 +227,9 @@ namespace GestionComerce
                     ViewFactureSettings, ModifyFactureSettings, ViewFacture,
                     ViewPaymentMethod, AddPaymentMethod, ModifyPaymentMethod, DeletePaymentMethod,
                     ViewApropos, Logout, ViewExit, ViewShutDown,
-                    ViewClientsPage, ViewFournisseurPage, ViewInventrory, ViewVente, CashClient, CashFournisseur, ViewCreditClient, ViewCreditFournisseur
+                    ViewClientsPage, ViewFournisseurPage, ViewInventrory, ViewVente, CashClient, CashFournisseur, ViewCreditClient, ViewCreditFournisseur,
+                    AccessFacturation, CreateFacture, HistoriqueFacture, HistoryCheck, FactureEnregistrees,
+                    AccessLivraison, CreationLivraison, GestionLivreur
                 ) VALUES (
                     @RoleName, @CreateClient, @ModifyClient, @DeleteClient, @ViewOperationClient, @PayeClient, @ViewClient,
                     @CreateFournisseur, @ModifyFournisseur, @DeleteFournisseur, @ViewOperationFournisseur, @PayeFournisseur, @ViewFournisseur,
@@ -216,7 +242,9 @@ namespace GestionComerce
                     @ViewFactureSettings, @ModifyFactureSettings, @ViewFacture,
                     @ViewPaymentMethod, @AddPaymentMethod, @ModifyPaymentMethod, @DeletePaymentMethod,
                     @ViewApropos, @Logout, @ViewExit, @ViewShutDown,
-                    @ViewClientsPage, @ViewFournisseurPage, @ViewInventrory, @ViewVente, @CashClient, @CashFournisseur, @ViewCreditClient, @ViewCreditFournisseur
+                    @ViewClientsPage, @ViewFournisseurPage, @ViewInventrory, @ViewVente, @CashClient, @CashFournisseur, @ViewCreditClient, @ViewCreditFournisseur,
+                    @AccessFacturation, @CreateFacture, @HistoriqueFacture, @HistoryCheck, @FactureEnregistrees,
+                    @AccessLivraison, @CreationLivraison, @GestionLivreur
                 );
                 SELECT SCOPE_IDENTITY();";
 
@@ -241,7 +269,9 @@ namespace GestionComerce
                     ViewPaymentMethod=@ViewPaymentMethod, AddPaymentMethod=@AddPaymentMethod, ModifyPaymentMethod=@ModifyPaymentMethod, DeletePaymentMethod=@DeletePaymentMethod,
                     ViewApropos=@ViewApropos, Logout=@Logout, ViewExit=@ViewExit, ViewShutDown=@ViewShutDown,
                     ViewClientsPage=@ViewClientsPage, ViewFournisseurPage=@ViewFournisseurPage, ViewInventrory=@ViewInventrory, ViewVente=@ViewVente, 
-                    CashClient=@CashClient, CashFournisseur=@CashFournisseur, ViewCreditClient=@ViewCreditClient, ViewCreditFournisseur=@ViewCreditFournisseur
+                    CashClient=@CashClient, CashFournisseur=@CashFournisseur, ViewCreditClient=@ViewCreditClient, ViewCreditFournisseur=@ViewCreditFournisseur,
+                    AccessFacturation=@AccessFacturation, CreateFacture=@CreateFacture, HistoriqueFacture=@HistoriqueFacture, HistoryCheck=@HistoryCheck, FactureEnregistrees=@FactureEnregistrees,
+                    AccessLivraison=@AccessLivraison, CreationLivraison=@CreationLivraison, GestionLivreur=@GestionLivreur
                 WHERE RoleID=@RoleID";
 
             return await ExecuteSaveAsync(query, true);

@@ -398,30 +398,22 @@
                HorizontalAlignment="Center"/>
                     </StackPanel>
 
-                    <!-- NEW: Accountability Button -->
                     <StackPanel Grid.Row="0" Grid.Column="4" Margin="12">
                         <Button Style="{StaticResource ModuleButtonStyle}" Name="AccountabilityBtn"
-            Click="AccountabilityBtn_Click">
+Click="AccountabilityBtn_Click">
                             <Button.Background>
                                 <ImageBrush ImageSource="images/accounting.png" Stretch="Uniform"/>
                             </Button.Background>
                         </Button>
                         <TextBlock Text="Comptabilité" 
-               Style="{StaticResource ModuleLabelStyle}"
-               HorizontalAlignment="Center" 
-               Margin="0,16,0,4"/>
+   Style="{StaticResource ModuleLabelStyle}"
+   HorizontalAlignment="Center" 
+   Margin="0,16,0,4"/>
                         <TextBlock Text="Gestion comptable" 
-               FontSize="12" 
-               Foreground="#94A3B8"
-               HorizontalAlignment="Center"/>
+   FontSize="12" 
+   Foreground="#94A3B8"
+   HorizontalAlignment="Center"/>
                     </StackPanel>
-
-                    <!-- ========================================
-     ADD THIS BUTTON TO YOUR CMain.xaml DASHBOARD
-     Place it in the Second Row alongside other buttons
-     ======================================== -->
-
-                    <!-- Update the Second Row Grid to have 4 columns instead of 3 -->
                     <!-- Second Row - Centered under first row -->
                     <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Center" Margin="0,24,0,0">
                         <Grid.ColumnDefinitions>

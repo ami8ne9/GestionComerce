@@ -738,8 +738,10 @@
                             <StackPanel Grid.Column="2" Margin="6,0" Grid.ColumnSpan="2">
                                 <TextBlock Text="Référence de Client" Style="{StaticResource FieldLabel}"/>
                                 <TextBox x:Name="txtClientReference" 
-                                         IsReadOnly="True" 
-                                         Style="{StaticResource ModernTextBox}"/>
+             Style="{StaticResource ModernTextBox}"
+             Background="White"
+             Foreground="#0F172A"
+             FontWeight="SemiBold"/>
                             </StackPanel>
                         </Grid>
 

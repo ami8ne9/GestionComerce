@@ -321,6 +321,25 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 txtClientAddress.Text = GetClientAddress(_selectedClient);
                 txtClientEtatJuridique.Text = GetClientEtatJuridique(_selectedClient);
                 txtClientIdSociete.Text = GetClientIdSociete(_selectedClient);
+
+                // **FIXED: Set the client ID in txtClientReference**
+                if (txtClientReference != null)
+                {
+                    txtClientReference.Text = _selectedClient.ClientID.ToString();
+                    System.Diagnostics.Debug.WriteLine($"Client Reference set to: {_selectedClient.ClientID}");
+                }
+            }
+            else
+            {
+                // Clear all client fields if no client selected
+                if (txtClientName != null) txtClientName.Text = "";
+                if (txtClientICE != null) txtClientICE.Text = "";
+                if (txtClientVAT != null) txtClientVAT.Text = "";
+                if (txtClientPhone != null) txtClientPhone.Text = "";
+                if (txtClientAddress != null) txtClientAddress.Text = "";
+                if (txtClientEtatJuridique != null) txtClientEtatJuridique.Text = "";
+                if (txtClientIdSociete != null) txtClientIdSociete.Text = "";
+                if (txtClientReference != null) txtClientReference.Text = "";
             }
         }
 

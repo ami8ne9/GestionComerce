@@ -251,7 +251,7 @@
                             <CheckBox x:Name="FacturesCheckBox" 
               Content="Inclure les Factures" 
               Style="{StaticResource ModernCheckBox}"
-              IsChecked="False"/>
+              IsChecked="True"/>
                         </StackPanel>
                     </Grid>
                 </Border>

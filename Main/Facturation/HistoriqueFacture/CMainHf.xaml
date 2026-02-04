@@ -361,36 +361,43 @@
                         </DataGridTemplateColumn>
 
                         <!-- Actions -->
-                        <DataGridTemplateColumn Header="Actions" Width="260">
+                        <!-- Actions -->
+                        <DataGridTemplateColumn Width="300">
+                            <DataGridTemplateColumn.Header>
+                                <TextBlock Text="Actions" 
+                   Margin="80,0,0,0"/>
+                            </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
                                         <Button Content="👁️ Voir" 
-                                                Style="{StaticResource PrimaryButtonStyle}"
-                                                Padding="8,6"
-                                                FontSize="12"
-                                                Margin="0,0,4,0"
-                                                Click="btnView_Click"
-                                                Tag="{Binding InvoiceID}"/>
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Padding="10,6"
+                        FontSize="12"
+                        Margin="0,0,6,0"
+                        Click="btnView_Click"
+                        Tag="{Binding InvoiceID}"/>
                                         <Button Content="✏️ Modifier" 
-                                                Background="#F59E0B"
-                                                Foreground="White"
-                                                FontSize="12"
-                                                FontWeight="SemiBold"
-                                                Padding="8,6"
-                                                BorderThickness="0"
-                                                Cursor="Hand"
-                                                Margin="0,0,4,0"
-                                                Click="btnEdit_Click"
-                                                Tag="{Binding InvoiceID}">
+                        Background="#F59E0B"
+                        Foreground="White"
+                        FontSize="12"
+                        FontWeight="SemiBold"
+                        Padding="10,6"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Margin="0,0,6,0"
+                        Click="btnEdit_Click"
+                        Tag="{Binding InvoiceID}">
                                             <Button.Style>
                                                 <Style TargetType="Button">
                                                     <Setter Property="Template">
                                                         <Setter.Value>
                                                             <ControlTemplate TargetType="Button">
                                                                 <Border Background="{TemplateBinding Background}" 
-                                                                        CornerRadius="6" 
-                                                                        Padding="{TemplateBinding Padding}">
+                                                CornerRadius="6" 
+                                                Padding="{TemplateBinding Padding}">
                                                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                                 </Border>
                                                                 <ControlTemplate.Triggers>
@@ -408,11 +415,11 @@
                                             </Button.Style>
                                         </Button>
                                         <Button Content="🗑️ Supprimer" 
-                                                Style="{StaticResource DangerButtonStyle}"
-                                                Padding="8,6"
-                                                FontSize="12"
-                                                Click="btnDelete_Click"
-                                                Tag="{Binding InvoiceID}"/>
+                        Style="{StaticResource DangerButtonStyle}"
+                        Padding="10,6"
+                        FontSize="12"
+                        Click="btnDelete_Click"
+                        Tag="{Binding InvoiceID}"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

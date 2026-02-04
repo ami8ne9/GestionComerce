@@ -50,7 +50,8 @@
                 <!-- Retour Button -->
                 <Button Grid.Column="0" Content="← Retour" Style="{StaticResource SecondaryButtonStyle}" x:Name="RetourButton" Click="RetourButton_Click" Margin="16,8,16,8" VerticalAlignment="Center"/>
                 <!-- Operations Button -->
-                <Button Grid.Column="1" Content="Créer Facture" x:Name="CreeFacture" Click="CreeFacture_Click" Padding="24,16" FontSize="14" FontWeight="Medium" FontFamily="Segoe UI" Background="White" Foreground="#3B82F6" BorderThickness="0,0,0,3" BorderBrush="#3B82F6" Cursor="Hand">
+                <!-- Operations Button -->
+                <Button Grid.Column="1" Content="Créer Facture" x:Name="CreeFacture" Click="CreeFacture_Click" Padding="24,16" FontSize="14" FontWeight="Medium" FontFamily="Segoe UI" Background="Transparent" Foreground="#6B7280" BorderThickness="0,0,0,3" BorderBrush="Transparent" Cursor="Hand">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">
@@ -105,7 +106,7 @@
                     </Button.Style>
                 </Button>
                 <!-- Vérifier l'Historique Button -->
-                <Button Grid.Column="3" Content="Vérifier l'Historique" x:Name="VerifierHistorique" Click="VerifierHistorique_Click" Padding="24,16" FontSize="14" FontWeight="Medium" FontFamily="Segoe UI" Background="Transparent" Foreground="#6B7280" BorderThickness="0,0,0,3" BorderBrush="Transparent" Cursor="Hand">
+                <Button Grid.Column="3" Content="Historique de check" x:Name="VerifierHistorique" Click="VerifierHistorique_Click" Padding="24,16" FontSize="14" FontWeight="Medium" FontFamily="Segoe UI" Background="Transparent" Foreground="#6B7280" BorderThickness="0,0,0,3" BorderBrush="Transparent" Cursor="Hand">
                     <Button.Style>
                         <Style TargetType="Button">
                             <Setter Property="Template">

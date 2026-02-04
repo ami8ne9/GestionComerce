@@ -140,7 +140,7 @@
                 <Button x:Name="UserManagementBtn" Style="{StaticResource ActiveNavigationItemStyle}" 
                             Tag="&#xE716;" Content="Gestion des Utilisateurs" Click="NavigationItem_Click"/>
                 <Button x:Name="ConfigurationBtn" Style="{StaticResource NavigationItemStyle}" 
-                            Tag="&#xE713;" Content="Paramètres de Facture" Click="FactureSettings_Click"/>
+                            Tag="&#xE713;" Content="Paramètres de Ticket" Click="FactureSettings_Click"/>
                 <Button x:Name="DatabaseSettingsBtn" Style="{StaticResource NavigationItemStyle}" 
                             Tag="&#xE1C3;" Content="Méthode de Paiement" Click="PaimentMehode_Click"/>
                 <Button x:Name="AProposBtn" Style="{StaticResource NavigationItemStyle}" 

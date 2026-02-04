@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace GestionComerce.Main.Delivery
 {
@@ -21,7 +22,52 @@ namespace GestionComerce.Main.Delivery
             this.main = main;
             this.u = u;
 
+            // Apply permissions before loading
+            ApplyPermissions();
+
             Loaded += CLivraison_Loaded;
+        }
+
+        private void ApplyPermissions()
+        {
+            // Find user's role
+            Role userRole = null;
+            foreach (Role r in main.lr)
+            {
+                if (r.RoleID == u.RoleID)
+                {
+                    userRole = r;
+                    break;
+                }
+            }
+
+            if (userRole == null) return;
+
+            // Check permissions
+            bool hasCreationLivraison = userRole.CreationLivraison;
+            bool hasGestionLivreur = userRole.GestionLivreur;
+
+            // Apply to buttons
+            if (!hasCreationLivraison)
+            {
+                BtnNouvelleLivraison.IsEnabled = false;
+                SetButtonGrayedOut(BtnNouvelleLivraison);
+            }
+
+            if (!hasGestionLivreur)
+            {
+                BtnGererLivreurs.IsEnabled = false;
+                SetButtonGrayedOut(BtnGererLivreurs);
+            }
+        }
+
+        private void SetButtonGrayedOut(Button button)
+        {
+            if (button != null)
+            {
+                button.Opacity = 0.5;
+                button.Cursor = Cursors.No;
+            }
         }
 
         private async void CLivraison_Loaded(object sender, RoutedEventArgs e)
@@ -78,6 +124,8 @@ namespace GestionComerce.Main.Delivery
         // Bouton Nouvelle Livraison
         private void BtnNouvelleLivraison_Click(object sender, RoutedEventArgs e)
         {
+            if (!BtnNouvelleLivraison.IsEnabled) return;
+
             // Ouvrir la fenêtre d'ajout de livraison
             LivraisonAddWindow addWindow = new LivraisonAddWindow(main, u);
             addWindow.LivraisonAdded += async (s, args) => await LoadLivraisonsAsync();
@@ -87,6 +135,8 @@ namespace GestionComerce.Main.Delivery
         // Bouton Gérer Livreurs
         private void BtnGererLivreurs_Click(object sender, RoutedEventArgs e)
         {
+            if (!BtnGererLivreurs.IsEnabled) return;
+
             // Ouvrir la fenêtre de gestion des livreurs
             LivreurManagementWindow livreurWindow = new LivreurManagementWindow(main, u);
             livreurWindow.ShowDialog();
