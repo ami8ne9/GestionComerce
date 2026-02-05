@@ -612,33 +612,19 @@ namespace Superete.Main.Comptabilite.Graphes
                 return data;
             }
 
-            string clientName = client.Nom;
+            // CRITICAL: Trim whitespace
+            string clientName = client.Nom?.Trim();
             string clientIdStr = selectedEntityId.Value.ToString();
 
             var clientOps = operations.Where(o => o.ClientID == selectedEntityId.Value &&
                                                   o.DateOperation >= startDate &&
                                                   o.DateOperation <= endDate).ToList();
 
-            System.Diagnostics.Debug.WriteLine($"=== GenerateClientData for {clientName} (ID: {clientIdStr}) ===");
-            System.Diagnostics.Debug.WriteLine($"  Metric: {metric}");
+            System.Diagnostics.Debug.WriteLine($"=== GenerateClientData for '{clientName}' (ID: {clientIdStr}) ===");
             System.Diagnostics.Debug.WriteLine($"  Date Range: {startDate:yyyy-MM-dd} to {endDate:yyyy-MM-dd}");
             System.Diagnostics.Debug.WriteLine($"  Client Operations: {clientOps.Count}");
-            System.Diagnostics.Debug.WriteLine($"  Total Invoices Available: {invoices?.Count ?? 0}");
-
-            // Diagnostic: Show all invoices for this client
-            if (invoices != null)
-            {
-                var allClientInvoices = invoices.Where(i =>
-                    (i.ClientName != null && i.ClientName.Equals(clientName, StringComparison.OrdinalIgnoreCase)) ||
-                    (i.ReferenceClient != null && i.ReferenceClient == clientIdStr)
-                ).ToList();
-
-                System.Diagnostics.Debug.WriteLine($"  Total invoices for this client: {allClientInvoices.Count}");
-                foreach (var inv in allClientInvoices)
-                {
-                    System.Diagnostics.Debug.WriteLine($"    - {inv.InvoiceNumber}: {inv.InvoiceDate:yyyy-MM-dd}, Articles: {inv.Articles?.Count ?? 0}");
-                }
-            }
+            System.Diagnostics.Debug.WriteLine($"  Total Generated Invoices: {invoices?.Count ?? 0}");
+            System.Diagnostics.Debug.WriteLine($"  FacturesCheckBox: {FacturesCheckBox?.IsChecked}");
 
             switch (metric)
             {
@@ -652,44 +638,57 @@ namespace Superete.Main.Comptabilite.Graphes
                             {
                                 double totalSold = 0;
 
-                                // Get invoice articles for this client and date - IMPROVED MATCHING
-                                List<Invoice> clientInvoicesForDate = null;
+                                // ====== INVOICES: Articles in generated invoices for this client ======
                                 if (FacturesCheckBox?.IsChecked == true && invoices != null)
                                 {
-                                    clientInvoicesForDate = invoices.Where(i =>
+                                    // Match by ClientName (case-insensitive, trimmed)
+                                    var clientInvoicesForDate = invoices.Where(i =>
                                         i.InvoiceDate.Date == currentDate.Date &&
-                                        (
-                                            // Case-insensitive client name matching
-                                            (i.ClientName != null && i.ClientName.Equals(clientName, StringComparison.OrdinalIgnoreCase)) ||
-                                            // Reference client matching
-                                            (i.ReferenceClient != null && i.ReferenceClient == clientIdStr)
-                                        ) &&
                                         i.Articles != null &&
-                                        i.Articles.Count > 0
+                                        i.Articles.Count > 0 &&
+                                        (
+                                            string.Equals(i.ClientName?.Trim(), clientName, StringComparison.OrdinalIgnoreCase) ||
+                                            i.ReferenceClient?.Trim() == clientIdStr
+                                        )
                                     ).ToList();
 
                                     if (clientInvoicesForDate.Count > 0)
                                     {
                                         System.Diagnostics.Debug.WriteLine($"  Date {currentDate:yyyy-MM-dd}: Found {clientInvoicesForDate.Count} invoices");
-                                    }
-                                }
 
-                                // Collect operation IDs that are in invoices to avoid double-counting
-                                var operationIdsInInvoices = new HashSet<int>();
-                                if (clientInvoicesForDate != null && clientInvoicesForDate.Count > 0)
-                                {
-                                    foreach (var invoice in clientInvoicesForDate)
-                                    {
-                                        foreach (var art in invoice.Articles.Where(a => a.OperationID.HasValue))
+                                        foreach (var invoice in clientInvoicesForDate)
                                         {
-                                            operationIdsInInvoices.Add(art.OperationID.Value);
+                                            var invoiceQty = invoice.Articles.Sum(art => (double)art.Quantite);
+                                            totalSold += invoiceQty;
+                                            System.Diagnostics.Debug.WriteLine($"    Invoice {invoice.InvoiceNumber}: {invoiceQty} articles");
                                         }
                                     }
                                 }
 
-                                // Include operations if checkbox is checked - ONLY count operations NOT in invoices
+                                // ====== OPERATIONS: Only count operations NOT already in invoices ======
                                 if (OperationsCheckBox?.IsChecked == true)
                                 {
+                                    // Get operation IDs that are in invoices (to avoid double-counting)
+                                    var operationIdsInInvoices = new HashSet<int>();
+                                    if (invoices != null)
+                                    {
+                                        var clientInvoicesAllDates = invoices.Where(i =>
+                                            string.Equals(i.ClientName?.Trim(), clientName, StringComparison.OrdinalIgnoreCase) ||
+                                            i.ReferenceClient?.Trim() == clientIdStr
+                                        ).ToList();
+
+                                        foreach (var invoice in clientInvoicesAllDates)
+                                        {
+                                            if (invoice.Articles != null)
+                                            {
+                                                foreach (var art in invoice.Articles.Where(a => a.OperationID.HasValue))
+                                                {
+                                                    operationIdsInInvoices.Add(art.OperationID.Value);
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     var opArticles = clientOps
                                         .Where(o => o.DateOperation.Date == currentDate.Date &&
                                                    !operationIdsInInvoices.Contains(o.OperationID))
@@ -699,24 +698,13 @@ namespace Superete.Main.Comptabilite.Graphes
                                     totalSold += opArticles;
                                     if (opArticles > 0)
                                     {
-                                        System.Diagnostics.Debug.WriteLine($"    Operations articles: {opArticles}");
-                                    }
-                                }
-
-                                // Include invoice articles if checkbox is checked
-                                if (FacturesCheckBox?.IsChecked == true && clientInvoicesForDate != null)
-                                {
-                                    foreach (var invoice in clientInvoicesForDate)
-                                    {
-                                        var invoiceQty = invoice.Articles.Sum(art => (double)art.Quantite);
-                                        totalSold += invoiceQty;
-                                        System.Diagnostics.Debug.WriteLine($"    Invoice {invoice.InvoiceNumber}: {invoiceQty} articles");
+                                        System.Diagnostics.Debug.WriteLine($"    Operations (not in invoices): {opArticles} articles");
                                     }
                                 }
 
                                 if (totalSold > 0)
                                 {
-                                    System.Diagnostics.Debug.WriteLine($"    Total Sold: {totalSold}");
+                                    System.Diagnostics.Debug.WriteLine($"    ✓ Total Sold: {totalSold}");
                                 }
                                 data.Add(new GraphDataPoint { Date = currentDate, Value = totalSold });
                             }
@@ -736,38 +724,49 @@ namespace Superete.Main.Comptabilite.Graphes
                             {
                                 double totalRevenue = 0;
 
-                                // Get invoice revenue for this client and date - IMPROVED MATCHING
-                                List<Invoice> clientInvoicesForDate = null;
+                                // ====== INVOICES: Revenue from generated invoices ======
                                 if (FacturesCheckBox?.IsChecked == true && invoices != null)
                                 {
-                                    clientInvoicesForDate = invoices.Where(i =>
+                                    var clientInvoicesForDate = invoices.Where(i =>
                                         i.InvoiceDate.Date == currentDateRev.Date &&
                                         (
-                                            (i.ClientName != null && i.ClientName.Equals(clientName, StringComparison.OrdinalIgnoreCase)) ||
-                                            (i.ReferenceClient != null && i.ReferenceClient == clientIdStr)
+                                            string.Equals(i.ClientName?.Trim(), clientName, StringComparison.OrdinalIgnoreCase) ||
+                                            i.ReferenceClient?.Trim() == clientIdStr
                                         )
                                     ).ToList();
-                                }
 
-                                // Collect operation IDs that are in invoices
-                                var operationIdsWithInvoices = new HashSet<int>();
-                                if (clientInvoicesForDate != null && clientInvoicesForDate.Count > 0)
-                                {
-                                    foreach (var invoice in clientInvoicesForDate)
+                                    var invoiceRevenue = clientInvoicesForDate.Sum(i => (double)i.TotalTTC);
+                                    totalRevenue += invoiceRevenue;
+
+                                    if (invoiceRevenue > 0)
                                     {
-                                        if (invoice.Articles != null)
-                                        {
-                                            foreach (var art in invoice.Articles.Where(a => a.OperationID.HasValue))
-                                            {
-                                                operationIdsWithInvoices.Add(art.OperationID.Value);
-                                            }
-                                        }
+                                        System.Diagnostics.Debug.WriteLine($"    Invoice Revenue: {invoiceRevenue:F2}");
                                     }
                                 }
 
-                                // Include operations revenue - ONLY count operations NOT in invoices
+                                // ====== OPERATIONS: Only operations NOT in invoices ======
                                 if (OperationsCheckBox?.IsChecked == true)
                                 {
+                                    var operationIdsWithInvoices = new HashSet<int>();
+                                    if (invoices != null)
+                                    {
+                                        var clientInvoicesAllDates = invoices.Where(i =>
+                                            string.Equals(i.ClientName?.Trim(), clientName, StringComparison.OrdinalIgnoreCase) ||
+                                            i.ReferenceClient?.Trim() == clientIdStr
+                                        ).ToList();
+
+                                        foreach (var invoice in clientInvoicesAllDates)
+                                        {
+                                            if (invoice.Articles != null)
+                                            {
+                                                foreach (var art in invoice.Articles.Where(a => a.OperationID.HasValue))
+                                                {
+                                                    operationIdsWithInvoices.Add(art.OperationID.Value);
+                                                }
+                                            }
+                                        }
+                                    }
+
                                     var opRevenue = clientOps
                                         .Where(o => o.DateOperation.Date == currentDateRev.Date &&
                                                    !o.Reversed &&
@@ -775,13 +774,11 @@ namespace Superete.Main.Comptabilite.Graphes
                                         .Sum(o => (double)o.PrixOperation);
 
                                     totalRevenue += opRevenue;
-                                }
 
-                                // Include invoice revenue
-                                if (FacturesCheckBox?.IsChecked == true && clientInvoicesForDate != null)
-                                {
-                                    var invoiceRevenue = clientInvoicesForDate.Sum(i => (double)i.TotalTTC);
-                                    totalRevenue += invoiceRevenue;
+                                    if (opRevenue > 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"    Operations Revenue: {opRevenue:F2}");
+                                    }
                                 }
 
                                 data.Add(new GraphDataPoint { Date = currentDateRev, Value = totalRevenue });
@@ -804,24 +801,23 @@ namespace Superete.Main.Comptabilite.Graphes
 
                                 if (OperationsCheckBox?.IsChecked == true)
                                 {
-                                    // Get operation IDs that have invoices for this date
+                                    // Get operation IDs that have invoices
                                     var operationIdsWithInvoices = new HashSet<int>();
                                     if (FacturesCheckBox?.IsChecked == true && invoices != null)
                                     {
-                                        var clientInvoicesForDate = invoices.Where(i =>
-                                            i.InvoiceDate.Date == currentDateOps.Date &&
-                                            (
-                                                (i.ClientName != null && i.ClientName.Equals(clientName, StringComparison.OrdinalIgnoreCase)) ||
-                                                (i.ReferenceClient != null && i.ReferenceClient == clientIdStr)
-                                            ) &&
-                                            i.Articles != null
+                                        var clientInvoicesAllDates = invoices.Where(i =>
+                                            string.Equals(i.ClientName?.Trim(), clientName, StringComparison.OrdinalIgnoreCase) ||
+                                            i.ReferenceClient?.Trim() == clientIdStr
                                         ).ToList();
 
-                                        foreach (var invoice in clientInvoicesForDate)
+                                        foreach (var invoice in clientInvoicesAllDates)
                                         {
-                                            foreach (var art in invoice.Articles.Where(a => a.OperationID.HasValue))
+                                            if (invoice.Articles != null)
                                             {
-                                                operationIdsWithInvoices.Add(art.OperationID.Value);
+                                                foreach (var art in invoice.Articles.Where(a => a.OperationID.HasValue))
+                                                {
+                                                    operationIdsWithInvoices.Add(art.OperationID.Value);
+                                                }
                                             }
                                         }
                                     }
@@ -851,14 +847,13 @@ namespace Superete.Main.Comptabilite.Graphes
 
                                 if (FacturesCheckBox?.IsChecked == true && invoices != null)
                                 {
-                                    // IMPROVED MATCHING - Case insensitive
                                     totalInvoices = invoices
                                         .Count(i =>
+                                            i.InvoiceDate.Date == currentDateInv.Date &&
                                             (
-                                                (i.ClientName != null && i.ClientName.Equals(clientName, StringComparison.OrdinalIgnoreCase)) ||
-                                                (i.ReferenceClient != null && i.ReferenceClient == clientIdStr)
-                                            ) &&
-                                            i.InvoiceDate.Date == currentDateInv.Date
+                                                string.Equals(i.ClientName?.Trim(), clientName, StringComparison.OrdinalIgnoreCase) ||
+                                                i.ReferenceClient?.Trim() == clientIdStr
+                                            )
                                         );
 
                                     if (totalInvoices > 0)
@@ -876,9 +871,7 @@ namespace Superete.Main.Comptabilite.Graphes
                     break;
             }
 
-            System.Diagnostics.Debug.WriteLine($"  Total data points generated: {data.Count}");
-            System.Diagnostics.Debug.WriteLine($"  Data points with value > 0: {data.Count(d => d.Value > 0)}");
-
+            System.Diagnostics.Debug.WriteLine($"  Total data points: {data.Count}, Non-zero: {data.Count(d => d.Value > 0)}");
             return data;
         }
 
@@ -895,6 +888,10 @@ namespace Superete.Main.Comptabilite.Graphes
             var fournisseurOps = operations.Where(o => o.FournisseurID == selectedEntityId.Value &&
                                                        o.DateOperation >= startDate &&
                                                        o.DateOperation <= endDate).ToList();
+
+            System.Diagnostics.Debug.WriteLine($"=== GenerateFournisseurData for ID {selectedEntityId.Value} ===");
+            System.Diagnostics.Debug.WriteLine($"  Operations: {fournisseurOps.Count}");
+            System.Diagnostics.Debug.WriteLine($"  Saved Invoices Available: {facturesEnregistrees?.Count ?? 0}");
 
             switch (metric)
             {
@@ -930,7 +927,7 @@ namespace Superete.Main.Comptabilite.Graphes
                             {
                                 double totalExpenses = 0;
 
-                                // Include operations expenses
+                                // ====== OPERATIONS: Purchase operations ======
                                 if (OperationsCheckBox?.IsChecked == true)
                                 {
                                     var opExpenses = fournisseurOps
@@ -938,17 +935,33 @@ namespace Superete.Main.Comptabilite.Graphes
                                         .Sum(o => (double)o.PrixOperation);
 
                                     totalExpenses += opExpenses;
+
+                                    if (opExpenses > 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"  Date {currentDateExp:yyyy-MM-dd}: Operations Expenses = {opExpenses:F2}");
+                                    }
                                 }
 
-                                // Include saved invoices - these are ALWAYS separate from operations
+                                // ====== SAVED INVOICES: Match by FournisseurID ======
                                 if (FacturesCheckBox?.IsChecked == true && facturesEnregistrees != null)
                                 {
-                                    var invoiceExpenses = facturesEnregistrees
+                                    var savedInvoicesForDate = facturesEnregistrees
                                         .Where(f => f.FournisseurID == selectedEntityId.Value &&
                                                    f.InvoiceDate.Date == currentDateExp.Date)
-                                        .Sum(f => (double)f.TotalAmount);
+                                        .ToList();
 
+                                    var invoiceExpenses = savedInvoicesForDate.Sum(f => (double)f.TotalAmount);
                                     totalExpenses += invoiceExpenses;
+
+                                    if (invoiceExpenses > 0)
+                                    {
+                                        System.Diagnostics.Debug.WriteLine($"  Date {currentDateExp:yyyy-MM-dd}: Saved Invoices Expenses = {invoiceExpenses:F2} ({savedInvoicesForDate.Count} invoices)");
+                                    }
+                                }
+
+                                if (totalExpenses > 0)
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"    ✓ Total Expenses: {totalExpenses:F2}");
                                 }
 
                                 data.Add(new GraphDataPoint { Date = currentDateExp, Value = totalExpenses });
@@ -988,9 +1001,15 @@ namespace Superete.Main.Comptabilite.Graphes
                         {
                             if (currentDateInv.Date <= DateTime.Now.Date)
                             {
+                                // Match by FournisseurID
                                 var invoicesCount = facturesEnregistrees
                                     .Count(f => f.FournisseurID == selectedEntityId.Value &&
                                                f.InvoiceDate.Date == currentDateInv.Date);
+
+                                if (invoicesCount > 0)
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"  Date {currentDateInv:yyyy-MM-dd}: {invoicesCount} saved invoices");
+                                }
 
                                 data.Add(new GraphDataPoint { Date = currentDateInv, Value = invoicesCount });
                             }
@@ -1001,8 +1020,10 @@ namespace Superete.Main.Comptabilite.Graphes
                     break;
             }
 
+            System.Diagnostics.Debug.WriteLine($"  Total data points: {data.Count}, Non-zero: {data.Count(d => d.Value > 0)}");
             return data;
         }
+
 
         private List<GraphDataPoint> GenerateUserData(string metric, DateTime startDate, DateTime endDate)
         {

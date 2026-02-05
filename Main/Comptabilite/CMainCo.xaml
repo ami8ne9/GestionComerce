@@ -9,7 +9,7 @@
              Background="#FAFBFC">
 
     <UserControl.Resources>
-        <!-- Modern Menu Button Style -->
+        <!-- Modern Menu Button Style with Smooth Transitions -->
         <Style x:Key="ModernMenuButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="#2D3748"/>
@@ -29,10 +29,32 @@
                                 CornerRadius="12">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                             VerticalAlignment="Center"/>
+                            <!-- Smooth color transition -->
+                            <Border.RenderTransform>
+                                <ScaleTransform ScaleX="1" ScaleY="1"/>
+                            </Border.RenderTransform>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#EDF2F7"/>
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                          Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          To="#EDF2F7"
+                                                          Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetName="border"
+                                                          Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                          Duration="0:0:0.2"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="#E2E8F0"/>
@@ -195,9 +217,7 @@
                         <Button x:Name="GraphesButton" 
                                 Content="Graphes" 
                                 Style="{StaticResource ModernMenuButton}"
-                                Click="Graphes_Click"
-                                Background="#4299E1"
-                                Foreground="White"/>
+                                Click="Graphes_Click"/>
                         <Button x:Name="SalaireButton" 
                                 Content="Geration des Salaire" 
                                 Style="{StaticResource ModernMenuButton}"/>

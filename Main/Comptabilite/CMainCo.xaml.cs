@@ -28,6 +28,9 @@ namespace Superete.Main.Comptabilite
             InitializeComponent();
             this.u = u;
             this.main = main;
+
+            // Set initial selection
+            SetSelectedButtonStyle(GraphesButton);
             LoadGraphes();
         }
 
@@ -65,13 +68,20 @@ namespace Superete.Main.Comptabilite
 
         private void ResetButtonStyles()
         {
-            // Reset all menu buttons to default style
-            GraphesButton.Style = (Style)FindResource("ModernMenuButton");
-            SalaireButton.Style = (Style)FindResource("ModernMenuButton");
-            RapportButton.Style = (Style)FindResource("ModernMenuButton");
-            ExpencesButton.Style = (Style)FindResource("ModernMenuButton");
-            AIButton.Style = (Style)FindResource("AIButtonStyle");
-            ExpectationButton.Style = (Style)FindResource("ModernMenuButton");
+            // Reset all menu buttons to default transparent style
+            ResetButton(GraphesButton);
+            ResetButton(SalaireButton);
+            ResetButton(RapportButton);
+            ResetButton(ExpencesButton);
+            ResetButton(ExpectationButton);
+            // AI button keeps its gradient style
+        }
+
+        private void ResetButton(Button button)
+        {
+            button.Background = Brushes.Transparent;
+            button.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D3748"));
+            button.FontWeight = FontWeights.Medium;
         }
 
         private void SetSelectedButtonStyle(Button button)
@@ -79,8 +89,10 @@ namespace Superete.Main.Comptabilite
             // Don't change AI button style
             if (button == AIButton) return;
 
-            button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4299E1"));
-            button.Foreground = new SolidColorBrush(Colors.White);
+            // Simple, clean selected style - light gray background with darker text
+            button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F1F5F9"));
+            button.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1E293B"));
+            button.FontWeight = FontWeights.SemiBold;
         }
     }
 }

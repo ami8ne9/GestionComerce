@@ -287,7 +287,7 @@
                     </Button.Style>
                 </Button>
 
-                <Button Grid.Column="3" 
+                <!--<Button Grid.Column="3" 
 Content="Rapport" 
 x:Name="Repportbtn"
 Click="RepportButton_Click"
@@ -330,7 +330,7 @@ Cursor="Hand">
                             </Setter>
                         </Style>
                     </Button.Style>
-                </Button>
+                </Button>-->
             </Grid>
         </Border>
 
@@ -1271,7 +1271,7 @@ Padding="12,6" Click="Button1_Click">
                 </StackPanel>
             </ScrollViewer>
         </Grid>
-        <Grid Background="#F5F7FA" Grid.Row="1" x:Name="RapportContent" Visibility="Collapsed">
+        <!--<Grid Background="#F5F7FA" Grid.Row="1" x:Name="RapportContent" Visibility="Collapsed">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -1280,7 +1280,7 @@ Padding="12,6" Click="Button1_Click">
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Page Title -->
+            --><!-- Page Title --><!--
             <TextBlock Grid.Row="0" 
                Text="Rapports" 
                FontSize="28" 
@@ -1288,7 +1288,7 @@ Padding="12,6" Click="Button1_Click">
                Foreground="#2C3E50"
                Margin="30,30,30,20"/>
 
-            <!-- Filter Buttons -->
+            --><!-- Filter Buttons --><!--
             <Border Grid.Row="1" 
             Background="White" 
             CornerRadius="12" 
@@ -1447,7 +1447,7 @@ Padding="12,6" Click="Button1_Click">
                 </Grid>
             </Border>
 
-            <!-- Date Pickers Section -->
+            --><!-- Date Pickers Section --><!--
             <Border Grid.Row="2" 
             Background="White" 
             CornerRadius="12" 
@@ -1463,7 +1463,7 @@ Padding="12,6" Click="Button1_Click">
                 </Border.Effect>
 
                 <Grid>
-                    <!-- Day View (Full Date) -->
+                    --><!-- Day View (Full Date) --><!--
                     <StackPanel x:Name="DayView" Visibility="Visible">
                         <TextBlock Text="Sélectionner une date" 
                            FontSize="13" 
@@ -1531,7 +1531,7 @@ Padding="12,6" Click="Button1_Click">
                         </DatePicker>
                     </StackPanel>
 
-                    <!-- Month View (Month and Year) -->
+                    --><!-- Month View (Month and Year) --><!--
                     <StackPanel x:Name="MonthView" Visibility="Collapsed">
                         <TextBlock Text="Sélectionner un mois" 
                            FontSize="13" 
@@ -1801,7 +1801,7 @@ Padding="12,6" Click="Button1_Click">
                                     </Style>
                                 </ComboBox.ItemContainerStyle>
 
-                                <!-- Years -->
+                                --><!-- Years --><!--
                                 <ComboBoxItem>2025</ComboBoxItem>
                                 <ComboBoxItem>2024</ComboBoxItem>
                                 <ComboBoxItem>2023</ComboBoxItem>
@@ -1817,7 +1817,7 @@ Padding="12,6" Click="Button1_Click">
                         </Grid>
                     </StackPanel>
 
-                    <!-- Year View (Year Only) -->
+                    --><!-- Year View (Year Only) --><!--
                     <StackPanel x:Name="YearView" Visibility="Collapsed">
                         <TextBlock Text="Sélectionner une année" 
                            FontSize="13" 
@@ -1946,7 +1946,7 @@ Padding="12,6" Click="Button1_Click">
                         </ComboBox>
                     </StackPanel>
 
-                    <!-- Custom View (Date Range) -->
+                    --><!-- Custom View (Date Range) --><!--
                     <StackPanel x:Name="CustomView" Visibility="Collapsed">
                         <TextBlock Text="Période personnalisée" 
                            FontSize="13" 
@@ -2111,10 +2111,10 @@ Padding="12,6" Click="Button1_Click">
                 </Grid>
             </Border>
 
-            <!-- Statistics Display Area -->
+            --><!-- Statistics Display Area --><!--
             <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto" Margin="30,0,30,30">
                 <StackPanel>
-                    <!-- KPI Cards Grid -->
+                    --><!-- KPI Cards Grid --><!--
                     <Grid Margin="0,0,0,30">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -2126,7 +2126,7 @@ Padding="12,6" Click="Button1_Click">
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Revenue Card -->
+                        --><!-- Revenue Card --><!--
                         <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2138,7 +2138,7 @@ Padding="12,6" Click="Button1_Click">
                             </StackPanel>
                         </Border>
 
-                        <!-- Bought Card -->
+                        --><!-- Bought Card --><!--
                         <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2150,7 +2150,7 @@ Padding="12,6" Click="Button1_Click">
                             </StackPanel>
                         </Border>
 
-                        <!-- Sold Card -->
+                        --><!-- Sold Card --><!--
                         <Border Grid.Column="4" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2162,7 +2162,7 @@ Padding="12,6" Click="Button1_Click">
                             </StackPanel>
                         </Border>
 
-                        <!-- Difference Card -->
+                        --><!-- Difference Card --><!--
                         <Border Grid.Column="6" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2175,7 +2175,7 @@ Padding="12,6" Click="Button1_Click">
                         </Border>
                     </Grid>
 
-                    <!-- Article and Operation Stats -->
+                    --><!-- Article and Operation Stats --><!--
                     <Grid Margin="0,0,0,30">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -2187,7 +2187,7 @@ Padding="12,6" Click="Button1_Click">
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Articles Sold -->
+                        --><!-- Articles Sold --><!--
                         <Border Grid.Column="0" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2199,7 +2199,7 @@ Padding="12,6" Click="Button1_Click">
                             </StackPanel>
                         </Border>
 
-                        <!-- Articles Bought -->
+                        --><!-- Articles Bought --><!--
                         <Border Grid.Column="2" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2211,7 +2211,7 @@ Padding="12,6" Click="Button1_Click">
                             </StackPanel>
                         </Border>
 
-                        <!-- Sold Operations -->
+                        --><!-- Sold Operations --><!--
                         <Border Grid.Column="4" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2223,7 +2223,7 @@ Padding="12,6" Click="Button1_Click">
                             </StackPanel>
                         </Border>
 
-                        <!-- Bought Operations -->
+                        --><!-- Bought Operations --><!--
                         <Border Grid.Column="6" Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                             <Border.Effect>
                                 <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2236,8 +2236,8 @@ Padding="12,6" Click="Button1_Click">
                         </Border>
                     </Grid>
 
-                    <!-- Operations List Section -->
-                    <!-- Operations List Section -->
+                    --><!-- Operations List Section -->
+                    <!-- Operations List Section --><!--
                     <Border Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8" Margin="0,0,0,30">
                         <Border.Effect>
                             <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2282,7 +2282,7 @@ Padding="12,6" Click="Button1_Click">
                         </StackPanel>
                     </Border>
 
-                    <!-- Articles List Section -->
+                    --><!-- Articles List Section --><!--
                     <Border Background="White" CornerRadius="12" Padding="24" BorderThickness="1" BorderBrush="#E8E8E8">
                         <Border.Effect>
                             <DropShadowEffect Color="#000000" Opacity="0.05" BlurRadius="20" ShadowDepth="0"/>
@@ -2328,7 +2328,7 @@ Padding="12,6" Click="Button1_Click">
                     </Border>
                 </StackPanel>
             </ScrollViewer>
-        </Grid>
+        </Grid>-->
 
     </Grid>
 </UserControl>

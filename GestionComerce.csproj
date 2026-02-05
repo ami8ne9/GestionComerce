@@ -114,6 +114,7 @@
     <Compile Include="Main\Comptabilite\Rapport\CMainR.xaml.cs">
       <DependentUpon>CMainR.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Main\Comptabilite\Rapport\SalaryReportHelper.cs" />
     <Compile Include="Main\Comptabilite\services\EmployeModel.cs" />
     <Compile Include="Main\Comptabilite\services\EmployeService.cs" />
     <Compile Include="Main\Comptabilite\services\SalaireModel.cs" />
