@@ -1,8 +1,9 @@
-﻿<UserControl x:Class="GestionComerce.Main.Facturation.HistoriqueFacture.CMainHf"
+<UserControl x:Class="GestionComerce.Main.Facturation.HistoriqueFacture.CMainHf"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:res="clr-namespace:GestionComerce.Resources"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="1000">
     <UserControl.Resources>
@@ -157,19 +158,19 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="Historique des Factures" 
+                    <TextBlock Text="{x:Static res:Resources.InvoiceHistory}" 
                                FontSize="24" 
                                FontWeight="Bold" 
                                Foreground="#111827"
                                Margin="0,0,0,4"/>
-                    <TextBlock Text="Consultez et gérez toutes vos factures" 
+                    <TextBlock Text="{x:Static res:Resources.ConsultManageInvoices}" 
                                FontSize="14" 
                                Foreground="#6B7280"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button x:Name="btnRefresh" 
-                            Content="🔄 Actualiser" 
+                            Content="{x:Static res:Resources.Refresh}" 
                             Style="{StaticResource PrimaryButtonStyle}"
                             Margin="0,0,8,0"
                             Click="btnRefresh_Click"/>
@@ -201,7 +202,7 @@
                                         <Setter.Value>
                                             <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
                                                 <VisualBrush.Visual>
-                                                    <TextBlock Text="🔍 Rechercher par numéro, client, ICE..." 
+                                                    <TextBlock Text="{x:Static res:Resources.SearchByNumberClientICE}" 
                                                                Foreground="#9CA3AF" 
                                                                Margin="12,0,0,0"/>
                                                 </VisualBrush.Visual>
@@ -216,7 +217,7 @@
 
                 <!-- Date Filter From -->
                 <StackPanel Grid.Column="1" Margin="0,0,12,0">
-                    <TextBlock Text="Date début" FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
+                    <TextBlock Text="{x:Static res:Resources.StartDate}" FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
                     <DatePicker x:Name="dpStartDate" 
                                 SelectedDateChanged="DateFilter_Changed"
                                 Width="140"
@@ -227,7 +228,7 @@
 
                 <!-- Date Filter To -->
                 <StackPanel Grid.Column="2" Margin="0,0,12,0">
-                    <TextBlock Text="Date fin" FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
+                    <TextBlock Text="{x:Static res:Resources.EndDate}" FontSize="12" Foreground="#6B7280" Margin="0,0,0,4"/>
                     <DatePicker x:Name="dpEndDate" 
                                 SelectedDateChanged="DateFilter_Changed"
                                 Width="140"
@@ -239,7 +240,7 @@
                 <!-- Clear Filters Button -->
                 <Button x:Name="btnClearFilters" 
                         Grid.Column="3"
-                        Content="Effacer filtres" 
+                        Content="{x:Static res:Resources.ClearFilters}" 
                         Background="#F3F4F6"
                         Foreground="#374151"
                         FontSize="14"
@@ -301,7 +302,7 @@
 
                     <DataGrid.Columns>
                         <!-- Invoice Number -->
-                        <DataGridTextColumn Header="N° Facture" 
+                        <DataGridTextColumn Header="{x:Static res:Resources.InvoiceNumber}" 
                                             Binding="{Binding InvoiceNumber}" 
                                             Width="140">
                             <DataGridTextColumn.ElementStyle>
@@ -313,27 +314,27 @@
                         </DataGridTextColumn>
 
                         <!-- Date -->
-                        <DataGridTextColumn Header="Date" 
+                        <DataGridTextColumn Header="{x:Static res:Resources.Date}" 
                                             Binding="{Binding InvoiceDate, StringFormat=dd/MM/yyyy}" 
                                             Width="100"/>
 
                         <!-- Client Name -->
-                        <DataGridTextColumn Header="Client" 
+                        <DataGridTextColumn Header="{x:Static res:Resources.Client}" 
                                             Binding="{Binding ClientName}" 
                                             Width="*"/>
 
                         <!-- Client ICE -->
-                        <DataGridTextColumn Header="ICE Client" 
+                        <DataGridTextColumn Header="{x:Static res:Resources.ClientICE}" 
                                             Binding="{Binding ClientICE}" 
                                             Width="120"/>
 
                         <!-- Type -->
-                        <DataGridTextColumn Header="Type" 
+                        <DataGridTextColumn Header="{x:Static res:Resources.Type}" 
                                             Binding="{Binding InvoiceType}" 
                                             Width="100"/>
 
                         <!-- Total TTC -->
-                        <DataGridTextColumn Header="Total TTC" 
+                        <DataGridTextColumn Header="{x:Static res:Resources.TotalTTC}" 
                                             Binding="{Binding TotalTTC, StringFormat={}{0:N2} DH}" 
                                             Width="120">
                             <DataGridTextColumn.ElementStyle>
@@ -346,7 +347,7 @@
                         </DataGridTextColumn>
 
                         <!-- State -->
-                        <DataGridTemplateColumn Header="État" Width="100">
+                        <DataGridTemplateColumn Header="{x:Static res:Resources.State}" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border
@@ -361,10 +362,9 @@
                         </DataGridTemplateColumn>
 
                         <!-- Actions -->
-                        <!-- Actions -->
                         <DataGridTemplateColumn Width="300">
                             <DataGridTemplateColumn.Header>
-                                <TextBlock Text="Actions" 
+                                <TextBlock Text="{x:Static res:Resources.Actions}" 
                    Margin="80,0,0,0"/>
                             </DataGridTemplateColumn.Header>
                             <DataGridTemplateColumn.CellTemplate>
@@ -372,14 +372,14 @@
                                     <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center">
-                                        <Button Content="👁️ Voir" 
+                                        <Button Content="{x:Static res:Resources.View}" 
                         Style="{StaticResource PrimaryButtonStyle}"
                         Padding="10,6"
                         FontSize="12"
                         Margin="0,0,6,0"
                         Click="btnView_Click"
                         Tag="{Binding InvoiceID}"/>
-                                        <Button Content="✏️ Modifier" 
+                                        <Button Content="{x:Static res:Resources.Modify}" 
                         Background="#F59E0B"
                         Foreground="White"
                         FontSize="12"
@@ -414,7 +414,7 @@
                                                 </Style>
                                             </Button.Style>
                                         </Button>
-                                        <Button Content="🗑️ Supprimer" 
+                                        <Button Content="{x:Static res:Resources.Delete}" 
                         Style="{StaticResource DangerButtonStyle}"
                         Padding="10,6"
                         FontSize="12"
@@ -434,7 +434,7 @@
                         BorderBrush="#E5E7EB" 
                         BorderThickness="0,1,0,0">
                     <TextBlock x:Name="txtInvoiceCount" 
-                               Text="0 facture(s)" 
+                               Text="{x:Static res:Resources.InvoiceCount}" 
                                FontSize="13" 
                                Foreground="#6B7280"
                                HorizontalAlignment="Left"/>

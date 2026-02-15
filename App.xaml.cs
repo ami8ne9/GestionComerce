@@ -1,5 +1,7 @@
-﻿using Superete;
+using Superete;
 using System;
+using System.Globalization;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 
@@ -10,6 +12,7 @@ namespace GestionComerce
         private GlobalButtonWindow _globalButton;
         private int _currentUserId;
         private string _keyboardSetting = "Manuel";
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -65,7 +68,6 @@ namespace GestionComerce
             main.Show();
 
             // Create global button window
-            // Create global button window and store reference
             _globalButton = new GlobalButtonWindow
             {
                 WindowStartupLocation = WindowStartupLocation.Manual,
@@ -102,17 +104,21 @@ namespace GestionComerce
                 }
             };
         }
+
         public void SetUserForKeyboard(int userId)
         {
             _currentUserId = userId;
 
-            // Load keyboard setting
+            // Load keyboard setting and language preference
             try
             {
                 var parametres = Superete.ParametresGeneraux.ObtenirParametresParUserId(userId, "Server=localhost\\SQLEXPRESS;Database=GESTIONCOMERCEP;Trusted_Connection=True;");
                 if (parametres != null)
                 {
                     _keyboardSetting = parametres.AfficherClavier;
+
+                    // Apply saved language preference
+                    ApplyLanguage(parametres.Langue);
                 }
             }
             catch { }
@@ -134,7 +140,6 @@ namespace GestionComerce
                     System.Windows.Controls.PasswordBox.GotFocusEvent,
                     new RoutedEventHandler(OnTextBoxGotFocus));
 
-                // ADD THESE: Register MouseDown to detect clicks even when already focused
                 EventManager.RegisterClassHandler(typeof(System.Windows.Controls.TextBox),
                     System.Windows.Controls.TextBox.PreviewMouseDownEvent,
                     new MouseButtonEventHandler(OnTextBoxMouseDown));
@@ -145,6 +150,92 @@ namespace GestionComerce
             }
         }
 
+        /// <summary>
+        /// Apply language based on user settings
+        /// </summary>
+        private void ApplyLanguage(string languageName)
+        {
+            if (string.IsNullOrEmpty(languageName))
+                languageName = "Français";
+
+            CultureInfo culture = GetCultureFromLanguageName(languageName);
+            
+            // Set the culture for current thread
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+            
+            // Set for the application default
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            
+            // Update resource culture
+            GestionComerce.Resources.Resources.Culture = culture;
+            
+            // Optionally refresh all open windows
+            RefreshAllWindows();
+        }
+
+        /// <summary>
+        /// Convert language name to CultureInfo
+        /// </summary>
+        private CultureInfo GetCultureFromLanguageName(string languageName)
+        {
+            switch (languageName)
+            {
+                case "English":
+                    return new CultureInfo("en-US");
+                    
+                case "العربية":
+                case "Arabic":
+                    return new CultureInfo("ar-MA");
+                    
+                case "Français":
+                case "French":
+                default:
+                    return new CultureInfo("fr-FR");
+            }
+        }
+
+        /// <summary>
+        /// Refresh all open windows to reflect language changes
+        /// </summary>
+        private void RefreshAllWindows()
+        {
+            if (Current == null) return;
+            
+            Current.Dispatcher.Invoke(() =>
+            {
+                foreach (Window window in Current.Windows)
+                {
+                    if (window == null) continue;
+                    
+                    // Update flow direction for RTL languages (Arabic)
+                    window.FlowDirection = Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft
+                        ? FlowDirection.RightToLeft
+                        : FlowDirection.LeftToRight;
+                    
+                    // Force data context refresh to update bindings
+                    var context = window.DataContext;
+                    window.DataContext = null;
+                    window.DataContext = context;
+                    
+                    // If window implements ILanguageAware interface, call its method
+                    if (window is ILanguageAware languageAware)
+                    {
+                        languageAware.OnLanguageChanged();
+                    }
+                }
+            });
+        }
+
+        /// <summary>
+        /// Public method to change language at runtime (can be called from settings window)
+        /// </summary>
+        public void ChangeLanguage(string languageName)
+        {
+            ApplyLanguage(languageName);
+        }
+
         private void OnTextBoxGotFocus(object sender, RoutedEventArgs e)
         {
             if (_keyboardSetting == "Oui")
@@ -153,7 +244,6 @@ namespace GestionComerce
             }
         }
 
-        // ADD THIS METHOD:
         private void OnTextBoxMouseDown(object sender, MouseButtonEventArgs e)
         {
             if (_keyboardSetting == "Oui")
@@ -161,6 +251,7 @@ namespace GestionComerce
                 WKeyboard.ShowKeyboard(_currentUserId);
             }
         }
+
         private void PositionBottomRight(Window main, Window _globalButton)
         {
             // Get usable screen area (excludes taskbar)
@@ -178,5 +269,14 @@ namespace GestionComerce
                 _globalButton.Top = main.Top + main.Height - _globalButton.Height - 10;
             }
         }
+    }
+
+    /// <summary>
+    /// Optional interface for windows that need to respond to language changes
+    /// Implement this interface in your windows if they need custom language change handling
+    /// </summary>
+    public interface ILanguageAware
+    {
+        void OnLanguageChanged();
     }
 }

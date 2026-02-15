@@ -1,9 +1,10 @@
-﻿using Microsoft.Win32;
-using Superete;
-using GestionComerce.Main.Facturation.CreateFacture;
 using GestionComerce.Main.Facturation;
+using GestionComerce.Main.Facturation.CreateFacture;
+using Microsoft.Win32;
+using Superete;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
         public bool Reversed { get; set; }
         public decimal InitialQuantity { get; set; }
 
-        // NEW: Property to determine if stock should be reduced
+        // Property to determine if stock should be reduced
         public bool ReduceStock { get; set; } = false;
 
         public decimal TotalHT => Prix * Quantite;
@@ -79,8 +80,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
         public List<InvoiceArticle> InvoiceArticles = new List<InvoiceArticle>();
         public List<Operation> SelectedOperations = new List<Operation>();
 
-        // Update the CMainFa constructor in CMainFa.xaml.cs to automatically set the client
-
         public CMainFa(User u, MainWindow main, CMainIn In, Operation op)
         {
             InitializeComponent();
@@ -97,7 +96,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 {
                     InitializeWithOperation(op);
 
-                    // **NEW: Automatically set the client if the operation has one**
+                    // Automatically set the client if the operation has one
                     if (op.ClientID.HasValue && op.ClientID.Value > 0)
                     {
                         // Find the client from the main window's client list
@@ -158,9 +157,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
         {
             if (client == null) return "";
 
-            // Try different possible property names
-            // You need to check what properties your Client class actually has
-            // Common property names for client name:
             var properties = client.GetType().GetProperties();
 
             // Look for properties that might contain the name
@@ -322,7 +318,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 txtClientEtatJuridique.Text = GetClientEtatJuridique(_selectedClient);
                 txtClientIdSociete.Text = GetClientIdSociete(_selectedClient);
 
-                // **FIXED: Set the client ID in txtClientReference**
                 if (txtClientReference != null)
                 {
                     txtClientReference.Text = _selectedClient.ClientID.ToString();
@@ -415,6 +410,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
             return result.Trim();
         }
+        
         private string ConvertToFrenchLetters(decimal amount)
         {
             string[] ones = { "", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf",
@@ -462,6 +458,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
             return result.Trim();
         }
+        
         private string ConvertHundredsFrench(int num)
         {
             if (num == 0) return "";
@@ -535,37 +532,17 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             return result.Trim();
         }
 
-        // Replace the InitializeWithOperation method in CMainFa.xaml.cs
-
+        // **MODIFIED: Invoice status is now always a user choice, independent of reversed operations**
         private void InitializeWithOperation(Operation op)
         {
+            // Invoice status is now always a user choice - default to Normal
             if (EtatFacture != null)
             {
-                if (op.Reversed == true)
-                {
-                    EtatFacture.SelectedIndex = ETAT_FACTURE_REVERSED;
-                    EtatFacture.IsEnabled = false;
-                }
-                else
-                {
-                    EtatFacture.SelectedIndex = ETAT_FACTURE_NORMAL;
-                    EtatFacture.IsEnabled = false;
-
-                    if (main?.loa != null)
-                    {
-                        foreach (OperationArticle oa in main.loa)
-                        {
-                            if (oa.OperationID == op.OperationID && oa.Reversed == true)
-                            {
-                                EtatFacture.IsEnabled = true;
-                                break;
-                            }
-                        }
-                    }
-                }
+                EtatFacture.SelectedIndex = ETAT_FACTURE_NORMAL;
+                EtatFacture.IsEnabled = true; // Always allow user to change status
             }
 
-            // **NEW: Auto-select client if operation has one**
+            // Auto-select client if operation has one
             if (op.ClientID.HasValue && op.ClientID.Value > 0 && main?.lc != null)
             {
                 Client operationClient = main.lc.FirstOrDefault(c => c.ClientID == op.ClientID.Value);
@@ -617,7 +594,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             SelectedOperations.RemoveAll(o => o.OperationID == op.OperationID);
             InvoiceArticles.RemoveAll(ia => ia.OperationID == op.OperationID);
 
-            // **NEW: Don't call RecalculateTotals for Credit invoices**
             string invoiceType = InvoiceType.ToLower();
             if (invoiceType != "credit" && invoiceType != "cheque")
             {
@@ -754,7 +730,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             else
             {
                 // For regular invoices, this is more complex since articles are merged
-                // We need to find all articles with this ArticleID and recalculate
                 var similarArticles = InvoiceArticles
                     .Where(ia => ia.ArticleID == articleId)
                     .ToList();
@@ -776,14 +751,15 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             }
         }
 
+        // **MODIFIED: Removed all reversed-based filtering logic - now calculates all articles regardless of reversed status**
         public void RecalculateTotals()
         {
-            // Vérifier si les éléments UI sont initialisés
+            // Check if UI elements are initialized
             if (txtTotalAmount == null || txtTVAAmount == null || txtApresTVAAmount == null ||
                 txtApresRemiseAmount == null || txtTVARate == null)
                 return;
 
-            // **NOUVEAU: Ignorer le recalcul pour les factures Crédit - elles gèrent les totaux manuellement**
+            // Ignore recalculation for Credit invoices - they manage totals manually
             string invoiceType = InvoiceType.ToLower();
             if (invoiceType == "credit" || invoiceType == "cheque")
             {
@@ -791,37 +767,23 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 return;
             }
 
-            // Pour le calcul, utiliser uniquement les articles avec quantité > 0
+            // Calculate using only articles with quantity > 0
             var articlesForCalculation = InvoiceArticles.Where(ia => ia.Quantite > 0).ToList();
 
+            // **MODIFIED: Calculate all articles together, ignore reversed status**
             decimal totalHT = 0;
             decimal totalTVA = 0;
-            decimal totalHTReversed = 0;
-            decimal totalTVAReversed = 0;
-            bool hasReversedItems = false;
-            bool hasNormalItems = false;
 
-            // Filtrer les articles selon la sélection EtatFacture
             foreach (var invoiceArticle in articlesForCalculation)
             {
-                if (invoiceArticle.Reversed)
-                {
-                    totalHTReversed += invoiceArticle.TotalHT;
-                    totalTVAReversed += invoiceArticle.MontantTVA;
-                    hasReversedItems = true;
-                }
-                else
-                {
-                    totalHT += invoiceArticle.TotalHT;
-                    totalTVA += invoiceArticle.MontantTVA;
-                    hasNormalItems = true;
-                }
+                totalHT += invoiceArticle.TotalHT;
+                totalTVA += invoiceArticle.MontantTVA;
             }
 
-            // Activer Remise uniquement quand il y a des articles
+            // Enable Remise only when there are articles
             if (Remise != null)
             {
-                if (hasNormalItems || hasReversedItems)
+                if (articlesForCalculation.Count > 0)
                 {
                     Remise.IsEnabled = true;
                 }
@@ -832,7 +794,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 }
             }
 
-            // Obtenir la valeur de la remise
+            // Get discount value
             decimal remiseValue = 0;
             if (Remise != null && !string.IsNullOrWhiteSpace(Remise.Text))
             {
@@ -840,66 +802,35 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 decimal.TryParse(cleanedRemise, out remiseValue);
             }
 
-            // Mettre à jour les montants affichés selon l'état sélectionné
-            if (EtatFacture != null && EtatFacture.SelectedIndex == ETAT_FACTURE_REVERSED && hasReversedItems)
+            // **MODIFIED: Simple calculation without reversed-based logic**
+            currentTotalHT = totalHT;
+
+            // Validate remise against total
+            if (remiseValue > totalHT)
             {
-                currentTotalHT = totalHTReversed;
-
-                // Validate remise against reversed total
-                if (remiseValue > totalHTReversed)
+                remiseValue = 0;
+                if (Remise != null)
                 {
-                    remiseValue = 0;
-                    if (Remise != null)
-                    {
-                        Remise.TextChanged -= Remise_TextChanged;
-                        Remise.Text = "";
-                        Remise.TextChanged += Remise_TextChanged;
-                    }
+                    Remise.TextChanged -= Remise_TextChanged;
+                    Remise.Text = "";
+                    Remise.TextChanged += Remise_TextChanged;
                 }
-
-                decimal totalAfterRemise = totalHTReversed - remiseValue;
-                decimal tvaAfterRemise = totalHTReversed > 0 ? (totalTVAReversed / totalHTReversed) * totalAfterRemise : 0;
-
-                txtTotalAmount.Text = totalHTReversed.ToString("0.00") + " DH";
-                txtTVAAmount.Text = tvaAfterRemise.ToString("0.00") + " DH";
-                txtApresTVAAmount.Text = (totalHTReversed + tvaAfterRemise).ToString("0.00") + " DH";
-                txtApresRemiseAmount.Text = (totalAfterRemise + tvaAfterRemise).ToString("0.00") + " DH";
-
-                decimal tvaPercentage = totalHTReversed > 0 ? (totalTVAReversed / totalHTReversed) * 100 : 0;
-                txtTVARate.Text = tvaPercentage.ToString("0.00");
-            }
-            else
-            {
-                currentTotalHT = totalHT;
-
-                // Validate remise against normal total
-                if (remiseValue > totalHT)
-                {
-                    remiseValue = 0;
-                    if (Remise != null)
-                    {
-                        Remise.TextChanged -= Remise_TextChanged;
-                        Remise.Text = "";
-                        Remise.TextChanged += Remise_TextChanged;
-                    }
-                }
-
-                decimal totalAfterRemise = totalHT - remiseValue;
-                decimal tvaAfterRemise = totalHT > 0 ? (totalTVA / totalHT) * totalAfterRemise : 0;
-
-                txtTotalAmount.Text = totalHT.ToString("0.00") + " DH";
-                txtTVAAmount.Text = tvaAfterRemise.ToString("0.00") + " DH";
-                txtApresTVAAmount.Text = (totalHT + tvaAfterRemise).ToString("0.00") + " DH";
-                txtApresRemiseAmount.Text = (totalAfterRemise + tvaAfterRemise).ToString("0.00") + " DH";
-
-                decimal tvaPercentage = totalHT > 0 ? (totalTVA / totalHT) * 100 : 0;
-                txtTVARate.Text = tvaPercentage.ToString("0.00");
             }
 
-            // **NOUVEAU: Mettre à jour le montant en lettres après recalcul des totaux**
+            decimal totalAfterRemise = totalHT - remiseValue;
+            decimal tvaAfterRemise = totalHT > 0 ? (totalTVA / totalHT) * totalAfterRemise : 0;
+
+            txtTotalAmount.Text = totalHT.ToString("0.00") + " DH";
+            txtTVAAmount.Text = tvaAfterRemise.ToString("0.00") + " DH";
+            txtApresTVAAmount.Text = (totalHT + tvaAfterRemise).ToString("0.00") + " DH";
+            txtApresRemiseAmount.Text = (totalAfterRemise + tvaAfterRemise).ToString("0.00") + " DH";
+
+            decimal tvaPercentage = totalHT > 0 ? (totalTVA / totalHT) * 100 : 0;
+            txtTVARate.Text = tvaPercentage.ToString("0.00");
+
+            // Update amount in letters after recalculating totals
             UpdateAmountInLetters();
         }
-
 
         // Get filtered articles for WFacturePage (exclude articles with quantity 0)
         public List<InvoiceArticle> GetFilteredInvoiceArticles()
@@ -990,7 +921,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                     txtApresRemiseAmount.Text = totalWithTVA.ToString("0.00") + " DH";
                 }
 
-                // **NOUVEAU: Mettre à jour le montant en lettres**
                 UpdateAmountInLetters();
             }
             catch (Exception ex)
@@ -998,8 +928,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 System.Diagnostics.Debug.WriteLine($"Erreur dans txtTotalAmount_TextChanged: {ex.Message}");
             }
         }
-
-
 
         private void txtTVARate_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -1052,11 +980,8 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             if (txtApresRemiseAmount != null)
                 txtApresRemiseAmount.Text = totalWithTVA.ToString("0.00") + " DH";
 
-            // **NOUVEAU: Mettre à jour le montant en lettres**
             UpdateAmountInLetters();
         }
-
-
 
         private void Remise_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -1096,10 +1021,10 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 if (textBox.Text.Length > 0)
                 {
                     int caretPosition = textBox.CaretIndex;
-                    textBox.TextChanged -= Remise_TextChanged; // Temporarily remove handler
+                    textBox.TextChanged -= Remise_TextChanged;
                     textBox.Text = textBox.Text.Remove(textBox.Text.Length - 1);
                     textBox.CaretIndex = Math.Min(caretPosition, textBox.Text.Length);
-                    textBox.TextChanged += Remise_TextChanged; // Re-add handler
+                    textBox.TextChanged += Remise_TextChanged;
                 }
 
                 MessageBox.Show(
@@ -1113,6 +1038,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             // Recalculate with the new discount
             RecalculateWithRemise(remiseValue);
         }
+        
         private void RecalculateWithRemise(decimal remiseValue)
         {
             if (txtTotalAmount == null || txtTVARate == null || txtTVAAmount == null ||
@@ -1304,7 +1230,9 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             }
             try
             {
-                string dateValue = dpInvoiceDate?.SelectedDate?.ToString("dd/MM/yyyy") ?? DateTime.Now.ToString("dd/MM/yyyy");
+                string dateValue =
+    (dpInvoiceDate?.SelectedDate?.Date ?? DateTime.Now.Date)
+    .ToString("dd/MM/yy", CultureInfo.InvariantCulture);
 
                 string paymentMethod = (cmbPaymentMethod?.SelectedItem as ComboBoxItem)?.Content?.ToString() ?? "";
                 string chequeReference = (paymentMethod.ToLower() == "cheque" && txtChequeReference != null)
@@ -1324,13 +1252,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
                 string invoiceType = cmbInvoiceType?.Text ?? "";
 
-                // DEBUG: Add this to see what's happening
-                System.Diagnostics.Debug.WriteLine($"Invoice Type: {invoiceType}");
-                System.Diagnostics.Debug.WriteLine($"Selected Operations Count: {SelectedOperations.Count}");
-                System.Diagnostics.Debug.WriteLine($"Selected Client: {SelectedClient?.ToString()}");
-
-                // In the btnPreview_Click method, find the credit section and replace with:
-
                 if (invoiceType.ToLower() == "credit" && SelectedOperations.Count > 0)
                 {
                     var operation = SelectedOperations.First();
@@ -1345,7 +1266,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                         creditClientName = txtClientName.Text;
                     }
 
-                    // **FIXED: Get amount from txtApresTVAAmount (which contains the sum of operation prices)**
                     if (!string.IsNullOrEmpty(txtApresTVAAmount?.Text))
                     {
                         string cleanAmount = txtApresTVAAmount.Text.Replace("DH", "").Replace(" ", "").Trim();
@@ -1403,11 +1323,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             { "CreditRest", creditRest }
         };
 
-                // DEBUG: Print credit values
-                System.Diagnostics.Debug.WriteLine($"FactureInfo CreditClientName: {FactureInfo["CreditClientName"]}");
-                System.Diagnostics.Debug.WriteLine($"FactureInfo CreditMontant: {FactureInfo["CreditMontant"]}");
-                System.Diagnostics.Debug.WriteLine($"FactureInfo CreditRest: {FactureInfo["CreditRest"]}");
-
                 // For credit/cheque invoices, ensure we have client info and amount in letters
                 if ((invoiceType == "Credit" || invoiceType == "Cheque") && SelectedClient != null)
                 {
@@ -1451,7 +1366,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 Random random = new Random();
                 int randomNumber = random.Next(10000, 99999);
 
-                string invoiceNumber = $"{year}{month}{day}-{randomNumber}"; // Removed "FAC-" prefix
+                string invoiceNumber = $"{year}{month}{day}-{randomNumber}";
 
                 txtInvoiceNumber.Text = invoiceNumber;
             }
@@ -1463,10 +1378,8 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
         private void EtatFacture_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (txtTotalAmount != null && txtTVAAmount != null)
-            {
-                RecalculateTotals();
-            }
+            // Invoice status is now just a user choice - no special logic needed
+            // This event handler is kept for potential future use
         }
 
         private void cmbInvoiceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1476,7 +1389,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             SelectedOperations.Clear();
             InvoiceArticles.Clear();
 
-            // **NEW: Reset all totals when changing invoice type**
+            // Reset all totals when changing invoice type
             if (txtTotalAmount != null) txtTotalAmount.Text = "0.00 DH";
             if (txtTVAAmount != null) txtTVAAmount.Text = "0.00 DH";
             if (txtApresTVAAmount != null) txtApresTVAAmount.Text = "0.00 DH";
@@ -1513,7 +1426,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             }
         }
 
-        // Method to update or add article separately (used by other windows) - FIXED VERSION
+        // Method to update or add article separately (used by other windows)
         public void UpdateOrAddArticleSeparate(int operationID, int articleID, string articleName,
             decimal quantity, decimal price, decimal tva, decimal initialQuantity, decimal expeditionTotal = 0)
         {
@@ -1522,7 +1435,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 InvoiceArticles = new List<InvoiceArticle>();
             }
 
-            // Debug logging
             System.Diagnostics.Debug.WriteLine($"=== UpdateOrAddArticleSeparate called ===");
             System.Diagnostics.Debug.WriteLine($"  OperationID: {operationID}, ArticleID: {articleID}");
             System.Diagnostics.Debug.WriteLine($"  ArticleName: {articleName}, Quantity: {quantity}");
@@ -1535,8 +1447,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
             if (existingArticle != null)
             {
-                // **CRITICAL FIX: For Expedition type, ALWAYS update quantity even if 0**
-                // **ALSO for regular invoices, always update when called**
                 existingArticle.Quantite = quantity;
                 existingArticle.Prix = price;
                 existingArticle.TVA = tva;
@@ -1546,8 +1456,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             }
             else
             {
-                // **CRITICAL FIX: For Expedition type, add article even if quantity is 0**
-                // For Expedition invoices, we need to keep track of ALL articles, even with 0 quantity
+                // For Expedition invoices, keep track of ALL articles, even with 0 quantity
                 if (InvoiceType == "Expedition" || quantity > 0)
                 {
                     var newArticle = new InvoiceArticle
@@ -1571,7 +1480,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 }
             }
 
-            // Show current state for debugging
             System.Diagnostics.Debug.WriteLine($"  Current InvoiceArticles count: {InvoiceArticles.Count}");
             foreach (var article in InvoiceArticles.Where(a => a.OperationID == operationID && a.ArticleID == articleID))
             {
@@ -1590,7 +1498,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 InvoiceArticles = new List<InvoiceArticle>();
             }
 
-            // For Expedition invoices, we need to handle this specially
             var existingArticle = InvoiceArticles.FirstOrDefault(ia =>
                 ia.OperationID == operationID &&
                 ia.ArticleID == articleID);
@@ -1677,6 +1584,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             InvoiceArticles.Clear();
             InvoiceArticles.AddRange(mergedArticles);
         }
+        
         private void UpdateAmountInLetters()
         {
             if (txtAmountInLetters == null || txtApresRemiseAmount == null)
@@ -1684,7 +1592,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
             try
             {
-                // Obtenir le montant total après remise
+                // Get the total amount after discount
                 string amountText = txtApresRemiseAmount.Text.Replace("DH", "").Replace(" ", "").Trim();
 
                 if (decimal.TryParse(amountText, out decimal amount))
@@ -1692,15 +1600,16 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                     string amountInFrench = ConvertToFrenchLetters(amount);
                     txtAmountInLetters.Text = amountInFrench;
 
-                    System.Diagnostics.Debug.WriteLine($"Montant en lettres mis à jour: {amountInFrench}");
+                    System.Diagnostics.Debug.WriteLine($"Amount in letters updated: {amountInFrench}");
                 }
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Erreur lors de la mise à jour du montant en lettres: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error updating amount in letters: {ex.Message}");
             }
         }
-        // Add this method to handle adding manual articles
+        
+        // Method to handle adding manual articles
         public void AddManualArticle(InvoiceArticle article)
         {
             if (InvoiceArticles == null)
@@ -1716,20 +1625,18 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             RecalculateTotals();
         }
 
-        // Add this event handler for the Add Article button
+        // Event handler for the Add Article button
         private void btnAddArticle_Click(object sender, RoutedEventArgs e)
         {
             WAddArticle wAddArticle = new WAddArticle(this);
             wAddArticle.ShowDialog();
         }
+        
         public void ForceUpdateArticlesFromOperation(int operationId)
         {
             System.Diagnostics.Debug.WriteLine($"=== ForceUpdateArticlesFromOperation called for OperationID: {operationId} ===");
 
-            // This method would be called from CSingleOperation when WMouvments closes
-            // It ensures all articles for this operation are properly updated
-
-            // For now, just recalculate totals
+            // Recalculate totals
             RecalculateTotals();
         }
     }

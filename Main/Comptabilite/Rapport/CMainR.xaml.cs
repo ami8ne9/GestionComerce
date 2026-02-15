@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using GestionComerce.Main.Facturation;
+using GestionComerce.Helpers;
 
 namespace GestionComerce.Main.ProjectManagment
 {
@@ -34,7 +35,7 @@ namespace GestionComerce.Main.ProjectManagment
             PopulateYearComboBox(YearComboBox);
 
             ResetStatistics();
-            LoadInvoices(); // Load invoices on initialization
+            LoadInvoices();
         }
 
         public User u;
@@ -45,6 +46,10 @@ namespace GestionComerce.Main.ProjectManagment
         List<Operation> LOperation = new List<Operation>();
         List<OperationArticle> LOperationArticle = new List<OperationArticle>();
         List<Invoice> LInvoices = new List<Invoice>();
+
+        // NEW: Article data aggregator
+        private ArticleDataAggregator aggregator;
+
         private DateTime? _previousStartDate;
         private DateTime? _previousEndDate;
 
@@ -54,26 +59,49 @@ namespace GestionComerce.Main.ProjectManagment
             {
                 var invoiceRepo = new InvoiceRepository("");
                 LInvoices = await invoiceRepo.GetAllInvoicesAsync(false);
-                
-                // Load invoice articles for each invoice
+
+                // Load invoice articles using the dedicated GetInvoiceArticlesAsync method
                 foreach (var invoice in LInvoices)
                 {
-                    if (invoice.Articles == null || invoice.Articles.Count == 0)
+                    try
                     {
-                        // Articles should already be loaded, but just in case
-                        var fullInvoice = await invoiceRepo.GetInvoiceByIdAsync(invoice.InvoiceID);
-                        if (fullInvoice != null)
+                        var invoiceArticles = await invoiceRepo.GetInvoiceArticlesAsync(invoice.InvoiceID);
+
+                        if (invoiceArticles != null && invoiceArticles.Count > 0)
                         {
-                            invoice.Articles = fullInvoice.Articles;
+                            invoice.Articles = invoiceArticles;
+                        }
+                        else
+                        {
+                            invoice.Articles = new List<Invoice.InvoiceArticle>();
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Error loading articles for invoice {invoice.InvoiceID}: {ex.Message}");
+                        invoice.Articles = new List<Invoice.InvoiceArticle>();
+                    }
                 }
+
+                // NEW: Initialize aggregator after invoices are loaded
+                InitializeAggregator();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors du chargement des factures: {ex.Message}");
                 LInvoices = new List<Invoice>();
             }
+        }
+
+        // NEW: Initialize the aggregator with current data
+        private void InitializeAggregator()
+        {
+            aggregator = new ArticleDataAggregator(
+                main.lo?.ToList() ?? new List<Operation>(),
+                main.loa?.ToList() ?? new List<OperationArticle>(),
+                LInvoices,
+                main.la?.ToList() ?? new List<Article>()
+            );
         }
 
         private void DayButton_Click(object sender, RoutedEventArgs e)
@@ -145,7 +173,7 @@ namespace GestionComerce.Main.ProjectManagment
             TopSalariesContainer.Children.Clear();
             RevenueOperationsContainer.Children.Clear();
             RevenueArticlesContainer.Children.Clear();
-            
+
             SeeMoreContainer2.Visibility = Visibility.Collapsed;
             SeeMoreContainer3.Visibility = Visibility.Collapsed;
         }
@@ -251,6 +279,9 @@ namespace GestionComerce.Main.ProjectManagment
             LoadStatistics();
         }
 
+        // =======================
+        // UPDATED STATISTICS - NOW INTEGRATES INVOICEARTICLES
+        // =======================
         public void LoadStatistics()
         {
             LOperation.Clear();
@@ -265,15 +296,15 @@ namespace GestionComerce.Main.ProjectManagment
             int OperationVente = 0;
             int OperationAchete = 0;
 
-            // Dictionaries for tracking top performers
+            // NEW: Use aggregator for article statistics
             Dictionary<string, decimal> clientRevenue = new Dictionary<string, decimal>();
             Dictionary<int, decimal> supplierPurchases = new Dictionary<int, decimal>();
-            Dictionary<int, decimal> articleRevenue = new Dictionary<int, decimal>();
+            Dictionary<int, ArticlePerformance> articlePerformance = new Dictionary<int, ArticlePerformance>();
 
             DateTime? filterStartDate = null;
             DateTime? filterEndDate = null;
 
-            // Determine date range based on selected filter
+            // Determine date range
             if (selectedbtn == "day" && DayDatePicker.SelectedDate.HasValue)
             {
                 filterStartDate = DayDatePicker.SelectedDate.Value.Date;
@@ -300,6 +331,9 @@ namespace GestionComerce.Main.ProjectManagment
 
             if (filterStartDate.HasValue && filterEndDate.HasValue)
             {
+                // Reinitialize aggregator with current date range
+                InitializeAggregator();
+
                 // Process Operations
                 foreach (Operation o in main.lo)
                 {
@@ -347,36 +381,26 @@ namespace GestionComerce.Main.ProjectManagment
                             }
                         }
 
-                        // Track articles from operations
+                        // Track operation articles
                         foreach (OperationArticle oa in main.loa.Where(x => x.OperationID == o.OperationID))
                         {
                             LOperationArticle.Add(oa);
 
-                            Article article = main.la?.FirstOrDefault(a => a.ArticleID == oa.ArticleID);
-                            if (article != null && !oa.Reversed)
+                            if (!oa.Reversed)
                             {
                                 bool isVente = o.OperationType != null && o.OperationType.StartsWith("V", StringComparison.OrdinalIgnoreCase);
                                 bool isAchat = o.OperationType != null && o.OperationType.StartsWith("A", StringComparison.OrdinalIgnoreCase);
 
                                 if (isVente)
-                                {
                                     articleVendus += oa.QteArticle;
-
-                                    if (!articleRevenue.ContainsKey(oa.ArticleID))
-                                        articleRevenue[oa.ArticleID] = 0;
-                                    articleRevenue[oa.ArticleID] += article.PrixVente * oa.QteArticle;
-                                }
                                 else if (isAchat)
-                                {
                                     articleAchete += oa.QteArticle;
-                                }
                             }
                         }
                     }
                 }
 
-                // Process Invoices (Factures)
-                // Process Invoices (Factures)
+                // Process Invoices
                 foreach (Invoice invoice in LInvoices)
                 {
                     if (invoice.InvoiceDate >= filterStartDate && invoice.InvoiceDate < filterEndDate && !invoice.IsDeleted)
@@ -387,18 +411,14 @@ namespace GestionComerce.Main.ProjectManagment
                         }
                         else
                         {
-                            // Determine if invoice is sales or purchase
-                            // Typically invoices are sales documents
                             bool isVente = true;
                             bool isAchat = false;
 
-                            // If you have a way to distinguish purchase invoices, add logic here
-                            // For example:
                             if (invoice.InvoiceType != null)
                             {
-                                string typeLower = invoice.InvoiceType.ToLower(); // FIXED: Correct variable declaration
+                                string typeLower = invoice.InvoiceType.ToLower();
                                 isAchat = typeLower.Contains("achat") || typeLower.Contains("purchase");
-                                isVente = !isAchat; // If it's not purchase, it's sale
+                                isVente = !isAchat;
                             }
 
                             if (isVente)
@@ -406,7 +426,6 @@ namespace GestionComerce.Main.ProjectManagment
                                 OperationVente++;
                                 vendus += invoice.TotalTTC;
 
-                                // Track client revenue from invoices
                                 if (!string.IsNullOrEmpty(invoice.ClientName))
                                 {
                                     string clientKey = invoice.ClientName;
@@ -421,7 +440,7 @@ namespace GestionComerce.Main.ProjectManagment
                                 achete += invoice.TotalTTC;
                             }
 
-                            // Track invoice articles
+                            // NEW: Track invoice articles using aggregator
                             if (invoice.Articles != null)
                             {
                                 foreach (var invoiceArticle in invoice.Articles.Where(a => !a.IsDeleted && !a.IsReversed))
@@ -429,10 +448,6 @@ namespace GestionComerce.Main.ProjectManagment
                                     if (isVente)
                                     {
                                         articleVendus += (int)invoiceArticle.Quantite;
-
-                                        if (!articleRevenue.ContainsKey(invoiceArticle.ArticleID))
-                                            articleRevenue[invoiceArticle.ArticleID] = 0;
-                                        articleRevenue[invoiceArticle.ArticleID] += invoiceArticle.TotalTTC;
                                     }
                                     else if (isAchat)
                                     {
@@ -445,6 +460,13 @@ namespace GestionComerce.Main.ProjectManagment
                 }
 
                 revenue = vendus - achete;
+
+                // NEW: Get top articles using aggregator
+                var topArticles = aggregator.GetTopSellingArticles(filterStartDate.Value, filterEndDate.Value, 5);
+                foreach (var perf in topArticles)
+                {
+                    articlePerformance[perf.ArticleID] = perf;
+                }
             }
 
             // Update UI
@@ -460,14 +482,39 @@ namespace GestionComerce.Main.ProjectManagment
             // Load Top 5 lists
             LoadTopClients(clientRevenue);
             LoadTopSuppliers(supplierPurchases);
-            LoadTopArticles(articleRevenue);
+            LoadTopArticlesFromAggregator(articlePerformance);
             LoadTopSalaries(filterStartDate, filterEndDate);
-            
+
             // Load operations and articles lists
             LoadOpeerationsMouvment(LOperation);
             LoadOpeerationsArticleMouvment(LOperationArticle);
         }
 
+        // NEW: Load top articles using aggregator data
+        private void LoadTopArticlesFromAggregator(Dictionary<int, ArticlePerformance> articlePerformance)
+        {
+            TopArticlesContainer.Children.Clear();
+
+            var topArticles = articlePerformance.Values
+                .OrderByDescending(x => x.Revenue)
+                .Take(5)
+                .ToList();
+
+            if (topArticles.Count == 0)
+            {
+                AddEmptyState(TopArticlesContainer, "Aucun article trouvé");
+                return;
+            }
+
+            int rank = 1;
+            foreach (var item in topArticles)
+            {
+                AddTopItem(TopArticlesContainer, rank, item.ArticleName, item.Revenue, GetRankColor(rank));
+                rank++;
+            }
+        }
+
+        // [Keep all other existing methods: LoadTopClients, LoadTopSuppliers, etc.]
         private void LoadTopClients(Dictionary<string, decimal> clientRevenue)
         {
             TopClientsContainer.Children.Clear();
@@ -513,33 +560,6 @@ namespace GestionComerce.Main.ProjectManagment
                 if (supplier != null)
                 {
                     AddTopItem(TopSuppliersContainer, rank, supplier.Nom, item.Value, GetRankColor(rank));
-                    rank++;
-                }
-            }
-        }
-
-        private void LoadTopArticles(Dictionary<int, decimal> articleRevenue)
-        {
-            TopArticlesContainer.Children.Clear();
-
-            var topArticles = articleRevenue
-                .OrderByDescending(x => x.Value)
-                .Take(5)
-                .ToList();
-
-            if (topArticles.Count == 0)
-            {
-                AddEmptyState(TopArticlesContainer, "Aucun article trouvé");
-                return;
-            }
-
-            int rank = 1;
-            foreach (var item in topArticles)
-            {
-                var article = main.la?.FirstOrDefault(a => a.ArticleID == item.Key);
-                if (article != null)
-                {
-                    AddTopItem(TopArticlesContainer, rank, article.ArticleName, item.Value, GetRankColor(rank));
                     rank++;
                 }
             }
@@ -633,7 +653,6 @@ namespace GestionComerce.Main.ProjectManagment
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
             grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-            // Rank badge
             var rankBadge = new Border
             {
                 Width = 32,
@@ -656,7 +675,6 @@ namespace GestionComerce.Main.ProjectManagment
             Grid.SetColumn(rankBadge, 0);
             grid.Children.Add(rankBadge);
 
-            // Name
             var nameText = new TextBlock
             {
                 Text = name ?? "N/A",
@@ -669,7 +687,6 @@ namespace GestionComerce.Main.ProjectManagment
             Grid.SetColumn(nameText, 2);
             grid.Children.Add(nameText);
 
-            // Amount
             var amountText = new TextBlock
             {
                 Text = amount.ToString("N2") + " DH",
@@ -713,12 +730,12 @@ namespace GestionComerce.Main.ProjectManagment
         {
             switch (rank)
             {
-                case 1: return "#6366F1"; // Indigo
-                case 2: return "#8B5CF6"; // Purple
-                case 3: return "#EC4899"; // Pink
-                case 4: return "#F59E0B"; // Amber
-                case 5: return "#10B981"; // Green
-                default: return "#94A3B8"; // Gray
+                case 1: return "#6366F1";
+                case 2: return "#8B5CF6";
+                case 3: return "#EC4899";
+                case 4: return "#F59E0B";
+                case 5: return "#10B981";
+                default: return "#94A3B8";
             }
         }
     }

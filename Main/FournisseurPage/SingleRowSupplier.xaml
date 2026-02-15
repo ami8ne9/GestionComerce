@@ -1,6 +1,7 @@
-﻿<UserControl x:Class="GestionComerce.Main.FournisseurPage.SingleRowSupplier"
+<UserControl x:Class="GestionComerce.Main.FournisseurPage.SingleRowSupplier"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"   
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:GestionComerce.Resources"
              xmlns:local="clr-namespace:GestionComerce.Main.FournisseurPage"
              Height="60" Margin="0,0,0,1">
 
@@ -278,26 +279,26 @@
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        Margin="0,0,8,0">
-                <Button Content="✏️ Modifier" 
+                <Button Content="{x:Static res:Resources.EditSupplier}" 
                        Style="{StaticResource EditButtonStyle}" 
                        Name="Update"
                        Click="Update_Click"
-                       ToolTip="Modifier les informations du fournisseur"/>
-                <Button Content="🗑️ Supprimer" 
+                       ToolTip="Edit supplier information"/>
+                <Button Content="{x:Static res:Resources.DeleteSupplier}" 
                        Style="{StaticResource DeleteButtonStyle}" 
                        Name="Delete"
                        Click="Delete_Click"
-                       ToolTip="Supprimer le fournisseur" Width="95"/>
-                <Button Content="💰 Payer" 
+                       ToolTip="Delete supplier" Width="95"/>
+                <Button Content="{x:Static res:Resources.Pay}" 
                        Style="{StaticResource PaidButtonStyle}" 
                        Name="Paid"
                        Click="Paid_Click"
-                       ToolTip="Traiter le paiement" Width="75"/>
-                <Button Content="📋 Opérations" 
+                       ToolTip="Process payment" Width="75"/>
+                <Button Content="{x:Static res:Resources.Operations}" 
                        Style="{StaticResource OperationButtonStyle}" 
                        Name="Operation"
                        Click="Operations_Click"
-                       ToolTip="Voir les opérations" Width="105"/>
+                       ToolTip="View operations" Width="105"/>
             </StackPanel>
         </Grid>
     </Border>

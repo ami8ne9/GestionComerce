@@ -1,5 +1,6 @@
 ﻿<Window x:Class="GestionComerce.Main.ClientPage.ClientOperationsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:res="clr-namespace:GestionComerce.Resources"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Opérations Client" Height="700" Width="750"
         MinWidth="550"
@@ -162,7 +163,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- Header -->
-                <TextBlock Grid.Row="0" Text="📋 Opérations Client" Style="{StaticResource HeaderTextStyle}"/>
+                <TextBlock Grid.Row="0" Text="{x:Static res:Resources.ClientOperations}" Style="{StaticResource HeaderTextStyle}"/>
 
                 <!-- Operations List with ScrollViewer -->
                 <ScrollViewer Grid.Row="1" 
@@ -179,7 +180,7 @@
                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource ModernGridViewColumnHeader}">
-                                <GridViewColumn Header="Date" Width="100">
+                                <GridViewColumn Header="{x:Static res:Resources.Date}" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock FontSize="13" FontWeight="Medium" Foreground="#64748B" Text="{Binding Date, StringFormat='dd/MM/yyyy', FallbackValue='N/A'}"/>
@@ -187,7 +188,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="ID" Width="60">
+                                <GridViewColumn Header="{x:Static res:Resources.ID}" Width="60">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="6" Padding="6,3" Background="#F3F4F6">
@@ -197,7 +198,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Type" Width="140">
+                                <GridViewColumn Header="{x:Static res:Resources.Type}" Width="140">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="10" Padding="10,6" Background="#EEF2FF">
@@ -207,7 +208,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Montant" Width="100">
+                                <GridViewColumn Header="{x:Static res:Resources.Amount}" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock FontSize="13" FontWeight="SemiBold" Foreground="#059669" Text="{Binding PrixOperation, StringFormat='{}{0:N2} DH', FallbackValue='0,00 DH'}"/>
@@ -215,7 +216,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Remise" Width="80">
+                                <GridViewColumn Header="{x:Static res:Resources.Discount}" Width="80">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="6" Padding="6,3" Background="#FEF2F2">
@@ -225,7 +226,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Crédit" Width="80">
+                                <GridViewColumn Header="{x:Static res:Resources.Credit}" Width="80">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="6" Padding="6,3" Background="#FFFBEB">
@@ -244,7 +245,7 @@
             <Border x:Name="ArticlesPanel" Grid.Column="1" Style="{StaticResource CardStyle}" Margin="15,15,15,15">
                 <StackPanel>
                     <DockPanel Margin="0,0,0,24">
-                        <TextBlock Text="📦 Articles de l'opération" Style="{StaticResource HeaderTextStyle}" DockPanel.Dock="Left"/>
+                        <TextBlock Text="{x:Static res:Resources.OperationArticles}" Style="{StaticResource HeaderTextStyle}" DockPanel.Dock="Left"/>
                         <Button x:Name="CloseArticlesButton" 
                                DockPanel.Dock="Right"
                                Click="CloseArticlesButton_Click"
@@ -276,7 +277,7 @@
                             <TextBlock Text="✕"/>
                         </Button>
                         <TextBlock x:Name="OperationInfoText" 
-                                  Text="Sélectionnez une opération" 
+                                  Text="{x:Static res:Resources.SelectOperation}" 
                                   FontSize="14" Foreground="#64748B" 
                                   HorizontalAlignment="Right" VerticalAlignment="Bottom"
                                   DockPanel.Dock="Right" Margin="0,0,15,0"/>
@@ -293,7 +294,7 @@
                              ScrollViewer.CanContentScroll="True">
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource ModernGridViewColumnHeader}">
-                                <GridViewColumn Header="ID Article" Width="90">
+                                <GridViewColumn Header="{x:Static res:Resources.ArticleID}" Width="90">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="6" Padding="6,3">
@@ -325,7 +326,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Nom Article" Width="150">
+                                <GridViewColumn Header="{x:Static res:Resources.ArticleName}" Width="150">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel>
@@ -361,7 +362,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Famille" Width="100">
+                                <GridViewColumn Header="{x:Static res:Resources.Family}" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="8" Padding="8,4">
@@ -393,7 +394,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Quantité" Width="85">
+                                <GridViewColumn Header="{x:Static res:Resources.Quantity}" Width="85">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="8" Padding="8,4">
@@ -425,7 +426,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Prix Unitaire" Width="105">
+                                <GridViewColumn Header="{x:Static res:Resources.UnitPrice}" Width="105">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock FontSize="13" FontWeight="Medium">
@@ -445,7 +446,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <GridViewColumn Header="Total" Width="120">
+                                <GridViewColumn Header="{x:Static res:Resources.Total}" Width="120">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock FontSize="14" FontWeight="Bold" Margin="0,0,0,0">
@@ -478,17 +479,17 @@
                             </Grid.ColumnDefinitions>
 
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Articles" FontSize="13" Foreground="#64748B" FontWeight="Medium"/>
+                                <TextBlock Text="{x:Static res:Resources.Articles}" FontSize="13" Foreground="#64748B" FontWeight="Medium"/>
                                 <TextBlock x:Name="TotalArticlesText" Text="0" FontSize="20" FontWeight="Bold" Foreground="#1F2937" Margin="0,4,0,0"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1">
-                                <TextBlock Text="Quantité totale" FontSize="13" Foreground="#64748B" FontWeight="Medium"/>
+                                <TextBlock Text="{x:Static res:Resources.TotalQuantity}" FontSize="13" Foreground="#64748B" FontWeight="Medium"/>
                                 <TextBlock x:Name="TotalQuantityText" Text="0" FontSize="20" FontWeight="Bold" Foreground="#2563EB" Margin="0,4,0,0"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Total opération" FontSize="13" Foreground="#64748B" FontWeight="Medium"/>
+                                <TextBlock Text="{x:Static res:Resources.TotalOperation}" FontSize="13" Foreground="#64748B" FontWeight="Medium"/>
                                 <TextBlock x:Name="TotalAmountText" Text="0,00 DH" FontSize="20" FontWeight="Bold" Foreground="#059669" Margin="0,4,0,0"/>
                             </StackPanel>
                         </Grid>

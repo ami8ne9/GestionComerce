@@ -1,7 +1,8 @@
 ﻿<Window x:Class="GestionComerce.Main.ClientPage.ClientFormWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:res="clr-namespace:GestionComerce.Resources"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Gestion des clients"
+        Title="{x:Static res:Resources.ClientManagement}"
         Height="Auto" Width="500"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
@@ -162,7 +163,7 @@
 
             <!-- Title Bar with Close Button -->
             <Grid Grid.Row="0" Margin="32,32,32,20">
-                <TextBlock Text="Gestion des clients" 
+                <TextBlock Text="{x:Static res:Resources.ClientManagement}" 
                           Style="{StaticResource TitleStyle}"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Center"/>
@@ -209,7 +210,7 @@
                     <!-- Company Type Checkbox -->
                     <StackPanel Margin="0,0,0,24">
                         <CheckBox x:Name="IsCompanyCheckBox" 
-                                 Content="Est-ce une entreprise ?"
+                                 Content="{x:Static res:Resources.IsCompany}"
                                  Style="{StaticResource ModernCheckBox}"
                                  Checked="IsCompanyCheckBox_Changed"
                                  Unchecked="IsCompanyCheckBox_Changed"/>
@@ -217,7 +218,7 @@
 
                     <!-- Name Field -->
                     <StackPanel Margin="0,0,0,24">
-                        <TextBlock x:Name="NameLabel" Text="Nom du client" Style="{StaticResource ModernLabel}"/>
+                        <TextBlock x:Name="NameLabel" Text="{x:Static res:Resources.ClientName}" Style="{StaticResource ModernLabel}"/>
                         <TextBox x:Name="NameTextBox" 
                                 Style="{StaticResource ModernTextBox}"
                                 Tag="Entrez le nom du client..." MaxLength="100"/>
@@ -225,20 +226,20 @@
 
                     <!-- Phone Field -->
                     <StackPanel Margin="0,0,0,24">
-                        <TextBlock Text="Numéro de téléphone" Style="{StaticResource ModernLabel}"/>
+                        <TextBlock Text="{x:Static res:Resources.PhoneNumber}" Style="{StaticResource ModernLabel}"/>
                         <TextBox x:Name="PhoneTextBox" 
                                 Style="{StaticResource ModernTextBox}" MaxLength="19"/>
                     </StackPanel>
 
                     <!-- Address Field -->
                     <StackPanel Margin="0,0,0,24">
-                        <TextBlock Text="Adresse" Style="{StaticResource ModernLabel}"/>
+                        <TextBlock Text="{x:Static res:Resources.Address}" Style="{StaticResource ModernLabel}"/>
                         <TextBox x:Name="AdresseTextBox" 
                                 Style="{StaticResource ModernTextBox}" MaxLength="200"/>
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,24">
-                        <TextBlock Text="Remise" Style="{StaticResource ModernLabel}"/>
+                        <TextBlock Text="{x:Static res:Resources.Discount}" Style="{StaticResource ModernLabel}"/>
                         <TextBox x:Name="RemiseTextBox" 
               Style="{StaticResource ModernTextBox}" MaxLength="200" TextChanged="RemiseTextBox_TextChanged"/>
                     </StackPanel>
@@ -247,28 +248,28 @@
                     <StackPanel x:Name="CompanyFieldsPanel" Visibility="Collapsed">
                         <!-- Legal Status -->
                         <StackPanel Margin="0,0,0,24">
-                            <TextBlock Text="État juridique" Style="{StaticResource ModernLabel}"/>
+                            <TextBlock Text="{x:Static res:Resources.LegalStatus}" Style="{StaticResource ModernLabel}"/>
                             <TextBox x:Name="EtatJuridiqueTextBox" 
                                     Style="{StaticResource ModernTextBox}" MaxLength="100"/>
                         </StackPanel>
 
                         <!-- ICE -->
                         <StackPanel Margin="0,0,0,24">
-                            <TextBlock Text="ICE (Identifiant Commun de l'Entreprise)" Style="{StaticResource ModernLabel}"/>
+                            <TextBlock Text="{x:Static res:Resources.ICE}" Style="{StaticResource ModernLabel}"/>
                             <TextBox x:Name="ICETextBox" 
                                     Style="{StaticResource ModernTextBox}" MaxLength="50"/>
                         </StackPanel>
 
                         <!-- Company Headquarters -->
                         <StackPanel Margin="0,0,0,24">
-                            <TextBlock Text="Siège d'entreprise" Style="{StaticResource ModernLabel}"/>
+                            <TextBlock Text="{x:Static res:Resources.Headquarters}" Style="{StaticResource ModernLabel}"/>
                             <TextBox x:Name="SiegeEntrepriseTextBox" 
                                     Style="{StaticResource ModernTextBox}" MaxLength="200"/>
                         </StackPanel>
 
                         <!-- Code -->
                         <StackPanel Margin="0,0,0,24">
-                            <TextBlock Text="Code" Style="{StaticResource ModernLabel}"/>
+                            <TextBlock Text="{x:Static res:Resources.Code}" Style="{StaticResource ModernLabel}"/>
                             <TextBox x:Name="CodeTextBox" 
                                     Style="{StaticResource ModernTextBox}" MaxLength="50"/>
                         </StackPanel>
@@ -276,7 +277,7 @@
 
                     <!-- Balance Field -->
                     <StackPanel Margin="0,0,0,32">
-                        <TextBlock Text="Solde" Style="{StaticResource ModernLabel}"/>
+                        <TextBlock Text="{x:Static res:Resources.Balance}" Style="{StaticResource ModernLabel}"/>
                         <TextBox x:Name="BalanceTextBox" 
                                 Style="{StaticResource ModernTextBox}" MaxLength="18"/>
                     </StackPanel>
@@ -291,13 +292,13 @@
 
                         <Button x:Name="CancelButton" 
                                 Grid.Column="0"
-                                Content="Annuler" 
+                                Content="{x:Static res:Resources.Cancel}" 
                                 Style="{StaticResource SecondaryButton}"
                                 Click="CancelButton_Click"/>
 
                         <Button x:Name="UpdateButton" 
                                 Grid.Column="2"
-                                Content="Enregistrer"
+                                Content="{x:Static res:Resources.Save}"
                                 Style="{StaticResource PrimaryButton}"
                                 Click="UpdateButton_Click"/>
                     </Grid>

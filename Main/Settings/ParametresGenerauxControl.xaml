@@ -350,37 +350,29 @@
                     </Border>
 
                     <!-- Langue -->
-                    <Border Style="{StaticResource ModernCard}" Opacity="0.6">
+                    <!-- Langue - NOW ENABLED -->
+                    <Border Style="{StaticResource ModernCard}">
                         <StackPanel>
                             <Grid Margin="0,0,0,12">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="&#xE774;" Style="{StaticResource IconText}" Foreground="#94A3B8"/>
-                                <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                    <TextBlock Text="Langue de l'Interface" Style="{StaticResource SectionTitle}"/>
-                                    <Border Background="#FEF3C7" 
-                                            CornerRadius="6" 
-                                            Padding="8,4"
-                                            Margin="12,0,0,0"
-                                            VerticalAlignment="Center">
-                                        <TextBlock Text="BIENTÔT" 
-                                                   FontSize="11" 
-                                                   FontWeight="Bold"
-                                                   Foreground="#92400E"/>
-                                    </Border>
-                                </StackPanel>
+                                <TextBlock Grid.Column="0" Text="&#xE774;" Style="{StaticResource IconText}" Foreground="#6366F1"/>
+                                <TextBlock Grid.Column="1" Text="Langue de l'Interface" Style="{StaticResource SectionTitle}"/>
                             </Grid>
                             <TextBlock Style="{StaticResource SectionDescription}"
-                                       Text="Changez la langue de l'application (Fonctionnalité en développement)"/>
+                   Text="Changez la langue de l'application (les changements prendront effet immédiatement)"/>
                             <ComboBox x:Name="CbLangue" 
-                                      Style="{StaticResource ModernComboBox}"
-                                      Width="320" 
-                                      HorizontalAlignment="Left"
-                                      IsEnabled="False">
-                                <ComboBoxItem Content="🇫🇷  Français"/>
+                  Style="{StaticResource ModernComboBox}"
+                  Width="320" 
+                  HorizontalAlignment="Left"
+                  SelectionChanged="CbLangue_SelectionChanged">
+                                <ComboBoxItem Content="🇫🇷  Français" Tag="fr"/>
+                                <ComboBoxItem Content="🇬🇧  English" Tag="en"/>
+                                <ComboBoxItem Content="🇸🇦  العربية" Tag="ar"/>
                             </ComboBox>
+                            
                         </StackPanel>
                     </Border>
 

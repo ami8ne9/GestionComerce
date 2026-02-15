@@ -474,7 +474,13 @@ namespace GestionComerce.Main.Facturation
             await cmd.ExecuteNonQueryAsync();
         }
 
-        private async Task<List<Invoice.InvoiceArticle>> GetInvoiceArticlesAsync(int invoiceId)
+        // Add this method to your InvoiceRepository class in Invoice.cs
+        // Place it in the "Invoice Articles Operations" region
+
+        /// <summary>
+        /// Gets all articles for a specific invoice using the database table directly
+        /// </summary>
+        public async Task<List<Invoice.InvoiceArticle>> GetInvoiceArticlesAsync(int invoiceId)
         {
             List<Invoice.InvoiceArticle> articles = new List<Invoice.InvoiceArticle>();
 
@@ -483,8 +489,22 @@ namespace GestionComerce.Main.Facturation
                 await conn.OpenAsync();
 
                 string query = @"
-                    SELECT * FROM InvoiceArticle 
-                    WHERE InvoiceID = @InvoiceID AND IsDeleted = 0";
+            SELECT 
+                InvoiceArticleID,
+                InvoiceID,
+                OperationID,
+                ArticleID,
+                ArticleName,
+                PrixUnitaire,
+                Quantite,
+                TVA,
+                IsReversed,
+                CreatedDate,
+                IsDeleted
+            FROM InvoiceArticle 
+            WHERE InvoiceID = @InvoiceID 
+                AND IsDeleted = 0
+            ORDER BY InvoiceArticleID";
 
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@InvoiceID", invoiceId);
@@ -513,6 +533,7 @@ namespace GestionComerce.Main.Facturation
                 }
             }
 
+            System.Diagnostics.Debug.WriteLine($"GetInvoiceArticlesAsync: Loaded {articles.Count} articles for invoice {invoiceId}");
             return articles;
         }
 

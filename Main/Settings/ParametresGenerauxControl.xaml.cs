@@ -138,7 +138,23 @@ namespace Superete.Main.Settings
                     CbTailleIcones.SelectedIndex = 1; // Moyennes par défaut
                     break;
             }
-
+            // Langue
+            switch (_parametresActuels.Langue)
+            {
+                case "Français":
+                    CbLangue.SelectedIndex = 0;
+                    break;
+                case "English":
+                    CbLangue.SelectedIndex = 1;
+                    break;
+                case "العربية":
+                case "Arabic":
+                    CbLangue.SelectedIndex = 2;
+                    break;
+                default:
+                    CbLangue.SelectedIndex = 0; // Default to French
+                    break;
+            }
             // Checkboxes
             ChkMasquerEtiquettesVides.IsChecked = _parametresActuels.MasquerEtiquettesVides;
             ChkSupprimerArticlesQuantiteZero.IsChecked = _parametresActuels.SupprimerArticlesQuantiteZero;
@@ -250,7 +266,18 @@ namespace Superete.Main.Settings
                     case 2: tailleIcones = "Petites"; break;
                     default: tailleIcones = "Moyennes"; break;
                 }
+                // Get language setting
+                string langue = "Français";
+                if (CbLangue.SelectedItem is ComboBoxItem langItem)
+                {
+                    langue = langItem.Content.ToString()
+                        .Replace("🇫🇷  ", "")
+                        .Replace("🇬🇧  ", "")
+                        .Replace("🇸🇦  ", "");
+                }
 
+                // Then add this line where you update other parameters:
+                
                 // Mettre à jour l'objet
                 _parametresActuels.AfficherClavier = afficherClavier;
                 _parametresActuels.MasquerEtiquettesVides = ChkMasquerEtiquettesVides.IsChecked ?? false;
@@ -261,6 +288,7 @@ namespace Superete.Main.Settings
                 _parametresActuels.VueParDefaut = vueParDefaut;
                 _parametresActuels.TrierParDefaut = trierParDefaut;
                 _parametresActuels.TailleIcones = tailleIcones;
+                _parametresActuels.Langue = langue;
 
                 // Sauvegarder dans la BD
                 bool success = _parametresActuels.MettreAJourParametres(_connectionString);
@@ -297,7 +325,18 @@ namespace Superete.Main.Settings
         {
             return _parametresActuels;
         }
+        private void CbLangue_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CbLangue.SelectedItem is ComboBoxItem selectedItem)
+            {
+                string languageCode = selectedItem.Tag.ToString();
 
+                // Change the language immediately using TranslationService
+                //TranslationService.ChangeLanguage(languageCode);
+
+                // Note: The actual save to database happens when user clicks "Enregistrer"
+            }
+        }
         // Méthode pour obtenir l'ID de la méthode de paiement sélectionnée (optionnel)
         public int? ObtenirPaymentMethodIdSelectionne()
         {

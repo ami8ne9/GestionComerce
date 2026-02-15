@@ -1,4 +1,4 @@
-﻿using GestionComerce.Main.Facturation;
+using GestionComerce.Main.Facturation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,25 +45,15 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
             if (articlesToUse != null && articlesToUse.Count > 0)
             {
-                var filteredArticles = articlesToUse.Where(ia =>
-                {
-                    if (main != null && main.EtatFacture != null && main.EtatFacture.IsEnabled == true)
-                    {
-                        if (main.EtatFacture.Text == "Normal")
-                        {
-                            return !ia.Reversed;
-                        }
-                        else
-                        {
-                            return ia.Reversed;
-                        }
-                    }
-                    return !ia.Reversed;
-                }).ToList();
+                // **MODIFIED: Invoice status is now independent of reversed articles**
+                // We show ALL articles regardless of their reversed status
+                // The invoice status (Normal/Cancelled) is just a label chosen by the user
+                var filteredArticles = articlesToUse.ToList();
 
                 string invoiceType = GetDictionaryValue("Type", "").ToLower();
                 if (invoiceType != "expedition")
                 {
+                    // Only filter out articles with quantity 0 for non-expedition invoices
                     filteredArticles = filteredArticles.Where(ia => ia.Quantite > 0).ToList();
                 }
 
@@ -1329,11 +1319,12 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
             decimal.TryParse(CleanNumericValue(GetDictionaryValue("CreditMontant")), out decimal creditMontant);
             string creditClientName = GetDictionaryValue("CreditClientName");
+            
 
             var invoice = new Invoice
             {
                 InvoiceNumber = GetDictionaryValue("NFacture"),
-                InvoiceDate = DateTime.TryParse(GetDictionaryValue("Date"), out DateTime date) ? date : DateTime.Now,
+                InvoiceDate = DateTime.TryParse(GetDictionaryValue("Date"),out DateTime date) ? date.Date: DateTime.Now.Date,
                 InvoiceType = GetDictionaryValue("Type"),
                 InvoiceIndex = GetDictionaryValue("IndexDeFacture"),
 
@@ -1564,9 +1555,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                         quantityToReduce = invoiceArticle.Quantite;
                         System.Diagnostics.Debug.WriteLine($"=== Reducing Stock (REGULAR) ===");
                         System.Diagnostics.Debug.WriteLine($"  Article: {invoiceArticle.ArticleName}");
-                        System.Diagnostics.Debug.// Continuation from previous part...
-
-WriteLine($"  Quantity to Reduce: {quantityToReduce}");
+                        System.Diagnostics.Debug.WriteLine($"  Quantity to Reduce: {quantityToReduce}");
                     }
 
                     decimal newStock = currentStock - quantityToReduce;

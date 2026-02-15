@@ -1,5 +1,6 @@
 ﻿<Window x:Class="GestionComerce.Main.Delivery.DeliveryTicketWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:res="clr-namespace:GestionComerce.Resources"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Bon de Livraison"
         Height="900"
@@ -45,7 +46,7 @@
                     BorderThickness="2">
                 <StackPanel>
                     <!-- Header -->
-                    <TextBlock Text="BON DE LIVRAISON" 
+                    <TextBlock Text="{x:Static res:Resources.DeliveryTicketUpper}" 
                                Style="{StaticResource HeaderTextStyle}"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,10"/>
@@ -54,12 +55,12 @@
 
                     <!-- Company Info -->
                     <TextBlock x:Name="TxtCompanyName"
-                               Text="NOM DE L'ENTREPRISE" 
+                               Text="{x:Static res:Resources.CompanyName}" 
                                Style="{StaticResource BoldTextStyle}"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,5"/>
                     <TextBlock x:Name="TxtCompanyAddress"
-                               Text="Adresse de l'entreprise" 
+                               Text="{x:Static res:Resources.CompanyAddress}" 
                                Style="{StaticResource TicketTextStyle}"
                                HorizontalAlignment="Center"
                                Margin="0,0,0,5"/>
@@ -79,13 +80,13 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="BON N°:" Style="{StaticResource BoldTextStyle}"/>
+                            <TextBlock Text="{x:Static res:Resources.TicketNumber}" Style="{StaticResource BoldTextStyle}"/>
                             <TextBlock x:Name="TxtBonNumber" 
                                        Text="LIV-00001" 
                                        Style="{StaticResource TicketTextStyle}"
                                        Margin="0,2,0,10"/>
 
-                            <TextBlock Text="DATE:" Style="{StaticResource BoldTextStyle}"/>
+                            <TextBlock Text="{x:Static res:Resources.DateUpper}" Style="{StaticResource BoldTextStyle}"/>
                             <TextBlock x:Name="TxtDate" 
                                        Text="31/12/2025" 
                                        Style="{StaticResource TicketTextStyle}"
@@ -93,13 +94,13 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="LIVREUR:" Style="{StaticResource BoldTextStyle}"/>
+                            <TextBlock Text="{x:Static res:Resources.DelivererUpper}" Style="{StaticResource BoldTextStyle}"/>
                             <TextBlock x:Name="TxtLivreur" 
-                                       Text="Nom du livreur" 
+                                       Text="{x:Static res:Resources.DelivererName}" 
                                        Style="{StaticResource TicketTextStyle}"
                                        Margin="0,2,0,10"/>
 
-                            <TextBlock Text="HEURE:" Style="{StaticResource BoldTextStyle}"/>
+                            <TextBlock Text="{x:Static res:Resources.TimeUpper}" Style="{StaticResource BoldTextStyle}"/>
                             <TextBlock x:Name="TxtHeure" 
                                        Text="10:00 - 12:00" 
                                        Style="{StaticResource TicketTextStyle}"
@@ -110,7 +111,7 @@
                     <Rectangle Height="1" Fill="#000000" Margin="0,10,0,15"/>
 
                     <!-- Client Info -->
-                    <TextBlock Text="DESTINATAIRE:" 
+                    <TextBlock Text="{x:Static res:Resources.Recipient}" 
                                Style="{StaticResource BoldTextStyle}"
                                Margin="0,0,0,10"/>
 
@@ -120,7 +121,7 @@
                             Margin="0,0,0,15">
                         <StackPanel>
                             <TextBlock x:Name="TxtClientName" 
-                                       Text="Nom du client" 
+                                       Text="{x:Static res:Resources.ClientName}" 
                                        Style="{StaticResource BoldTextStyle}"
                                        Margin="0,0,0,5"/>
                             <TextBlock x:Name="TxtClientPhone" 
@@ -128,18 +129,18 @@
                                        Style="{StaticResource TicketTextStyle}"
                                        Margin="0,0,0,5"/>
                             <TextBlock x:Name="TxtClientAddress" 
-                                       Text="Adresse complète" 
+                                       Text="{x:Static res:Resources.FullAddress}" 
                                        Style="{StaticResource TicketTextStyle}"
                                        TextWrapping="Wrap"
                                        Margin="0,0,0,5"/>
                             <TextBlock x:Name="TxtClientCity" 
-                                       Text="Ville, Code Postal" 
+                                       Text="{x:Static res:Resources.CityPostalCode}" 
                                        Style="{StaticResource TicketTextStyle}"/>
                         </StackPanel>
                     </Border>
 
                     <!-- Articles List -->
-                    <TextBlock Text="ARTICLES À LIVRER:" 
+                    <TextBlock Text="{x:Static res:Resources.ArticlesToDeliver}" 
                                Style="{StaticResource BoldTextStyle}"
                                Margin="0,0,0,10"/>
 
@@ -166,7 +167,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.Column="0" 
-                                   Text="Total Commande:" 
+                                   Text="{x:Static res:Resources.TotalOrderColon}" 
                                    Style="{StaticResource TicketTextStyle}"
                                    Margin="0,0,0,5"/>
                         <TextBlock x:Name="TxtTotalCommande" 
@@ -176,7 +177,7 @@
                                    Margin="0,0,0,5"/>
 
                         <TextBlock Grid.Row="1" Grid.Column="0" 
-                                   Text="Frais de livraison:" 
+                                   Text="{x:Static res:Resources.DeliveryFeesColon}" 
                                    Style="{StaticResource TicketTextStyle}"
                                    Margin="0,0,0,5"/>
                         <TextBlock x:Name="TxtFraisLivraison" 
@@ -191,7 +192,7 @@
                                    Margin="0,5"/>
 
                         <TextBlock Grid.Row="3" Grid.Column="0" 
-                                   Text="TOTAL À PAYER:" 
+                                   Text="{x:Static res:Resources.TotalAmount}" 
                                    Style="{StaticResource BoldTextStyle}"
                                    FontSize="16"
                                    Margin="0,5,0,0"/>
@@ -213,16 +214,16 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="MODE DE PAIEMENT:" 
+                            <TextBlock Text="{x:Static res:Resources.PaymentModeUpper}" 
                                        Style="{StaticResource BoldTextStyle}"/>
                             <TextBlock x:Name="TxtModePaiement" 
-                                       Text="Espèces" 
+                                       Text="{x:Static res:Resources.Cash}" 
                                        Style="{StaticResource TicketTextStyle}"
                                        Margin="0,2,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1">
-                            <TextBlock Text="ZONE:" 
+                            <TextBlock Text="{x:Static res:Resources.ZoneUpper}" 
                                        Style="{StaticResource BoldTextStyle}"/>
                             <TextBlock x:Name="TxtZone" 
                                        Text="Centre Ville" 
@@ -234,7 +235,7 @@
                     <!-- Notes -->
                     <TextBlock x:Name="NotesSection" 
                                Visibility="Collapsed">
-                        <TextBlock Text="NOTES:" 
+                        <TextBlock Text="{x:Static res:Resources.NotesUpper}" 
                                    Style="{StaticResource BoldTextStyle}"/>
                         <TextBlock x:Name="TxtNotes" 
                                    Text="" 
@@ -253,7 +254,7 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Column="0" HorizontalAlignment="Center">
-                            <TextBlock Text="SIGNATURE LIVREUR" 
+                            <TextBlock Text="{x:Static res:Resources.DelivererSignature}" 
                                        Style="{StaticResource BoldTextStyle}"
                                        HorizontalAlignment="Center"/>
                             <Rectangle Height="60" Width="150" 
@@ -263,7 +264,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" HorizontalAlignment="Center">
-                            <TextBlock Text="SIGNATURE CLIENT" 
+                            <TextBlock Text="{x:Static res:Resources.ClientSignature}" 
                                        Style="{StaticResource BoldTextStyle}"
                                        HorizontalAlignment="Center"/>
                             <Rectangle Height="60" Width="150" 
@@ -274,7 +275,7 @@
                     </Grid>
 
                     <!-- Footer -->
-                    <TextBlock Text="Merci de votre confiance !" 
+                    <TextBlock Text="{x:Static res:Resources.ThankYou}" 
                                Style="{StaticResource TicketTextStyle}"
                                HorizontalAlignment="Center"
                                Margin="0,30,0,0"/>
@@ -289,7 +290,7 @@
                 BorderThickness="0,1,0,0"
                 Padding="20">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <Button Content="🖨️ Imprimer" 
+                <Button Content="{x:Static res:Resources.Print}" 
                         Name="BtnPrint"
                         Click="BtnPrint_Click"
                         Height="44"
@@ -302,7 +303,7 @@
                         Cursor="Hand"
                         Margin="0,0,10,0"/>
 
-                <Button Content="💾 Enregistrer PDF" 
+                <Button Content="{x:Static res:Resources.SaveAsPDF}" 
                         Name="BtnSavePDF"
                         Click="BtnSavePDF_Click"
                         Height="44"
@@ -315,7 +316,7 @@
                         Cursor="Hand"
                         Margin="0,0,10,0"/>
 
-                <Button Content="✅ Fermer" 
+                <Button Content="{x:Static res:Resources.Close}" 
                         Name="BtnClose"
                         Click="BtnClose_Click"
                         Height="44"

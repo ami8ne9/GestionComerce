@@ -1,5 +1,6 @@
 ﻿<UserControl x:Class="GestionComerce.Main.ClientPage.SingleRowClient"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:res="clr-namespace:GestionComerce.Resources"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Height="70">
 
@@ -189,7 +190,7 @@
                                   FontSize="10" 
                                   Margin="0,0,4,0"
                                   VerticalAlignment="Center"/>
-                        <TextBlock Text="Entreprise" 
+                        <TextBlock Text="{x:Static res:Resources.Company}" 
                                   FontSize="11" 
                                   FontWeight="Bold" 
                                   Foreground="White"
@@ -253,26 +254,26 @@
                        HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        Margin="0,0,10,0">
-                <Button Content="✏️ Modifier" 
+                <Button Content="{x:Static res:Resources.Edit}" 
                        Style="{StaticResource EditButtonStyle}" 
                        Name="Update"
                        Click="Update_Click"
-                       ToolTip="Modifier les informations du client" Width="85"/>
-                <Button Content="🗑️ Supprimer" 
+                       ToolTip="{x:Static res:Resources.EditClient}" Width="85"/>
+                <Button Content="{x:Static res:Resources.Delete}" 
                        Style="{StaticResource DeleteButtonStyle}" 
                        Name="Delete"
                        Click="Delete_Click"
-                       ToolTip="Supprimer le client" Width="95"/>
-                <Button Content="💰 Payer" 
+                       ToolTip="{x:Static res:Resources.DeleteClient}" Width="95"/>
+                <Button Content="{x:Static res:Resources.Pay}" 
                        Style="{StaticResource PaidButtonStyle}" 
                        Name="Paye"
                        Click="Paid_Click"
-                       ToolTip="Traiter le paiement" Width="75"/>
-                <Button Content="📋 Opérations" 
+                       ToolTip="{x:Static res:Resources.ProcessPayment}" Width="75"/>
+                <Button Content="{x:Static res:Resources.Operations}" 
                        Style="{StaticResource OperationButtonStyle}" 
                        Name="Operation"
                        Click="Operations_Click"
-                       ToolTip="Voir les opérations" Width="105"/>
+                       ToolTip="{x:Static res:Resources.ViewOperations}" Width="105"/>
             </StackPanel>
         </Grid>
     </Border>

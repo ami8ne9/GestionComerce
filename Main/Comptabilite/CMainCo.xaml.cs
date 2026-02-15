@@ -1,5 +1,6 @@
 ﻿using GestionComerce;
 using Superete.Main.Comptabilite.Graphes;
+using Superete.Main.Comptabilite.Expectation;
 using GestionComerce.Main.ProjectManagment;
 using System;
 using System.Collections.Generic;
@@ -48,6 +49,12 @@ namespace Superete.Main.Comptabilite
             SetSelectedButtonStyle((Button)sender);
             LoadGraphes();
         }
+        private void Expectation_Click(object sender, RoutedEventArgs e)
+        {
+            ResetButtonStyles();
+            SetSelectedButtonStyle((Button)sender);
+            LoadExpectations();
+        }
 
         private void RapportStats_Click(object sender, RoutedEventArgs e)
         {
@@ -59,6 +66,11 @@ namespace Superete.Main.Comptabilite
         private void LoadGraphes()
         {
             MainContentArea.Content = new CGraphe(u, main);
+        }
+        
+        private void LoadExpectations()
+        {
+            MainContentArea.Content = new CMainEx(u, main);
         }
 
         private void LoadRapportStats()

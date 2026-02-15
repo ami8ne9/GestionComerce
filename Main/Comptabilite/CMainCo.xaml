@@ -231,7 +231,7 @@
                         <Button x:Name="AIButton" 
                                 Content="Comptable A.I" 
                                 Style="{StaticResource AIButtonStyle}"/>
-                        <Button x:Name="ExpectationButton" 
+                        <Button x:Name="ExpectationButton" Click="Expectation_Click"
                                 Content="Expectation et Projection" 
                                 Style="{StaticResource ModernMenuButton}"/>
                     </StackPanel>

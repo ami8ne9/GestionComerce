@@ -1,4 +1,4 @@
-﻿using GestionComerce;
+using GestionComerce;
 using GestionComerce.Main.Facturation;
 using GestionComerce.Main.ProjectManagment;
 using System;
@@ -54,6 +54,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 OperationType.Text = "Vente #" + op.OperationID.ToString();
             }
 
+            // **MODIFIED: Display reversed status only for UI information, don't affect invoice status**
             if (op.Reversed == true)
             {
                 OperationType.Text += " (Reversed)";
@@ -139,6 +140,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             }
         }
 
+        // **MODIFIED: Removed all reversed-based logic for invoice status**
         private void HandleOperationSelection()
         {
             if (sc?.main?.main == null)
@@ -155,7 +157,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                 return;
             }
 
-            // **NEW: Handle Credit operations specially - ADD to existing total**
+            // Handle Credit operations specially - ADD to existing total
             if (isCreditMode)
             {
                 // Get current total from txtApresTVAAmount
@@ -166,7 +168,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                     decimal.TryParse(cleanAmount, out currentTotal);
                 }
 
-                // **ADD operation price to existing total**
+                // ADD operation price to existing total
                 decimal newTotal = currentTotal + op.PrixOperation;
 
                 System.Diagnostics.Debug.WriteLine($"=== Adding Credit Operation ===");
@@ -208,29 +210,15 @@ namespace GestionComerce.Main.Facturation.CreateFacture
             }
             else
             {
-                // Normal operation handling (non-credit)
-                // Add operation to main BEFORE checking reversed status
+                // **MODIFIED: Normal operation handling - invoice status is always user's choice**
+                // Add operation to main
                 sc.main.AddOperation(op);
 
-                if (op.Reversed == true)
-                {
-                    sc.main.EtatFacture.SelectedIndex = ETAT_FACTURE_REVERSED;
-                    sc.main.EtatFacture.IsEnabled = false;
-                }
-                else
+                // Invoice status is always enabled for user to choose
+                if (sc.main.EtatFacture != null)
                 {
                     sc.main.EtatFacture.SelectedIndex = ETAT_FACTURE_NORMAL;
-                    sc.main.EtatFacture.IsEnabled = false;
-
-                    // Check for partial reversals
-                    foreach (OperationArticle oa in sc.main.main.loa)
-                    {
-                        if (oa.OperationID == op.OperationID && oa.Reversed == true)
-                        {
-                            sc.main.EtatFacture.IsEnabled = true;
-                            break;
-                        }
-                    }
+                    sc.main.EtatFacture.IsEnabled = true; // Always let user choose status
                 }
 
                 // Display discount
@@ -270,7 +258,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
 
             if (result == MessageBoxResult.Yes)
             {
-                // **NEW: Handle Credit operations specially - SUBTRACT from existing total**
+                // Handle Credit operations specially - SUBTRACT from existing total
                 if (isCreditMode)
                 {
                     // Get current total
@@ -281,7 +269,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                         decimal.TryParse(cleanAmount, out currentTotal);
                     }
 
-                    // **SUBTRACT operation price from existing total**
+                    // SUBTRACT operation price from existing total
                     decimal newTotal = Math.Max(0, currentTotal - op.PrixOperation); // Ensure it doesn't go negative
 
                     System.Diagnostics.Debug.WriteLine($"=== Removing Credit Operation ===");
@@ -440,7 +428,6 @@ namespace GestionComerce.Main.Facturation.CreateFacture
         {
             // This method is kept for compatibility but should not be used
             // All logic is now in Border_MouseLeftButtonDown
-            // Don't call Border_MouseLeftButtonDown to avoid double processing
         }
     }
 }

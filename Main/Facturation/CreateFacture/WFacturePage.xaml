@@ -1,6 +1,7 @@
-﻿<Window x:Class="GestionComerce.Main.Facturation.CreateFacture.WFacturePage"
+<Window x:Class="GestionComerce.Main.Facturation.CreateFacture.WFacturePage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:resx="clr-namespace:GestionComerce.Resources"
         Title="MainWindow" 
         AllowsTransparency="True" WindowStartupLocation="CenterScreen"
         WindowStyle="None" Width="800"
@@ -119,7 +120,7 @@ TextAlignment="Center"/>
                         </Button.Style>
                     </Button>
                     <Button x:Name="Save"
-    Content="Enregistrer"
+    Content="{x:Static resx:Resources.Save}"
     Background="Green"
     Foreground="White"
     BorderThickness="0"
@@ -156,7 +157,7 @@ TextAlignment="Center"/>
                     </Button>
 
                     <Button x:Name="btnPrint"
-    Content="Imprimer"
+    Content="{x:Static resx:Resources.Print}"
     Background="#38B2AC"
     Foreground="White"
     BorderThickness="0"
@@ -166,7 +167,6 @@ TextAlignment="Center"/>
     Padding="16,10"
     Margin="0,0,8,0" 
     Click="btnPrint_Click">
-                        <!-- ... style remains same ... -->
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Template">
@@ -194,7 +194,7 @@ Padding="{TemplateBinding Padding}">
                     </Button>
 
                     <Button x:Name="SaveAndPrint"
-    Content="Enregistrer et Imprimer"
+    Content="{x:Static resx:Resources.SaveAndPrint}"
     Background="Blue"
     Foreground="White"
     BorderThickness="0"
@@ -204,7 +204,6 @@ Padding="{TemplateBinding Padding}">
     Padding="16,10"
     Margin="0,0,8,0" 
     Click="btnSaveAndPrint_Click">
-                        <!-- ... style remains same ... -->
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Template">

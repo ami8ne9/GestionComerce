@@ -6,15 +6,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{49DA6D4D-F0AF-453B-9724-88EA6E9B1ECD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Superete</RootNamespace>
-    <AssemblyName>A&amp;A Gestion Comerce</AssemblyName>
+    <RootNamespace>GestionComerce</RootNamespace>
+    <AssemblyName>GestionComerce</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,6 +35,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>BM-Logo.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ReachFramework" />
@@ -80,9 +81,13 @@
     <Compile Include="GlobalButtonWindow.xaml.cs">
       <DependentUpon>GlobalButtonWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ArticleDataAggregator.cs" />
     <Compile Include="Invoice.cs" />
     <Compile Include="Livraison.cs" />
     <Compile Include="Livreur.cs" />
+    <Compile Include="Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MachineLock.cs" />
     <Compile Include="Main\ClientPage\ClientFormWindow.xaml.cs">
       <DependentUpon>ClientFormWindow.xaml</DependentUpon>
@@ -107,6 +112,9 @@
     </Compile>
     <Compile Include="Main\Comptabilite\CMainCo.xaml.cs">
       <DependentUpon>CMainCo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Main\Comptabilite\Expectation\CMainEx.xaml.cs">
+      <DependentUpon>CMainEx.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main\Comptabilite\Graphes\CGraphe.xaml.cs">
       <DependentUpon>CGraphe.xaml</DependentUpon>
@@ -376,6 +384,11 @@
     <Compile Include="OperationArticle.cs" />
     <Compile Include="ParametresGeneraux.cs" />
     <Compile Include="PaymentMethod.cs" />
+    <Compile Include="Resources\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Role.cs" />
     <Compile Include="User.cs" />
     <Page Include="GlobalButtonWindow.xaml">
@@ -383,6 +396,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Login.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -429,6 +443,10 @@
     <Page Include="Main\Comptabilite\CMainCo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Main\Comptabilite\Expectation\CMainEx.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Main\Comptabilite\Graphes\CGraphe.xaml">
       <SubType>Designer</SubType>
@@ -784,10 +802,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -863,6 +877,18 @@
     <Folder Include="Main\Comptabilite\Comptable\" />
     <Folder Include="Main\Comptabilite\Expences\" />
     <Folder Include="Main\Comptabilite\Salaire\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resources.ar.resx">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Resources.en.resx">
+      <DependentUpon>Resources.resx</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

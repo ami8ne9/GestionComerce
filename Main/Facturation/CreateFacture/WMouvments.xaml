@@ -1,7 +1,8 @@
-﻿<Window x:Class="GestionComerce.Main.Facturation.CreateFacture.WMouvments"
+<Window x:Class="GestionComerce.Main.Facturation.CreateFacture.WMouvments"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Rechercher"
+        xmlns:resx="clr-namespace:GestionComerce.Resources"
+        Title="{x:Static resx:Resources.Search}"
         SizeToContent="Height"
         MaxHeight="500"
         Width="800"
@@ -91,7 +92,7 @@
                 <!-- Header with Close Button -->
                 <Grid Grid.Row="0" Margin="20,15,20,10">
                     <!-- Title -->
-                    <TextBlock Text="Articles de l'opération"
+                    <TextBlock Text="{x:Static resx:Resources.OperationArticles}"
                                FontSize="18"
                                FontWeight="SemiBold"
                                Foreground="#2D3748"
@@ -122,7 +123,7 @@
 
                     <!-- Article Name Header -->
                     <TextBlock Grid.Column="0"
-                               Text="Article"
+                               Text="{x:Static resx:Resources.Article}"
                                FontSize="12"
                                FontWeight="SemiBold"
                                Foreground="#4A5568"
@@ -131,7 +132,7 @@
 
                     <!-- Price Header -->
                     <TextBlock Grid.Column="1"
-                               Text="Prix"
+                               Text="{x:Static resx:Resources.Price}"
                                FontSize="12"
                                FontWeight="SemiBold"
                                Foreground="#4A5568"
@@ -140,7 +141,7 @@
 
                     <!-- TVA Header -->
                     <TextBlock Grid.Column="2"
-                               Text="TVA %"
+                               Text="{x:Static resx:Resources.TVA}"
                                FontSize="12"
                                FontWeight="SemiBold"
                                Foreground="#4A5568"
@@ -149,7 +150,7 @@
 
                     <!-- Quantity Header -->
                     <TextBlock Grid.Column="3"
-                               Text="Quantité"
+                               Text="{x:Static resx:Resources.Quantity}"
                                FontSize="12"
                                FontWeight="SemiBold"
                                Foreground="#4A5568"
@@ -159,7 +160,7 @@
                     <!-- Expedition Total Header (only visible in Expedition mode) -->
                     <TextBlock x:Name="TxtExpeditionTotalHeader"
                                Grid.Column="4"
-                               Text="Qté Totale"
+                               Text="{x:Static resx:Resources.TotalQuantityHeader}"
                                FontSize="12"
                                FontWeight="SemiBold"
                                Foreground="#4A5568"
@@ -169,7 +170,7 @@
 
                     <!-- Initial Quantity Header -->
                     <TextBlock Grid.Column="5"
-                               Text="Qté Initiale"
+                               Text="{x:Static resx:Resources.InitialQuantity}"
                                FontSize="12"
                                FontWeight="SemiBold"
                                Foreground="#4A5568"
@@ -196,7 +197,7 @@
                                 HorizontalAlignment="Right">
                         <!-- Save Button -->
                         <Button x:Name="btnSaveExpedition"
-                                Content="Enregistrer"
+                                Content="{x:Static resx:Resources.Save}"
                                 Style="{StaticResource SaveButton}"
                                 Click="btnSaveExpedition_Click"
                                 Visibility="Visible"/>
