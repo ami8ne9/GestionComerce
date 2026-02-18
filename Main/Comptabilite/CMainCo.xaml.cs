@@ -65,7 +65,7 @@ namespace Superete.Main.Comptabilite
 
         private void LoadGraphes()
         {
-            MainContentArea.Content = new CGraphe(u, main);
+            MainContentArea.Content = new CGraphe();
         }
         
         private void LoadExpectations()

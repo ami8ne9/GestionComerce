@@ -29,7 +29,7 @@ namespace GestionComerce.Resources {
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        public Resources() {
         }
         
         /// <summary>
@@ -57,6 +57,258 @@ namespace GestionComerce.Resources {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sécurité Avancée.
+        /// </summary>
+        public static string About_AdvancedSecurity {
+            get {
+                return ResourceManager.GetString("About_AdvancedSecurity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Protection des données avec gestion des droits d&apos;accès.
+        /// </summary>
+        public static string About_AdvancedSecurityDesc {
+            get {
+                return ResourceManager.GetString("About_AdvancedSecurityDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Facturation Automatique.
+        /// </summary>
+        public static string About_AutoInvoicing {
+            get {
+                return ResourceManager.GetString("About_AutoInvoicing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Création et impression de factures professionnelles en un clic.
+        /// </summary>
+        public static string About_AutoInvoicingDesc {
+            get {
+                return ResourceManager.GetString("About_AutoInvoicingDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nous sommes disponibles du Lundi au Vendredi.
+        /// </summary>
+        public static string About_Availability {
+            get {
+                return ResourceManager.GetString("About_Availability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestion des Clients.
+        /// </summary>
+        public static string About_ClientManagement {
+            get {
+                return ResourceManager.GetString("About_ClientManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Base de données client complète et historique des achats.
+        /// </summary>
+        public static string About_ClientManagementDesc {
+            get {
+                return ResourceManager.GetString("About_ClientManagementDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Notre équipe est à votre disposition pour répondre à toutes vos questions, vous accompagner dans l&apos;utilisation de notre solution et vous fournir un support technique de qualité..
+        /// </summary>
+        public static string About_ContactDesc {
+            get {
+                return ResourceManager.GetString("About_ContactDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contactez-Nous.
+        /// </summary>
+        public static string About_ContactUs {
+            get {
+                return ResourceManager.GetString("About_ContactUs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to © 2024 A&amp;A Software Solution.
+        /// </summary>
+        public static string About_Copyright {
+            get {
+                return ResourceManager.GetString("About_Copyright", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bienvenue chez A&amp;A Software Solution, votre partenaire de confiance pour les solutions de gestion commerciale. Notre système de point de vente (POS) est conçu pour simplifier et optimiser la gestion de votre commerce, quelle que soit sa taille..
+        /// </summary>
+        public static string About_Description1 {
+            get {
+                return ResourceManager.GetString("About_Description1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nous comprenons les défis quotidiens auxquels font face les commerçants modernes. C&apos;est pourquoi nous avons développé une solution complète, intuitive et performante qui vous permet de vous concentrer sur l&apos;essentiel : développer votre activité et satisfaire vos clients..
+        /// </summary>
+        public static string About_Description2 {
+            get {
+                return ResourceManager.GetString("About_Description2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rapports Détaillés.
+        /// </summary>
+        public static string About_DetailedReports {
+            get {
+                return ResourceManager.GetString("About_DetailedReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Analyses approfondies pour prendre des décisions éclairées.
+        /// </summary>
+        public static string About_DetailedReportsDesc {
+            get {
+                return ResourceManager.GetString("About_DetailedReportsDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fonctionnalités Principales.
+        /// </summary>
+        public static string About_MainFeatures {
+            get {
+                return ResourceManager.GetString("About_MainFeatures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 06 17 23 29 32.
+        /// </summary>
+        public static string About_Phone1 {
+            get {
+                return ResourceManager.GetString("About_Phone1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 06 04 48 17 65.
+        /// </summary>
+        public static string About_Phone2 {
+            get {
+                return ResourceManager.GetString("About_Phone2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact Principal.
+        /// </summary>
+        public static string About_PrimaryContact {
+            get {
+                return ResourceManager.GetString("About_PrimaryContact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tous droits réservés - Solution de gestion commerciale professionnelle.
+        /// </summary>
+        public static string About_Rights {
+            get {
+                return ResourceManager.GetString("About_Rights", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestion des Ventes.
+        /// </summary>
+        public static string About_SalesManagement {
+            get {
+                return ResourceManager.GetString("About_SalesManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Traitement rapide des transactions avec une interface intuitive.
+        /// </summary>
+        public static string About_SalesManagementDesc {
+            get {
+                return ResourceManager.GetString("About_SalesManagementDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contact Secondaire.
+        /// </summary>
+        public static string About_SecondaryContact {
+            get {
+                return ResourceManager.GetString("About_SecondaryContact", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to À Propos de Notre Solution.
+        /// </summary>
+        public static string About_SolutionTitle {
+            get {
+                return ResourceManager.GetString("About_SolutionTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestion des Stocks.
+        /// </summary>
+        public static string About_StockManagement {
+            get {
+                return ResourceManager.GetString("About_StockManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suivi en temps réel de votre inventaire et alertes automatiques.
+        /// </summary>
+        public static string About_StockManagementDesc {
+            get {
+                return ResourceManager.GetString("About_StockManagementDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Votre partenaire technologique de confiance.
+        /// </summary>
+        public static string About_Tagline {
+            get {
+                return ResourceManager.GetString("About_Tagline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A&amp;A Software Solution.
+        /// </summary>
+        public static string About_Title {
+            get {
+                return ResourceManager.GetString("About_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to De 9h00 à 18h00.
+        /// </summary>
+        public static string About_WorkingHours {
+            get {
+                return ResourceManager.GetString("About_WorkingHours", resourceCulture);
             }
         }
         
@@ -192,6 +444,69 @@ namespace GestionComerce.Resources {
         public static string AddSupplier {
             get {
                 return ResourceManager.GetString("AddSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annuler.
+        /// </summary>
+        public static string AddUser_Cancel {
+            get {
+                return ResourceManager.GetString("AddUser_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Créer l&apos;utilisateur.
+        /// </summary>
+        public static string AddUser_Create {
+            get {
+                return ResourceManager.GetString("AddUser_Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Créer un nouveau compte utilisateur pour le système.
+        /// </summary>
+        public static string AddUser_Description {
+            get {
+                return ResourceManager.GetString("AddUser_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom complet.
+        /// </summary>
+        public static string AddUser_FullName {
+            get {
+                return ResourceManager.GetString("AddUser_FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mot de passe.
+        /// </summary>
+        public static string AddUser_Password {
+            get {
+                return ResourceManager.GetString("AddUser_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rôle.
+        /// </summary>
+        public static string AddUser_Role {
+            get {
+                return ResourceManager.GetString("AddUser_Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ajouter un nouvel utilisateur.
+        /// </summary>
+        public static string AddUser_Title {
+            get {
+                return ResourceManager.GetString("AddUser_Title", resourceCulture);
             }
         }
         
@@ -1060,6 +1375,69 @@ namespace GestionComerce.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Annuler.
+        /// </summary>
+        public static string DeleteUser_Cancel {
+            get {
+                return ResourceManager.GetString("DeleteUser_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer.
+        /// </summary>
+        public static string DeleteUser_Confirm {
+            get {
+                return ResourceManager.GetString("DeleteUser_Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmer la suppression.
+        /// </summary>
+        public static string DeleteUser_ConfirmTitle {
+            get {
+                return ResourceManager.GetString("DeleteUser_ConfirmTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cette action est irréversible.
+        /// </summary>
+        public static string DeleteUser_Irreversible {
+            get {
+                return ResourceManager.GetString("DeleteUser_Irreversible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Êtes-vous sûr de vouloir supprimer cet utilisateur ?.
+        /// </summary>
+        public static string DeleteUser_Question {
+            get {
+                return ResourceManager.GetString("DeleteUser_Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmation.
+        /// </summary>
+        public static string DeleteUser_Title {
+            get {
+                return ResourceManager.GetString("DeleteUser_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toutes les données associées seront définitivement perdues..
+        /// </summary>
+        public static string DeleteUser_Warning {
+            get {
+                return ResourceManager.GetString("DeleteUser_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Suppression.
         /// </summary>
         public static string Deletion {
@@ -1483,6 +1861,411 @@ namespace GestionComerce.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 🟢  Toujours afficher le clavier.
+        /// </summary>
+        public static string General_AlwaysShow {
+            get {
+                return ResourceManager.GetString("General_AlwaysShow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🇸🇦  العربية.
+        /// </summary>
+        public static string General_Arabic {
+            get {
+                return ResourceManager.GetString("General_Arabic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🟡  Automatique (au clic sur le champ).
+        /// </summary>
+        public static string General_Automatic {
+            get {
+                return ResourceManager.GetString("General_Automatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annuler.
+        /// </summary>
+        public static string General_Cancel {
+            get {
+                return ResourceManager.GetString("General_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🎴  Affichage en Cartes.
+        /// </summary>
+        public static string General_CardView {
+            get {
+                return ResourceManager.GetString("General_CardView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Méthode de Paiement par Défaut.
+        /// </summary>
+        public static string General_DefaultPayment {
+            get {
+                return ResourceManager.GetString("General_DefaultPayment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ordre de Tri par Défaut.
+        /// </summary>
+        public static string General_DefaultSort {
+            get {
+                return ResourceManager.GetString("General_DefaultSort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vue d&apos;Affichage par Défaut.
+        /// </summary>
+        public static string General_DefaultView {
+            get {
+                return ResourceManager.GetString("General_DefaultView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer automatiquement les articles avec une quantité de zéro.
+        /// </summary>
+        public static string General_DeleteZero {
+            get {
+                return ResourceManager.GetString("General_DeleteZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personnalisez votre expérience et configurez les options par défaut.
+        /// </summary>
+        public static string General_Description {
+            get {
+                return ResourceManager.GetString("General_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🇬🇧  English.
+        /// </summary>
+        public static string General_English {
+            get {
+                return ResourceManager.GetString("General_English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🇫🇷  Français.
+        /// </summary>
+        public static string General_French {
+            get {
+                return ResourceManager.GetString("General_French", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Masquer automatiquement les étiquettes vides dans les factures.
+        /// </summary>
+        public static string General_HideEmpty {
+            get {
+                return ResourceManager.GetString("General_HideEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choisissez la taille d&apos;affichage des icônes d&apos;articles dans les vues en cartes.
+        /// </summary>
+        public static string General_IconDesc {
+            get {
+                return ResourceManager.GetString("General_IconDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Taille des Icônes.
+        /// </summary>
+        public static string General_IconSize {
+            get {
+                return ResourceManager.GetString("General_IconSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Optimisez l&apos;apparence de vos documents en masquant les champs vides.
+        /// </summary>
+        public static string General_InvoiceDesc {
+            get {
+                return ResourceManager.GetString("General_InvoiceDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Affichage des Factures.
+        /// </summary>
+        public static string General_InvoiceDisplay {
+            get {
+                return ResourceManager.GetString("General_InvoiceDisplay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choisissez le comportement du clavier tactile lors de la saisie dans les champs de texte.
+        /// </summary>
+        public static string General_KeyboardDesc {
+            get {
+                return ResourceManager.GetString("General_KeyboardDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Langue de l&apos;Interface.
+        /// </summary>
+        public static string General_Language {
+            get {
+                return ResourceManager.GetString("General_Language", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changez la langue de l&apos;application (les changements prendront effet immédiatement).
+        /// </summary>
+        public static string General_LanguageDesc {
+            get {
+                return ResourceManager.GetString("General_LanguageDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📏  Grandes icônes.
+        /// </summary>
+        public static string General_LargeIcons {
+            get {
+                return ResourceManager.GetString("General_LargeIcons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📋  Affichage en Liste (Rows).
+        /// </summary>
+        public static string General_ListView {
+            get {
+                return ResourceManager.GetString("General_ListView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📐  Moyennes icônes.
+        /// </summary>
+        public static string General_MediumIcons {
+            get {
+                return ResourceManager.GetString("General_MediumIcons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📝  Nom (A-Z).
+        /// </summary>
+        public static string General_NameAZ {
+            get {
+                return ResourceManager.GetString("General_NameAZ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📝  Nom (Z-A).
+        /// </summary>
+        public static string General_NameZA {
+            get {
+                return ResourceManager.GetString("General_NameZA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🔴  Ne jamais afficher le clavier.
+        /// </summary>
+        public static string General_NeverShow {
+            get {
+                return ResourceManager.GetString("General_NeverShow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🆕  Plus récent au plus ancien.
+        /// </summary>
+        public static string General_NewestFirst {
+            get {
+                return ResourceManager.GetString("General_NewestFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ⏰  Plus ancien au plus récent.
+        /// </summary>
+        public static string General_OldestFirst {
+            get {
+                return ResourceManager.GetString("General_OldestFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sélectionnez la méthode de paiement qui sera présélectionnée lors de chaque nouvelle vente.
+        /// </summary>
+        public static string General_PaymentDesc {
+            get {
+                return ResourceManager.GetString("General_PaymentDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 💰  Prix croissant.
+        /// </summary>
+        public static string General_PriceAsc {
+            get {
+                return ResourceManager.GetString("General_PriceAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 💰  Prix décroissant.
+        /// </summary>
+        public static string General_PriceDesc_Sort {
+            get {
+                return ResourceManager.GetString("General_PriceDesc_Sort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configurez les options d&apos;impression automatique pour gagner du temps lors des ventes.
+        /// </summary>
+        public static string General_PrintDesc {
+            get {
+                return ResourceManager.GetString("General_PrintDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ✓  Cocher &apos;Imprimer Facture&apos; par défaut.
+        /// </summary>
+        public static string General_PrintInvoice {
+            get {
+                return ResourceManager.GetString("General_PrintInvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options d&apos;Impression - Vente.
+        /// </summary>
+        public static string General_PrintOptions {
+            get {
+                return ResourceManager.GetString("General_PrintOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ✓  Cocher &apos;Imprimer Ticket&apos; par défaut.
+        /// </summary>
+        public static string General_PrintTicket {
+            get {
+                return ResourceManager.GetString("General_PrintTicket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📦  Quantité croissante.
+        /// </summary>
+        public static string General_QtyAsc {
+            get {
+                return ResourceManager.GetString("General_QtyAsc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📦  Quantité décroissante.
+        /// </summary>
+        public static string General_QtyDesc {
+            get {
+                return ResourceManager.GetString("General_QtyDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 💾  Enregistrer.
+        /// </summary>
+        public static string General_Save {
+            get {
+                return ResourceManager.GetString("General_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📌  Petites icônes.
+        /// </summary>
+        public static string General_SmallIcons {
+            get {
+                return ResourceManager.GetString("General_SmallIcons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Définissez l&apos;ordre de tri automatique pour l&apos;affichage des articles.
+        /// </summary>
+        public static string General_SortDesc {
+            get {
+                return ResourceManager.GetString("General_SortDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nettoyez automatiquement votre inventaire en supprimant les articles épuisés.
+        /// </summary>
+        public static string General_StockDesc {
+            get {
+                return ResourceManager.GetString("General_StockDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestion Automatique des Stocks.
+        /// </summary>
+        public static string General_StockManagement {
+            get {
+                return ResourceManager.GetString("General_StockManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paramètres Généraux.
+        /// </summary>
+        public static string General_Title {
+            get {
+                return ResourceManager.GetString("General_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choisissez le mode d&apos;affichage préféré pour la liste des articles.
+        /// </summary>
+        public static string General_ViewDesc {
+            get {
+                return ResourceManager.GetString("General_ViewDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Affichage du Clavier Virtuel.
+        /// </summary>
+        public static string General_VirtualKeyboard {
+            get {
+                return ResourceManager.GetString("General_VirtualKeyboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Générer.
         /// </summary>
         public static string GenerateInvoiceNumber {
@@ -1767,6 +2550,42 @@ namespace GestionComerce.Resources {
         public static string ItemsCount {
             get {
                 return ResourceManager.GetString("ItemsCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🇸🇦 AR.
+        /// </summary>
+        public static string Keyboard_AR {
+            get {
+                return ResourceManager.GetString("Keyboard_AR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🇬🇧 EN.
+        /// </summary>
+        public static string Keyboard_EN {
+            get {
+                return ResourceManager.GetString("Keyboard_EN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🇫🇷 FR.
+        /// </summary>
+        public static string Keyboard_FR {
+            get {
+                return ResourceManager.GetString("Keyboard_FR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Langue.
+        /// </summary>
+        public static string Keyboard_Language {
+            get {
+                return ResourceManager.GetString("Keyboard_Language", resourceCulture);
             }
         }
         
@@ -2185,6 +3004,150 @@ namespace GestionComerce.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        public static string Payment_Actions {
+            get {
+                return ResourceManager.GetString("Payment_Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ajoutez votre première méthode de paiement ci-dessus.
+        /// </summary>
+        public static string Payment_AddFirst {
+            get {
+                return ResourceManager.GetString("Payment_AddFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ➕ Ajouter la Méthode.
+        /// </summary>
+        public static string Payment_AddMethod {
+            get {
+                return ResourceManager.GetString("Payment_AddMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 📁.
+        /// </summary>
+        public static string Payment_Browse {
+            get {
+                return ResourceManager.GetString("Payment_Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🗑 Supprimer.
+        /// </summary>
+        public static string Payment_Delete {
+            get {
+                return ResourceManager.GetString("Payment_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gérez les méthodes de paiement disponibles dans votre système.
+        /// </summary>
+        public static string Payment_Description {
+            get {
+                return ResourceManager.GetString("Payment_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ✏ Modifier.
+        /// </summary>
+        public static string Payment_Edit {
+            get {
+                return ResourceManager.GetString("Payment_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Méthodes de Paiement Existantes.
+        /// </summary>
+        public static string Payment_ExistingMethods {
+            get {
+                return ResourceManager.GetString("Payment_ExistingMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID.
+        /// </summary>
+        public static string Payment_ID {
+            get {
+                return ResourceManager.GetString("Payment_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image.
+        /// </summary>
+        public static string Payment_Image {
+            get {
+                return ResourceManager.GetString("Payment_Image", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Image/Icône:.
+        /// </summary>
+        public static string Payment_ImageIcon {
+            get {
+                return ResourceManager.GetString("Payment_ImageIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom de la Méthode:.
+        /// </summary>
+        public static string Payment_MethodName {
+            get {
+                return ResourceManager.GetString("Payment_MethodName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom de la Méthode.
+        /// </summary>
+        public static string Payment_Name {
+            get {
+                return ResourceManager.GetString("Payment_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nouvelle Méthode de Paiement.
+        /// </summary>
+        public static string Payment_NewMethod {
+            get {
+                return ResourceManager.GetString("Payment_NewMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aucune méthode de paiement.
+        /// </summary>
+        public static string Payment_NoMethods {
+            get {
+                return ResourceManager.GetString("Payment_NoMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Méthodes de Paiement.
+        /// </summary>
+        public static string Payment_Title {
+            get {
+                return ResourceManager.GetString("Payment_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Montant du paiement.
         /// </summary>
         public static string PaymentAmount {
@@ -2266,6 +3229,780 @@ namespace GestionComerce.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accès au Livraison.
+        /// </summary>
+        public static string Perm_AccessDelivery {
+            get {
+                return ResourceManager.GetString("Perm_AccessDelivery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accès au Facturation.
+        /// </summary>
+        public static string Perm_AccessInvoicing {
+            get {
+                return ResourceManager.GetString("Perm_AccessInvoicing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activer.
+        /// </summary>
+        public static string Perm_Activate {
+            get {
+                return ResourceManager.GetString("Perm_Activate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tout activer.
+        /// </summary>
+        public static string Perm_ActivateAll {
+            get {
+                return ResourceManager.GetString("Perm_ActivateAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ajouter Articles.
+        /// </summary>
+        public static string Perm_AddArticles {
+            get {
+                return ResourceManager.GetString("Perm_AddArticles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ajouter Familles.
+        /// </summary>
+        public static string Perm_AddFamilies {
+            get {
+                return ResourceManager.GetString("Perm_AddFamilies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ajouter Méthodes.
+        /// </summary>
+        public static string Perm_AddPayMethods {
+            get {
+                return ResourceManager.GetString("Perm_AddPayMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ajouter Rôles.
+        /// </summary>
+        public static string Perm_AddRoles {
+            get {
+                return ResourceManager.GetString("Perm_AddRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ajouter Utilisateurs.
+        /// </summary>
+        public static string Perm_AddUsers {
+            get {
+                return ResourceManager.GetString("Perm_AddUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Appliquer.
+        /// </summary>
+        public static string Perm_Apply {
+            get {
+                return ResourceManager.GetString("Perm_Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Articles.
+        /// </summary>
+        public static string Perm_Articles {
+            get {
+                return ResourceManager.GetString("Perm_Articles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annuler.
+        /// </summary>
+        public static string Perm_Cancel {
+            get {
+                return ResourceManager.GetString("Perm_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cash Client.
+        /// </summary>
+        public static string Perm_CashClient {
+            get {
+                return ResourceManager.GetString("Perm_CashClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cash Fournisseur.
+        /// </summary>
+        public static string Perm_CashSupplier {
+            get {
+                return ResourceManager.GetString("Perm_CashSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to History de Check.
+        /// </summary>
+        public static string Perm_CheckHistory {
+            get {
+                return ResourceManager.GetString("Perm_CheckHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permissions Client.
+        /// </summary>
+        public static string Perm_ClientPerms {
+            get {
+                return ResourceManager.GetString("Perm_ClientPerms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Clients.
+        /// </summary>
+        public static string Perm_ClientsPage {
+            get {
+                return ResourceManager.GetString("Perm_ClientsPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration des Permissions.
+        /// </summary>
+        public static string Perm_ConfigTitle {
+            get {
+                return ResourceManager.GetString("Perm_ConfigTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Créer Client.
+        /// </summary>
+        public static string Perm_CreateClient {
+            get {
+                return ResourceManager.GetString("Perm_CreateClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Création de Livraison.
+        /// </summary>
+        public static string Perm_CreateDelivery {
+            get {
+                return ResourceManager.GetString("Perm_CreateDelivery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Créer Facture.
+        /// </summary>
+        public static string Perm_CreateInvoice {
+            get {
+                return ResourceManager.GetString("Perm_CreateInvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Créer Fournisseur.
+        /// </summary>
+        public static string Perm_CreateSupplier {
+            get {
+                return ResourceManager.GetString("Perm_CreateSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Désactiver.
+        /// </summary>
+        public static string Perm_Deactivate {
+            get {
+                return ResourceManager.GetString("Perm_Deactivate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tout désactiver.
+        /// </summary>
+        public static string Perm_DeactivateAll {
+            get {
+                return ResourceManager.GetString("Perm_DeactivateAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer Articles.
+        /// </summary>
+        public static string Perm_DeleteArticles {
+            get {
+                return ResourceManager.GetString("Perm_DeleteArticles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer Client.
+        /// </summary>
+        public static string Perm_DeleteClient {
+            get {
+                return ResourceManager.GetString("Perm_DeleteClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer Familles.
+        /// </summary>
+        public static string Perm_DeleteFamilies {
+            get {
+                return ResourceManager.GetString("Perm_DeleteFamilies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer Méthodes.
+        /// </summary>
+        public static string Perm_DeletePayMethods {
+            get {
+                return ResourceManager.GetString("Perm_DeletePayMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer Rôles.
+        /// </summary>
+        public static string Perm_DeleteRoles {
+            get {
+                return ResourceManager.GetString("Perm_DeleteRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer Fournisseur.
+        /// </summary>
+        public static string Perm_DeleteSupplier {
+            get {
+                return ResourceManager.GetString("Perm_DeleteSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supprimer Utilisateurs.
+        /// </summary>
+        public static string Perm_DeleteUsers {
+            get {
+                return ResourceManager.GetString("Perm_DeleteUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Livraison.
+        /// </summary>
+        public static string Perm_Delivery {
+            get {
+                return ResourceManager.GetString("Perm_Delivery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestion de Livreur.
+        /// </summary>
+        public static string Perm_DeliveryMgmt {
+            get {
+                return ResourceManager.GetString("Perm_DeliveryMgmt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier Articles.
+        /// </summary>
+        public static string Perm_EditArticles {
+            get {
+                return ResourceManager.GetString("Perm_EditArticles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier Familles.
+        /// </summary>
+        public static string Perm_EditFamilies {
+            get {
+                return ResourceManager.GetString("Perm_EditFamilies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier Utilisateurs.
+        /// </summary>
+        public static string Perm_EditUsers {
+            get {
+                return ResourceManager.GetString("Perm_EditUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quitter Application.
+        /// </summary>
+        public static string Perm_Exit {
+            get {
+                return ResourceManager.GetString("Perm_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Familles.
+        /// </summary>
+        public static string Perm_Families {
+            get {
+                return ResourceManager.GetString("Perm_Families", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Inventaire.
+        /// </summary>
+        public static string Perm_InventoryPage {
+            get {
+                return ResourceManager.GetString("Perm_InventoryPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Historique de Facture.
+        /// </summary>
+        public static string Perm_InvoiceHistory {
+            get {
+                return ResourceManager.GetString("Perm_InvoiceHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paramètres Ticket.
+        /// </summary>
+        public static string Perm_InvoiceSettings {
+            get {
+                return ResourceManager.GetString("Perm_InvoiceSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Facturation.
+        /// </summary>
+        public static string Perm_Invoicing {
+            get {
+                return ResourceManager.GetString("Perm_Invoicing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Déconnexion.
+        /// </summary>
+        public static string Perm_Logout {
+            get {
+                return ResourceManager.GetString("Perm_Logout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gérer les permissions par type d&apos;utilisateur.
+        /// </summary>
+        public static string Perm_ManageDesc {
+            get {
+                return ResourceManager.GetString("Perm_ManageDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestion et Paramètres.
+        /// </summary>
+        public static string Perm_Management {
+            get {
+                return ResourceManager.GetString("Perm_Management", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier Client.
+        /// </summary>
+        public static string Perm_ModifyClient {
+            get {
+                return ResourceManager.GetString("Perm_ModifyClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier Paramètres.
+        /// </summary>
+        public static string Perm_ModifyInvSettings {
+            get {
+                return ResourceManager.GetString("Perm_ModifyInvSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier Méthodes.
+        /// </summary>
+        public static string Perm_ModifyPayMethods {
+            get {
+                return ResourceManager.GetString("Perm_ModifyPayMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier Fournisseur.
+        /// </summary>
+        public static string Perm_ModifySupplier {
+            get {
+                return ResourceManager.GetString("Perm_ModifySupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Opérations et Mouvements.
+        /// </summary>
+        public static string Perm_Operations {
+            get {
+                return ResourceManager.GetString("Perm_Operations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accès aux Pages.
+        /// </summary>
+        public static string Perm_PageAccess {
+            get {
+                return ResourceManager.GetString("Perm_PageAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payer Client.
+        /// </summary>
+        public static string Perm_PayClient {
+            get {
+                return ResourceManager.GetString("Perm_PayClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Méthodes de Paiement.
+        /// </summary>
+        public static string Perm_PaymentMethods {
+            get {
+                return ResourceManager.GetString("Perm_PaymentMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payer Fournisseur.
+        /// </summary>
+        public static string Perm_PaySupplier {
+            get {
+                return ResourceManager.GetString("Perm_PaySupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rapports.
+        /// </summary>
+        public static string Perm_Reports {
+            get {
+                return ResourceManager.GetString("Perm_Reports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annuler Mouvement.
+        /// </summary>
+        public static string Perm_ReverseMove {
+            get {
+                return ResourceManager.GetString("Perm_ReverseMove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Annuler Opération.
+        /// </summary>
+        public static string Perm_ReverseOp {
+            get {
+                return ResourceManager.GetString("Perm_ReverseOp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom du Rôle.
+        /// </summary>
+        public static string Perm_RoleName {
+            get {
+                return ResourceManager.GetString("Perm_RoleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Vente.
+        /// </summary>
+        public static string Perm_SalesPage {
+            get {
+                return ResourceManager.GetString("Perm_SalesPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Facture Enregistrées.
+        /// </summary>
+        public static string Perm_SavedInvoices {
+            get {
+                return ResourceManager.GetString("Perm_SavedInvoices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solder Client.
+        /// </summary>
+        public static string Perm_SettleClient {
+            get {
+                return ResourceManager.GetString("Perm_SettleClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Règlements.
+        /// </summary>
+        public static string Perm_Settlements {
+            get {
+                return ResourceManager.GetString("Perm_Settlements", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Solder Fournisseur.
+        /// </summary>
+        public static string Perm_SettleSupplier {
+            get {
+                return ResourceManager.GetString("Perm_SettleSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Arrêter Système.
+        /// </summary>
+        public static string Perm_Shutdown {
+            get {
+                return ResourceManager.GetString("Perm_Shutdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permissions Fournisseur.
+        /// </summary>
+        public static string Perm_SupplierPerms {
+            get {
+                return ResourceManager.GetString("Perm_SupplierPerms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Fournisseurs.
+        /// </summary>
+        public static string Perm_SuppliersPage {
+            get {
+                return ResourceManager.GetString("Perm_SuppliersPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actions Système.
+        /// </summary>
+        public static string Perm_SystemActions {
+            get {
+                return ResourceManager.GetString("Perm_SystemActions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilisateurs et Rôles.
+        /// </summary>
+        public static string Perm_UsersRoles {
+            get {
+                return ResourceManager.GetString("Perm_UsersRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir À Propos.
+        /// </summary>
+        public static string Perm_ViewAbout {
+            get {
+                return ResourceManager.GetString("Perm_ViewAbout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Articles.
+        /// </summary>
+        public static string Perm_ViewArticles {
+            get {
+                return ResourceManager.GetString("Perm_ViewArticles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Client.
+        /// </summary>
+        public static string Perm_ViewClient {
+            get {
+                return ResourceManager.GetString("Perm_ViewClient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Crédit Client.
+        /// </summary>
+        public static string Perm_ViewClientCredit {
+            get {
+                return ResourceManager.GetString("Perm_ViewClientCredit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Opérations.
+        /// </summary>
+        public static string Perm_ViewClientOps {
+            get {
+                return ResourceManager.GetString("Perm_ViewClientOps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Familles.
+        /// </summary>
+        public static string Perm_ViewFamilies {
+            get {
+                return ResourceManager.GetString("Perm_ViewFamilies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Paramètres.
+        /// </summary>
+        public static string Perm_ViewInvSettings {
+            get {
+                return ResourceManager.GetString("Perm_ViewInvSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Mouvements.
+        /// </summary>
+        public static string Perm_ViewMoves {
+            get {
+                return ResourceManager.GetString("Perm_ViewMoves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Opérations.
+        /// </summary>
+        public static string Perm_ViewOps {
+            get {
+                return ResourceManager.GetString("Perm_ViewOps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Méthodes.
+        /// </summary>
+        public static string Perm_ViewPayMethods {
+            get {
+                return ResourceManager.GetString("Perm_ViewPayMethods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Gestion Projets.
+        /// </summary>
+        public static string Perm_ViewProjMgmt {
+            get {
+                return ResourceManager.GetString("Perm_ViewProjMgmt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Rapports.
+        /// </summary>
+        public static string Perm_ViewReports {
+            get {
+                return ResourceManager.GetString("Perm_ViewReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Rôles.
+        /// </summary>
+        public static string Perm_ViewRoles {
+            get {
+                return ResourceManager.GetString("Perm_ViewRoles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Paramètres.
+        /// </summary>
+        public static string Perm_ViewSettings {
+            get {
+                return ResourceManager.GetString("Perm_ViewSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Fournisseur.
+        /// </summary>
+        public static string Perm_ViewSupplier {
+            get {
+                return ResourceManager.GetString("Perm_ViewSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Crédit Fournisseur.
+        /// </summary>
+        public static string Perm_ViewSupplierCredit {
+            get {
+                return ResourceManager.GetString("Perm_ViewSupplierCredit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Opérations.
+        /// </summary>
+        public static string Perm_ViewSupplierOps {
+            get {
+                return ResourceManager.GetString("Perm_ViewSupplierOps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voir Utilisateurs.
+        /// </summary>
+        public static string Perm_ViewUsers {
+            get {
+                return ResourceManager.GetString("Perm_ViewUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Téléphone.
         /// </summary>
         public static string Phone {
@@ -2316,6 +4053,33 @@ namespace GestionComerce.Resources {
         public static string Preview {
             get {
                 return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FERMER.
+        /// </summary>
+        public static string Preview_Close {
+            get {
+                return ResourceManager.GetString("Preview_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to APERÇU DU TICKET.
+        /// </summary>
+        public static string Preview_Header {
+            get {
+                return ResourceManager.GetString("Preview_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Aperçu du Ticket.
+        /// </summary>
+        public static string Preview_Title {
+            get {
+                return ResourceManager.GetString("Preview_Title", resourceCulture);
             }
         }
         
@@ -2563,6 +4327,69 @@ namespace GestionComerce.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supprimer.
+        /// </summary>
+        public static string Role_Delete {
+            get {
+                return ResourceManager.GetString("Role_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier.
+        /// </summary>
+        public static string Role_Modify {
+            get {
+                return ResourceManager.GetString("Role_Modify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom du Rôle.
+        /// </summary>
+        public static string Role_Name {
+            get {
+                return ResourceManager.GetString("Role_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to + Add Role.
+        /// </summary>
+        public static string RoleWindow_AddRole {
+            get {
+                return ResourceManager.GetString("RoleWindow_AddRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string RoleWindow_Close {
+            get {
+                return ResourceManager.GetString("RoleWindow_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gérez les rôles utilisateurs et les permissions.
+        /// </summary>
+        public static string RoleWindow_Description {
+            get {
+                return ResourceManager.GetString("RoleWindow_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestion des rôles.
+        /// </summary>
+        public static string RoleWindow_Title {
+            get {
+                return ResourceManager.GetString("RoleWindow_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vente.
         /// </summary>
         public static string Sale {
@@ -2793,6 +4620,69 @@ namespace GestionComerce.Resources {
         public static string SelectOperation {
             get {
                 return ResourceManager.GetString("SelectOperation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to À propos de nous.
+        /// </summary>
+        public static string Settings_AboutUs {
+            get {
+                return ResourceManager.GetString("Settings_AboutUs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ←.
+        /// </summary>
+        public static string Settings_BackButton {
+            get {
+                return ResourceManager.GetString("Settings_BackButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Méthode de Paiement.
+        /// </summary>
+        public static string Settings_PaymentMethod {
+            get {
+                return ResourceManager.GetString("Settings_PaymentMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preference.
+        /// </summary>
+        public static string Settings_Preferences {
+            get {
+                return ResourceManager.GetString("Settings_Preferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paramètres de Ticket.
+        /// </summary>
+        public static string Settings_TicketSettings {
+            get {
+                return ResourceManager.GetString("Settings_TicketSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paramètres.
+        /// </summary>
+        public static string Settings_Title {
+            get {
+                return ResourceManager.GetString("Settings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gestion des Utilisateurs.
+        /// </summary>
+        public static string Settings_UserManagement {
+            get {
+                return ResourceManager.GetString("Settings_UserManagement", resourceCulture);
             }
         }
         
@@ -3400,11 +5290,101 @@ namespace GestionComerce.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Appliquer.
+        /// </summary>
+        public static string UpdateUser_Apply {
+            get {
+                return ResourceManager.GetString("UpdateUser_Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier un compte utilisateur pour le système.
+        /// </summary>
+        public static string UpdateUser_Description {
+            get {
+                return ResourceManager.GetString("UpdateUser_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modifier un nouvel utilisateur.
+        /// </summary>
+        public static string UpdateUser_Title {
+            get {
+                return ResourceManager.GetString("UpdateUser_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Utilisateur.
         /// </summary>
         public static string User {
             get {
                 return ResourceManager.GetString("User", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        public static string User_Actions {
+            get {
+                return ResourceManager.GetString("User_Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string User_Code {
+            get {
+                return ResourceManager.GetString("User_Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 🗑 Supprimer.
+        /// </summary>
+        public static string User_Delete {
+            get {
+                return ResourceManager.GetString("User_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ✏ Modifier.
+        /// </summary>
+        public static string User_Edit {
+            get {
+                return ResourceManager.GetString("User_Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID Utilisateur.
+        /// </summary>
+        public static string User_ID {
+            get {
+                return ResourceManager.GetString("User_ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nom d&apos;utilisateur.
+        /// </summary>
+        public static string User_Name {
+            get {
+                return ResourceManager.GetString("User_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rôle.
+        /// </summary>
+        public static string User_Role {
+            get {
+                return ResourceManager.GetString("User_Role", resourceCulture);
             }
         }
         

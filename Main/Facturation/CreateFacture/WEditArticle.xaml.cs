@@ -1,155 +1,167 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace GestionComerce.Main.Facturation.CreateFacture
 {
     public partial class WEditArticle : Window
     {
-        private CMainFa mainFa;
-        private InvoiceArticle article;
-        private CSingleArticle articleControl;
-        private bool isExpeditionMode = false;
+        private readonly CMainFa       mainFa;
+        private readonly InvoiceArticle article;
+        private readonly CSingleArticle articleControl;
+        private readonly bool          isExpeditionMode;
+
+        /// <summary>
+        /// The original name when the window opened.
+        /// Used to detect whether the user has changed it.
+        /// </summary>
+        private readonly string _originalName;
+
+        /// <summary>
+        /// Whether the article was a stock article (ArticleID >= 0 and OperationID == 0)
+        /// when the window opened. If the user changes the name we flip it to custom.
+        /// </summary>
+        private readonly bool _wasStockArticle;
+
+        /// <summary>
+        /// Tracks whether the name has been edited away from the original.
+        /// </summary>
+        private bool _nameChanged = false;
 
         public WEditArticle(CMainFa mainFa, InvoiceArticle article, CSingleArticle articleControl)
         {
             InitializeComponent();
-            this.mainFa = mainFa;
-            this.article = article;
+            this.mainFa         = mainFa;
+            this.article        = article;
             this.articleControl = articleControl;
 
-            // Check if we're in Expedition mode
             isExpeditionMode = mainFa?.InvoiceType == "Expedition";
 
+            // Capture original identity so we know when the user diverges from it
+            _originalName    = article.ArticleName ?? "";
+            _wasStockArticle = article.ArticleID > 0 && article.OperationID == 0;
+
             LoadArticleData();
-
-            // Show/hide expedition field based on invoice type
             UpdateExpeditionFieldVisibility();
+            UpdateTypeBadge(); // initial badge state
 
-            // Add TextChanged handlers for real-time validation
-            txtTVA.TextChanged += TxtTVA_TextChanged;
-            txtExpedition.TextChanged += TxtExpedition_TextChanged;
+            // Validation handlers
+            txtTVA.TextChanged       += TxtTVA_TextChanged;
+            txtExpedition.TextChanged+= TxtExpedition_TextChanged;
 
-            // Add paste handler to prevent pasting invalid values
-            DataObject.AddPastingHandler(txtTVA, OnPaste);
-            DataObject.AddPastingHandler(txtPrice, OnPaste);
-            DataObject.AddPastingHandler(txtQuantity, OnPaste);
-            DataObject.AddPastingHandler(txtExpedition, OnPaste);
+            // Paste guards
+            DataObject.AddPastingHandler(txtArticleName, OnPasteText);
+            DataObject.AddPastingHandler(txtTVA,         OnPaste);
+            DataObject.AddPastingHandler(txtPrice,       OnPaste);
+            DataObject.AddPastingHandler(txtQuantity,    OnPaste);
+            DataObject.AddPastingHandler(txtExpedition,  OnPaste);
         }
 
-        private void OnPaste(object sender, DataObjectPastingEventArgs e)
+        // ── Load ──────────────────────────────────────────────────────────
+
+        private void LoadArticleData()
         {
-            if (e.DataObject.GetDataPresent(typeof(string)))
+            txtArticleNameLabel.Text = _originalName;
+            txtArticleName.Text      = article.ArticleName;
+            txtPrice.Text            = article.Prix.ToString("0.00");
+            txtQuantity.Text         = article.Quantite.ToString("0.##");
+            txtTVA.Text              = article.TVA.ToString("0.##");
+
+            if (isExpeditionMode)
+                txtExpedition.Text = article.InitialQuantity.ToString("0.##");
+        }
+
+        private void UpdateExpeditionFieldVisibility()
+        {
+            ExpeditionPanel.Visibility = isExpeditionMode
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+
+        // ── Type badge ────────────────────────────────────────────────────
+
+        private void UpdateTypeBadge()
+        {
+            bool isNowCustom = _wasStockArticle && _nameChanged;
+
+            if (article.ArticleID < 0)
             {
-                string text = (string)e.DataObject.GetData(typeof(string));
-                if (!IsValidDecimalInput(text))
-                {
-                    e.CancelCommand();
-                }
+                // Was already custom
+                SetBadge("Personnalisé", "#EDE9FE", "#6D28D9");
+            }
+            else if (article.OperationID != 0)
+            {
+                SetBadge("Opération", "#DCFCE7", "#059669");
+            }
+            else if (isNowCustom)
+            {
+                // Stock article whose name has been changed → will become custom on save
+                SetBadge("Personnalisé *", "#FEF3C7", "#D97706");
             }
             else
             {
-                e.CancelCommand();
+                SetBadge("Stock", "#DBEAFE", "#1D4ED8");
             }
         }
 
-        private bool IsValidDecimalInput(string text)
+        private void SetBadge(string text, string bgHex, string fgHex)
         {
-            // Allow only digits, dot and comma
-            return text.All(c => char.IsDigit(c) || c == '.' || c == ',');
+            txtBadgeType.Text      = text;
+            badgeType.Background   = HexBrush(bgHex);
+            txtBadgeType.Foreground= HexBrush(fgHex);
         }
+
+        // ── Name-change handler ───────────────────────────────────────────
+
+        private void txtArticleName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string current = txtArticleName.Text ?? "";
+            _nameChanged   = _wasStockArticle && current != _originalName;
+            UpdateTypeBadge();
+        }
+
+        // ── Validation events ─────────────────────────────────────────────
 
         private void TxtTVA_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var textBox = sender as TextBox;
-            if (textBox == null) return;
-
-            decimal tva = ParseDecimal(textBox.Text);
-
-            // Visual feedback for invalid TVA
-            if (tva > 100)
-            {
-                textBox.BorderBrush = System.Windows.Media.Brushes.Red;
-                textBox.ToolTip = "La TVA ne peut pas dépasser 100%";
-            }
-            else
-            {
-                textBox.ClearValue(TextBox.BorderBrushProperty);
-                textBox.ToolTip = null;
-            }
+            var tb = sender as TextBox;
+            if (tb == null) return;
+            bool bad = ParseDecimal(tb.Text) > 100;
+            tb.BorderBrush = bad ? Brushes.Red : (Brush)new SolidColorBrush(Color.FromRgb(0xE2, 0xE8, 0xF0));
+            tb.ToolTip = bad ? "La TVA ne peut pas dépasser 100 %" : null;
         }
 
         private void TxtExpedition_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (!isExpeditionMode) return;
-
-            var textBox = sender as TextBox;
-            if (textBox == null) return;
-
-            decimal expeditionQty = ParseDecimal(txtExpedition.Text);
-            decimal quantity = ParseDecimal(txtQuantity.Text);
-
-            // Visual feedback for invalid expedition quantity
-            if (expeditionQty > quantity)
-            {
-                textBox.BorderBrush = System.Windows.Media.Brushes.Red;
-                textBox.ToolTip = $"Ne peut pas dépasser la quantité commandée ({quantity})";
-            }
-            else
-            {
-                textBox.ClearValue(TextBox.BorderBrushProperty);
-                textBox.ToolTip = null;
-            }
+            var tb  = sender as TextBox;
+            if (tb == null) return;
+            bool bad = ParseDecimal(txtExpedition.Text) > ParseDecimal(txtQuantity.Text);
+            tb.BorderBrush = bad ? Brushes.Red : (Brush)new SolidColorBrush(Color.FromRgb(0xE2, 0xE8, 0xF0));
+            tb.ToolTip = bad ? $"Ne peut pas dépasser la quantité commandée ({ParseDecimal(txtQuantity.Text)})" : null;
         }
 
-        private void UpdateExpeditionFieldVisibility()
-        {
-            if (isExpeditionMode)
-            {
-                ExpeditionPanel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ExpeditionPanel.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private void LoadArticleData()
-        {
-            txtArticleName.Text = article.ArticleName;
-            txtPrice.Text = article.Prix.ToString("0.00");
-            txtQuantity.Text = article.Quantite.ToString("0.00");
-            txtTVA.Text = article.TVA.ToString("0.00");
-
-            // Load expedition quantity if in expedition mode
-            if (isExpeditionMode)
-            {
-                txtExpedition.Text = article.InitialQuantity.ToString("0.00");
-            }
-        }
-
-        private decimal ParseDecimal(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-                return 0;
-
-            // Replace comma with dot for decimal parsing
-            text = text.Replace(",", ".");
-
-            if (decimal.TryParse(text, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result))
-                return result;
-
-            return 0;
-        }
+        // ── Save ──────────────────────────────────────────────────────────
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                // Parse and validate price
+                // Name
+                string newName = txtArticleName.Text?.Trim() ?? "";
+                if (string.IsNullOrWhiteSpace(newName))
+                {
+                    MessageBox.Show("Veuillez entrer un nom d'article.", "Attention",
+                        MessageBoxButton.OK, MessageBoxImage.Warning);
+                    txtArticleName.Focus();
+                    return;
+                }
+
+                // Price
                 decimal price = ParseDecimal(txtPrice.Text);
                 if (price <= 0)
                 {
@@ -159,7 +171,7 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                     return;
                 }
 
-                // Parse and validate quantity
+                // Quantity
                 decimal quantity = ParseDecimal(txtQuantity.Text);
                 if (quantity <= 0)
                 {
@@ -169,117 +181,125 @@ namespace GestionComerce.Main.Facturation.CreateFacture
                     return;
                 }
 
-                // Parse and validate TVA
+                // TVA
                 decimal tva = ParseDecimal(txtTVA.Text);
-
-                // CRITICAL: TVA cannot exceed 100%
                 if (tva > 100)
                 {
-                    MessageBox.Show("La TVA ne peut pas dépasser 100%.\n\nVeuillez entrer une valeur entre 0 et 100.",
-                        "TVA Invalide",
-                        MessageBoxButton.OK, MessageBoxImage.Error);
-                    txtTVA.Focus();
-                    txtTVA.SelectAll();
+                    MessageBox.Show("La TVA ne peut pas dépasser 100 %.\nVeuillez entrer une valeur entre 0 et 100.",
+                        "TVA invalide", MessageBoxButton.OK, MessageBoxImage.Error);
+                    txtTVA.Focus(); txtTVA.SelectAll();
                     return;
                 }
-
                 if (tva < 0)
                 {
                     MessageBox.Show("La TVA ne peut pas être négative.", "Attention",
                         MessageBoxButton.OK, MessageBoxImage.Warning);
-                    txtTVA.Focus();
-                    txtTVA.SelectAll();
+                    txtTVA.Focus(); txtTVA.SelectAll();
                     return;
                 }
 
-                // Validate expedition quantity if in expedition mode
+                // Expedition
                 decimal expeditionQty = quantity;
                 if (isExpeditionMode)
                 {
                     expeditionQty = ParseDecimal(txtExpedition.Text);
-
                     if (expeditionQty < 0)
                     {
                         MessageBox.Show("La quantité expédiée ne peut pas être négative.", "Attention",
                             MessageBoxButton.OK, MessageBoxImage.Warning);
-                        txtExpedition.Focus();
-                        txtExpedition.SelectAll();
+                        txtExpedition.Focus(); txtExpedition.SelectAll();
                         return;
                     }
-
-                    // CRITICAL: Expedition quantity cannot exceed ordered quantity
                     if (expeditionQty > quantity)
                     {
-                        MessageBox.Show($"La quantité expédiée ({expeditionQty}) ne peut pas dépasser la quantité commandée ({quantity}).\n\nVeuillez ajuster la quantité expédiée.",
-                            "Quantité Invalide",
-                            MessageBoxButton.OK, MessageBoxImage.Error);
-                        txtExpedition.Focus();
-                        txtExpedition.SelectAll();
+                        MessageBox.Show(
+                            $"La quantité expédiée ({expeditionQty}) ne peut pas dépasser la quantité commandée ({quantity}).",
+                            "Quantité invalide", MessageBoxButton.OK, MessageBoxImage.Error);
+                        txtExpedition.Focus(); txtExpedition.SelectAll();
                         return;
                     }
                 }
 
-                // Update article properties
-                article.Prix = price;
-                article.Quantite = quantity;
-                article.TVA = tva;
+                // ── Apply changes ──
 
-                // Update expedition quantity if in expedition mode
+                article.ArticleName = newName;
+                article.Prix        = price;
+                article.Quantite    = quantity;
+                article.TVA         = tva;
+
                 if (isExpeditionMode)
                 {
                     article.InitialQuantity = expeditionQty;
                     article.ExpeditionTotal = expeditionQty;
                 }
 
-                System.Diagnostics.Debug.WriteLine($"Updating Article:");
-                System.Diagnostics.Debug.WriteLine($"  Quantite (QTY): {quantity}");
-                System.Diagnostics.Debug.WriteLine($"  InitialQuantity (QTY EXPIDE): {expeditionQty}");
-                System.Diagnostics.Debug.WriteLine($"  TVA: {tva}%");
-                System.Diagnostics.Debug.WriteLine($"  IsExpeditionMode: {isExpeditionMode}");
+                // If the name of a stock article was changed → convert to custom
+                // A negative ArticleID is the convention for custom articles.
+                if (_wasStockArticle && _nameChanged)
+                {
+                    article.ArticleID  = -Math.Abs(DateTime.Now.Ticks.GetHashCode());
+                    article.OperationID= 0;
+                }
 
-                // Update the visual control
+                // Refresh the card in the invoice and recalculate
                 articleControl.UpdateArticle(article);
-
-                // Recalculate totals
                 mainFa.RecalculateTotals();
 
-                MessageBox.Show("Article modifié avec succès!", "Succès",
+                MessageBox.Show("Article modifié avec succès !", "Succès",
                     MessageBoxButton.OK, MessageBoxImage.Information);
 
-                this.Close();
+                Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de la modification: {ex.Message}", "Erreur",
+                MessageBox.Show($"Erreur lors de la modification : {ex.Message}", "Erreur",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        private void btnCancel_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+        private void btnCancel_Click(object sender, RoutedEventArgs e) => Close();
+
+        // ── Input guards ──────────────────────────────────────────────────
 
         private void DecimalTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var textBox = sender as TextBox;
-            if (textBox == null)
-            {
-                e.Handled = true;
-                return;
-            }
-
-            // Allow decimal point or comma
+            var tb = sender as TextBox;
+            if (tb == null) { e.Handled = true; return; }
             if (e.Text == "." || e.Text == ",")
-            {
-                // Only allow one decimal separator
-                e.Handled = textBox.Text.Contains(".") || textBox.Text.Contains(",");
-            }
+                e.Handled = tb.Text.Contains(".") || tb.Text.Contains(",");
             else
-            {
-                // Only allow digits
                 e.Handled = !e.Text.All(char.IsDigit);
-            }
         }
+
+        /// <summary>Paste handler for numeric-only fields.</summary>
+        private void OnPaste(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
+            {
+                string t = (string)e.DataObject.GetData(typeof(string));
+                if (!t.All(c => char.IsDigit(c) || c == '.' || c == ','))
+                    e.CancelCommand();
+            }
+            else e.CancelCommand();
+        }
+
+        /// <summary>Paste handler for the name field (allow any text).</summary>
+        private void OnPasteText(object sender, DataObjectPastingEventArgs e)
+        {
+            // No restriction on the name field — just let it through
+        }
+
+        // ── Helpers ───────────────────────────────────────────────────────
+
+        private decimal ParseDecimal(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return 0;
+            decimal.TryParse(text.Replace(",", "."),
+                NumberStyles.Any, CultureInfo.InvariantCulture, out decimal r);
+            return r;
+        }
+
+        private static SolidColorBrush HexBrush(string hex) =>
+            new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
     }
 }

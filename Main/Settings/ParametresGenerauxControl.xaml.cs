@@ -1,4 +1,4 @@
-﻿using GestionComerce;
+using GestionComerce;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,8 +25,6 @@ namespace Superete.Main.Settings
             _currentUserId = userId;
             _connectionString = connectionString;
             Loaded += ParametresGenerauxControl_Loaded;
-
-            // Ajouter un gestionnaire pour le changement de vue
             CbVueParDefaut.SelectionChanged += CbVueParDefaut_SelectionChanged;
         }
 
@@ -68,12 +66,10 @@ namespace Superete.Main.Settings
             {
                 _parametresActuels = ParametresGeneraux.ObtenirOuCreerParametres(_currentUserId, _connectionString);
 
-                // SI LES PARAMETRES VIENNENT D'ÊTRE CRÉÉS, FORCER LES BONNES VALEURS PAR DÉFAUT
                 if (_parametresActuels != null)
                 {
                     bool needsUpdate = false;
 
-                    // Forcer VueParDefaut à "Row" seulement si vide ou valeur invalide
                     if (string.IsNullOrEmpty(_parametresActuels.VueParDefaut) ||
                         (_parametresActuels.VueParDefaut != "Row" && _parametresActuels.VueParDefaut != "Cartes"))
                     {
@@ -81,18 +77,14 @@ namespace Superete.Main.Settings
                         needsUpdate = true;
                     }
 
-                    // Forcer TrierParDefaut à "Plus récent au plus ancien" SEULEMENT si vide
                     if (string.IsNullOrEmpty(_parametresActuels.TrierParDefaut))
                     {
                         _parametresActuels.TrierParDefaut = "Plus récent au plus ancien";
                         needsUpdate = true;
                     }
 
-                    // Si on a modifié quelque chose, sauvegarder
                     if (needsUpdate)
-                    {
                         _parametresActuels.MettreAJourParametres(_connectionString);
-                    }
                 }
 
                 RemplirInterface();
@@ -108,105 +100,57 @@ namespace Superete.Main.Settings
         {
             if (_parametresActuels == null) return;
 
-            // Affichage clavier
             switch (_parametresActuels.AfficherClavier)
             {
-                case "Oui":
-                    CbAfficherClavier.SelectedIndex = 0;
-                    break;
-                case "Non":
-                    CbAfficherClavier.SelectedIndex = 1;
-                    break;
-                case "Manuel":
-                default:
-                    CbAfficherClavier.SelectedIndex = 2;
-                    break;
+                case "Oui":   CbAfficherClavier.SelectedIndex = 0; break;
+                case "Non":   CbAfficherClavier.SelectedIndex = 1; break;
+                default:      CbAfficherClavier.SelectedIndex = 2; break;
             }
 
             switch (_parametresActuels.TailleIcones)
             {
-                case "Grandes":
-                    CbTailleIcones.SelectedIndex = 0;
-                    break;
-                case "Moyennes":
-                    CbTailleIcones.SelectedIndex = 1;
-                    break;
-                case "Petites":
-                    CbTailleIcones.SelectedIndex = 2;
-                    break;
-                default:
-                    CbTailleIcones.SelectedIndex = 1; // Moyennes par défaut
-                    break;
+                case "Grandes":  CbTailleIcones.SelectedIndex = 0; break;
+                case "Moyennes": CbTailleIcones.SelectedIndex = 1; break;
+                case "Petites":  CbTailleIcones.SelectedIndex = 2; break;
+                default:         CbTailleIcones.SelectedIndex = 1; break;
             }
-            // Langue
+
             switch (_parametresActuels.Langue)
             {
-                case "Français":
-                    CbLangue.SelectedIndex = 0;
-                    break;
-                case "English":
-                    CbLangue.SelectedIndex = 1;
-                    break;
+                case "English":  CbLangue.SelectedIndex = 1; break;
                 case "العربية":
-                case "Arabic":
-                    CbLangue.SelectedIndex = 2;
-                    break;
-                default:
-                    CbLangue.SelectedIndex = 0; // Default to French
-                    break;
+                case "Arabic":   CbLangue.SelectedIndex = 2; break;
+                default:         CbLangue.SelectedIndex = 0; break; // Français
             }
-            // Checkboxes
-            ChkMasquerEtiquettesVides.IsChecked = _parametresActuels.MasquerEtiquettesVides;
-            ChkSupprimerArticlesQuantiteZero.IsChecked = _parametresActuels.SupprimerArticlesQuantiteZero;
-            ChkImprimerFactureParDefaut.IsChecked = _parametresActuels.ImprimerFactureParDefaut;
-            ChkImprimerTicketParDefaut.IsChecked = _parametresActuels.ImprimerTicketParDefaut;
 
-            // Vue par défaut - SET THIS FIRST, then update visibility
+            ChkMasquerEtiquettesVides.IsChecked         = _parametresActuels.MasquerEtiquettesVides;
+            ChkSupprimerArticlesQuantiteZero.IsChecked  = _parametresActuels.SupprimerArticlesQuantiteZero;
+            ChkImprimerFactureParDefaut.IsChecked        = _parametresActuels.ImprimerFactureParDefaut;
+            ChkImprimerTicketParDefaut.IsChecked         = _parametresActuels.ImprimerTicketParDefaut;
+
             string vueParDefaut = string.IsNullOrEmpty(_parametresActuels.VueParDefaut) ? "Row" : _parametresActuels.VueParDefaut;
             CbVueParDefaut.SelectedIndex = vueParDefaut == "Cartes" ? 0 : 1;
-
-            // NOW update visibility based on the actual value
             TailleIconesBorder.Visibility = (vueParDefaut == "Cartes") ? Visibility.Visible : Visibility.Collapsed;
 
-            // Tri par défaut
             switch (_parametresActuels.TrierParDefaut)
             {
-                case "Nom (A-Z)":
-                    CbTrierParDefaut.SelectedIndex = 0;
-                    break;
-                case "Nom (Z-A)":
-                    CbTrierParDefaut.SelectedIndex = 1;
-                    break;
-                case "Prix croissant":
-                    CbTrierParDefaut.SelectedIndex = 2;
-                    break;
-                case "Prix décroissant":
-                    CbTrierParDefaut.SelectedIndex = 3;
-                    break;
-                case "Quantité croissante":
-                    CbTrierParDefaut.SelectedIndex = 4;
-                    break;
-                case "Quantité décroissante":
-                    CbTrierParDefaut.SelectedIndex = 5;
-                    break;
-                case "Plus récent au plus ancien":
-                    CbTrierParDefaut.SelectedIndex = 6;
-                    break;
-                case "Plus ancien au plus récent":
-                    CbTrierParDefaut.SelectedIndex = 7;
-                    break;
-                default:
-                    CbTrierParDefaut.SelectedIndex = 0;
-                    break;
+                case "Nom (A-Z)":                    CbTrierParDefaut.SelectedIndex = 0; break;
+                case "Nom (Z-A)":                    CbTrierParDefaut.SelectedIndex = 1; break;
+                case "Prix croissant":               CbTrierParDefaut.SelectedIndex = 2; break;
+                case "Prix décroissant":             CbTrierParDefaut.SelectedIndex = 3; break;
+                case "Quantité croissante":          CbTrierParDefaut.SelectedIndex = 4; break;
+                case "Quantité décroissante":        CbTrierParDefaut.SelectedIndex = 5; break;
+                case "Plus récent au plus ancien":   CbTrierParDefaut.SelectedIndex = 6; break;
+                case "Plus ancien au plus récent":   CbTrierParDefaut.SelectedIndex = 7; break;
+                default:                             CbTrierParDefaut.SelectedIndex = 0; break;
             }
 
-            // Méthode de paiement - Sélectionner par nom
             if (!string.IsNullOrEmpty(_parametresActuels.MethodePaiementParDefaut))
             {
                 for (int i = 0; i < CbMethodePaiementParDefaut.Items.Count; i++)
                 {
-                    ComboBoxItem item = CbMethodePaiementParDefaut.Items[i] as ComboBoxItem;
-                    if (item != null && item.Content.ToString() == _parametresActuels.MethodePaiementParDefaut)
+                    if (CbMethodePaiementParDefaut.Items[i] is ComboBoxItem item &&
+                        item.Content.ToString() == _parametresActuels.MethodePaiementParDefaut)
                     {
                         CbMethodePaiementParDefaut.SelectedIndex = i;
                         break;
@@ -215,13 +159,9 @@ namespace Superete.Main.Settings
             }
         }
 
-        // Gestionnaire pour le changement de vue
         private void CbVueParDefaut_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TailleIconesBorder == null) return;
-
-            // Si "Cartes" est sélectionné (index 0), afficher
-            // Si "Row" est sélectionné (index 1), masquer
             TailleIconesBorder.Visibility = (CbVueParDefaut.SelectedIndex == 0) ? Visibility.Visible : Visibility.Collapsed;
         }
 
@@ -229,14 +169,11 @@ namespace Superete.Main.Settings
         {
             try
             {
-                // Récupérer les valeurs de l'interface
                 string afficherClavier = CbAfficherClavier.SelectedIndex == 0 ? "Oui" :
-                                        CbAfficherClavier.SelectedIndex == 1 ? "Non" : "Manuel";
+                                         CbAfficherClavier.SelectedIndex == 1 ? "Non" : "Manuel";
 
-                // Vue par défaut
                 string vueParDefaut = CbVueParDefaut.SelectedIndex == 0 ? "Cartes" : "Row";
 
-                // Tri par défaut
                 string trierParDefaut = "";
                 switch (CbTrierParDefaut.SelectedIndex)
                 {
@@ -251,12 +188,9 @@ namespace Superete.Main.Settings
                     default: trierParDefaut = "Nom (A-Z)"; break;
                 }
 
-                // Récupérer le nom de la méthode de paiement depuis le ComboBox
                 string methodePaiement = "";
-                if (CbMethodePaiementParDefaut.SelectedItem is ComboBoxItem selectedItem)
-                {
-                    methodePaiement = selectedItem.Content.ToString();
-                }
+                if (CbMethodePaiementParDefaut.SelectedItem is ComboBoxItem selectedPayment)
+                    methodePaiement = selectedPayment.Content.ToString();
 
                 string tailleIcones = "";
                 switch (CbTailleIcones.SelectedIndex)
@@ -266,39 +200,45 @@ namespace Superete.Main.Settings
                     case 2: tailleIcones = "Petites"; break;
                     default: tailleIcones = "Moyennes"; break;
                 }
-                // Get language setting
+
+                // ── Get selected language name ──────────────────────────────
                 string langue = "Français";
                 if (CbLangue.SelectedItem is ComboBoxItem langItem)
                 {
-                    langue = langItem.Content.ToString()
-                        .Replace("🇫🇷  ", "")
-                        .Replace("🇬🇧  ", "")
-                        .Replace("🇸🇦  ", "");
+                    // Map combobox index to the stored language name
+                    switch (CbLangue.SelectedIndex)
+                    {
+                        case 1: langue = "English"; break;
+                        case 2: langue = "العربية"; break;
+                        default: langue = "Français"; break;
+                    }
                 }
+                // ───────────────────────────────────────────────────────────
 
-                // Then add this line where you update other parameters:
-                
-                // Mettre à jour l'objet
-                _parametresActuels.AfficherClavier = afficherClavier;
-                _parametresActuels.MasquerEtiquettesVides = ChkMasquerEtiquettesVides.IsChecked ?? false;
+                _parametresActuels.AfficherClavier              = afficherClavier;
+                _parametresActuels.MasquerEtiquettesVides        = ChkMasquerEtiquettesVides.IsChecked ?? false;
                 _parametresActuels.SupprimerArticlesQuantiteZero = ChkSupprimerArticlesQuantiteZero.IsChecked ?? false;
-                _parametresActuels.ImprimerFactureParDefaut = ChkImprimerFactureParDefaut.IsChecked ?? false;
-                _parametresActuels.ImprimerTicketParDefaut = ChkImprimerTicketParDefaut.IsChecked ?? false;
-                _parametresActuels.MethodePaiementParDefaut = methodePaiement;
-                _parametresActuels.VueParDefaut = vueParDefaut;
-                _parametresActuels.TrierParDefaut = trierParDefaut;
-                _parametresActuels.TailleIcones = tailleIcones;
-                _parametresActuels.Langue = langue;
+                _parametresActuels.ImprimerFactureParDefaut      = ChkImprimerFactureParDefaut.IsChecked ?? false;
+                _parametresActuels.ImprimerTicketParDefaut       = ChkImprimerTicketParDefaut.IsChecked ?? false;
+                _parametresActuels.MethodePaiementParDefaut      = methodePaiement;
+                _parametresActuels.VueParDefaut                  = vueParDefaut;
+                _parametresActuels.TrierParDefaut                = trierParDefaut;
+                _parametresActuels.TailleIcones                  = tailleIcones;
+                _parametresActuels.Langue                        = langue;
 
-                // Sauvegarder dans la BD
                 bool success = _parametresActuels.MettreAJourParametres(_connectionString);
 
                 if (success)
                 {
+                    // ── APPLY LANGUAGE IMMEDIATELY ACROSS THE WHOLE APP ─────
+                    var app = Application.Current as GestionComerce.App;
+                    if (app != null)
+                        app.ApplyLanguage(langue);
+                    // ───────────────────────────────────────────────────────
+
                     MessageBox.Show("Paramètres enregistrés avec succès !",
                         "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                    // Recharger pour mettre à jour
                     ChargerParametres();
                 }
                 else
@@ -316,34 +256,20 @@ namespace Superete.Main.Settings
 
         private void BtnAnnuler_Click(object sender, RoutedEventArgs e)
         {
-            // Recharger les paramètres pour annuler les modifications
             ChargerParametres();
         }
 
-        // Méthode publique pour obtenir les paramètres actuels
-        public ParametresGeneraux ObtenirParametres()
-        {
-            return _parametresActuels;
-        }
+        public ParametresGeneraux ObtenirParametres() => _parametresActuels;
+
         private void CbLangue_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CbLangue.SelectedItem is ComboBoxItem selectedItem)
-            {
-                string languageCode = selectedItem.Tag.ToString();
-
-                // Change the language immediately using TranslationService
-                //TranslationService.ChangeLanguage(languageCode);
-
-                // Note: The actual save to database happens when user clicks "Enregistrer"
-            }
+            // No preview change here — language only applies when user clicks Save
         }
-        // Méthode pour obtenir l'ID de la méthode de paiement sélectionnée (optionnel)
+
         public int? ObtenirPaymentMethodIdSelectionne()
         {
             if (CbMethodePaiementParDefaut.SelectedItem is ComboBoxItem selectedItem)
-            {
                 return (int)selectedItem.Tag;
-            }
             return null;
         }
     }

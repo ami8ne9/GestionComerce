@@ -1235,4 +1235,665 @@
   <data name="Year" xml:space="preserve">
     <value>Year</value>
   </data>
+
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_UserManagement" xml:space="preserve">
+    <value>User Management</value>
+  </data>
+  <data name="Settings_TicketSettings" xml:space="preserve">
+    <value>Ticket Settings</value>
+  </data>
+  <data name="Settings_PaymentMethod" xml:space="preserve">
+    <value>Payment Method</value>
+  </data>
+  <data name="Settings_AboutUs" xml:space="preserve">
+    <value>About Us</value>
+  </data>
+  <data name="Settings_Preferences" xml:space="preserve">
+    <value>Preferences</value>
+  </data>
+  <data name="Settings_BackButton" xml:space="preserve">
+    <value>←</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>A&amp;A Software Solution</value>
+  </data>
+  <data name="About_Tagline" xml:space="preserve">
+    <value>Your trusted technology partner</value>
+  </data>
+  <data name="About_SolutionTitle" xml:space="preserve">
+    <value>About Our Solution</value>
+  </data>
+  <data name="About_Description1" xml:space="preserve">
+    <value>Welcome to A&amp;A Software Solution, your trusted partner for business management solutions. Our point of sale (POS) system is designed to simplify and optimize the management of your business, regardless of its size.</value>
+  </data>
+  <data name="About_Description2" xml:space="preserve">
+    <value>We understand the daily challenges faced by modern merchants. That's why we have developed a complete, intuitive and efficient solution that allows you to focus on the essentials: growing your business and satisfying your customers.</value>
+  </data>
+  <data name="About_MainFeatures" xml:space="preserve">
+    <value>Main Features</value>
+  </data>
+  <data name="About_SalesManagement" xml:space="preserve">
+    <value>Sales Management</value>
+  </data>
+  <data name="About_SalesManagementDesc" xml:space="preserve">
+    <value>Fast transaction processing with an intuitive interface</value>
+  </data>
+  <data name="About_StockManagement" xml:space="preserve">
+    <value>Stock Management</value>
+  </data>
+  <data name="About_StockManagementDesc" xml:space="preserve">
+    <value>Real-time tracking of your inventory and automatic alerts</value>
+  </data>
+  <data name="About_ClientManagement" xml:space="preserve">
+    <value>Client Management</value>
+  </data>
+  <data name="About_ClientManagementDesc" xml:space="preserve">
+    <value>Complete customer database and purchase history</value>
+  </data>
+  <data name="About_AutoInvoicing" xml:space="preserve">
+    <value>Automatic Invoicing</value>
+  </data>
+  <data name="About_AutoInvoicingDesc" xml:space="preserve">
+    <value>Create and print professional invoices in one click</value>
+  </data>
+  <data name="About_DetailedReports" xml:space="preserve">
+    <value>Detailed Reports</value>
+  </data>
+  <data name="About_DetailedReportsDesc" xml:space="preserve">
+    <value>In-depth analysis to make informed decisions</value>
+  </data>
+  <data name="About_AdvancedSecurity" xml:space="preserve">
+    <value>Advanced Security</value>
+  </data>
+  <data name="About_AdvancedSecurityDesc" xml:space="preserve">
+    <value>Data protection with access rights management</value>
+  </data>
+  <data name="About_ContactUs" xml:space="preserve">
+    <value>Contact Us</value>
+  </data>
+  <data name="About_ContactDesc" xml:space="preserve">
+    <value>Our team is at your disposal to answer all your questions, support you in using our solution and provide you with quality technical support.</value>
+  </data>
+  <data name="About_PrimaryContact" xml:space="preserve">
+    <value>Primary Contact</value>
+  </data>
+  <data name="About_SecondaryContact" xml:space="preserve">
+    <value>Secondary Contact</value>
+  </data>
+  <data name="About_Phone1" xml:space="preserve">
+    <value>06 17 23 29 32</value>
+  </data>
+  <data name="About_Phone2" xml:space="preserve">
+    <value>06 04 48 17 65</value>
+  </data>
+  <data name="About_Availability" xml:space="preserve">
+    <value>We are available Monday to Friday</value>
+  </data>
+  <data name="About_WorkingHours" xml:space="preserve">
+    <value>From 9:00 AM to 6:00 PM</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>© 2024 A&amp;A Software Solution</value>
+  </data>
+  <data name="About_Rights" xml:space="preserve">
+    <value>All rights reserved - Professional business management solution</value>
+  </data>
+  <data name="Role_Name" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="Role_Modify" xml:space="preserve">
+    <value>Modify</value>
+  </data>
+  <data name="Role_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="User_ID" xml:space="preserve">
+    <value>User ID</value>
+  </data>
+  <data name="User_Name" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="User_Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="User_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="User_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="User_Edit" xml:space="preserve">
+    <value>✏ Edit</value>
+  </data>
+  <data name="User_Delete" xml:space="preserve">
+    <value>🗑 Delete</value>
+  </data>
+  <data name="AddUser_Title" xml:space="preserve">
+    <value>Add a new user</value>
+  </data>
+  <data name="AddUser_Description" xml:space="preserve">
+    <value>Create a new user account for the system</value>
+  </data>
+  <data name="AddUser_FullName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
+  <data name="AddUser_Password" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="AddUser_Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="AddUser_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="AddUser_Create" xml:space="preserve">
+    <value>Create User</value>
+  </data>
+  <data name="UpdateUser_Title" xml:space="preserve">
+    <value>Update a user</value>
+  </data>
+  <data name="UpdateUser_Description" xml:space="preserve">
+    <value>Update a user account for the system</value>
+  </data>
+  <data name="UpdateUser_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="DeleteUser_Title" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="DeleteUser_ConfirmTitle" xml:space="preserve">
+    <value>Confirm Deletion</value>
+  </data>
+  <data name="DeleteUser_Irreversible" xml:space="preserve">
+    <value>This action is irreversible</value>
+  </data>
+  <data name="DeleteUser_Question" xml:space="preserve">
+    <value>Are you sure you want to delete this user?</value>
+  </data>
+  <data name="DeleteUser_Warning" xml:space="preserve">
+    <value>All associated data will be permanently lost.</value>
+  </data>
+  <data name="DeleteUser_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="DeleteUser_Confirm" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="RoleWindow_Title" xml:space="preserve">
+    <value>Role Management</value>
+  </data>
+  <data name="RoleWindow_Description" xml:space="preserve">
+    <value>Manage user roles and permissions</value>
+  </data>
+  <data name="RoleWindow_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="RoleWindow_AddRole" xml:space="preserve">
+    <value>+ Add Role</value>
+  </data>
+  <data name="Payment_Title" xml:space="preserve">
+    <value>Payment Methods</value>
+  </data>
+  <data name="Payment_Description" xml:space="preserve">
+    <value>Manage available payment methods in your system</value>
+  </data>
+  <data name="Payment_NewMethod" xml:space="preserve">
+    <value>New Payment Method</value>
+  </data>
+  <data name="Payment_MethodName" xml:space="preserve">
+    <value>Method Name:</value>
+  </data>
+  <data name="Payment_ImageIcon" xml:space="preserve">
+    <value>Image/Icon:</value>
+  </data>
+  <data name="Payment_Browse" xml:space="preserve">
+    <value>📁</value>
+  </data>
+  <data name="Payment_AddMethod" xml:space="preserve">
+    <value>➕ Add Method</value>
+  </data>
+  <data name="Payment_ExistingMethods" xml:space="preserve">
+    <value>Existing Payment Methods</value>
+  </data>
+  <data name="Payment_Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="Payment_ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="Payment_Name" xml:space="preserve">
+    <value>Method Name</value>
+  </data>
+  <data name="Payment_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Payment_Edit" xml:space="preserve">
+    <value>✏ Edit</value>
+  </data>
+  <data name="Payment_Delete" xml:space="preserve">
+    <value>🗑 Delete</value>
+  </data>
+  <data name="Payment_NoMethods" xml:space="preserve">
+    <value>No payment methods</value>
+  </data>
+  <data name="Payment_AddFirst" xml:space="preserve">
+    <value>Add your first payment method above</value>
+  </data>
+  <data name="General_Title" xml:space="preserve">
+    <value>General Settings</value>
+  </data>
+  <data name="General_Description" xml:space="preserve">
+    <value>Customize your experience and configure default options</value>
+  </data>
+  <data name="General_VirtualKeyboard" xml:space="preserve">
+    <value>Virtual Keyboard Display</value>
+  </data>
+  <data name="General_KeyboardDesc" xml:space="preserve">
+    <value>Choose the touch keyboard behavior when entering in text fields</value>
+  </data>
+  <data name="General_AlwaysShow" xml:space="preserve">
+    <value>🟢  Always show keyboard</value>
+  </data>
+  <data name="General_NeverShow" xml:space="preserve">
+    <value>🔴  Never show keyboard</value>
+  </data>
+  <data name="General_Automatic" xml:space="preserve">
+    <value>🟡  Automatic (on field click)</value>
+  </data>
+  <data name="General_InvoiceDisplay" xml:space="preserve">
+    <value>Invoice Display</value>
+  </data>
+  <data name="General_InvoiceDesc" xml:space="preserve">
+    <value>Optimize the appearance of your documents by hiding empty fields</value>
+  </data>
+  <data name="General_HideEmpty" xml:space="preserve">
+    <value>Automatically hide empty labels in invoices</value>
+  </data>
+  <data name="General_StockManagement" xml:space="preserve">
+    <value>Automatic Stock Management</value>
+  </data>
+  <data name="General_StockDesc" xml:space="preserve">
+    <value>Automatically clean your inventory by removing out of stock items</value>
+  </data>
+  <data name="General_DeleteZero" xml:space="preserve">
+    <value>Automatically delete items with zero quantity</value>
+  </data>
+  <data name="General_Language" xml:space="preserve">
+    <value>Interface Language</value>
+  </data>
+  <data name="General_LanguageDesc" xml:space="preserve">
+    <value>Change the application language (changes will take effect immediately)</value>
+  </data>
+  <data name="General_French" xml:space="preserve">
+    <value>🇫🇷  French</value>
+  </data>
+  <data name="General_English" xml:space="preserve">
+    <value>🇬🇧  English</value>
+  </data>
+  <data name="General_Arabic" xml:space="preserve">
+    <value>🇸🇦  Arabic</value>
+  </data>
+  <data name="General_PrintOptions" xml:space="preserve">
+    <value>Print Options - Sale</value>
+  </data>
+  <data name="General_PrintDesc" xml:space="preserve">
+    <value>Configure automatic print options to save time during sales</value>
+  </data>
+  <data name="General_PrintInvoice" xml:space="preserve">
+    <value>✓  Check 'Print Invoice' by default</value>
+  </data>
+  <data name="General_PrintTicket" xml:space="preserve">
+    <value>✓  Check 'Print Ticket' by default</value>
+  </data>
+  <data name="General_DefaultPayment" xml:space="preserve">
+    <value>Default Payment Method</value>
+  </data>
+  <data name="General_PaymentDesc" xml:space="preserve">
+    <value>Select the payment method that will be preselected for each new sale</value>
+  </data>
+  <data name="General_DefaultView" xml:space="preserve">
+    <value>Default View</value>
+  </data>
+  <data name="General_ViewDesc" xml:space="preserve">
+    <value>Choose the preferred view mode for the item list</value>
+  </data>
+  <data name="General_CardView" xml:space="preserve">
+    <value>🎴  Card View</value>
+  </data>
+  <data name="General_ListView" xml:space="preserve">
+    <value>📋  List View (Rows)</value>
+  </data>
+  <data name="General_DefaultSort" xml:space="preserve">
+    <value>Default Sort Order</value>
+  </data>
+  <data name="General_SortDesc" xml:space="preserve">
+    <value>Define the automatic sort order for displaying items</value>
+  </data>
+  <data name="General_NameAZ" xml:space="preserve">
+    <value>📝  Name (A-Z)</value>
+  </data>
+  <data name="General_NameZA" xml:space="preserve">
+    <value>📝  Name (Z-A)</value>
+  </data>
+  <data name="General_PriceAsc" xml:space="preserve">
+    <value>💰  Price ascending</value>
+  </data>
+  <data name="General_PriceDesc_Sort" xml:space="preserve">
+    <value>💰  Price descending</value>
+  </data>
+  <data name="General_QtyAsc" xml:space="preserve">
+    <value>📦  Quantity ascending</value>
+  </data>
+  <data name="General_QtyDesc" xml:space="preserve">
+    <value>📦  Quantity descending</value>
+  </data>
+  <data name="General_NewestFirst" xml:space="preserve">
+    <value>🆕  Newest to oldest</value>
+  </data>
+  <data name="General_OldestFirst" xml:space="preserve">
+    <value>⏰  Oldest to newest</value>
+  </data>
+  <data name="General_IconSize" xml:space="preserve">
+    <value>Icon Size</value>
+  </data>
+  <data name="General_IconDesc" xml:space="preserve">
+    <value>Choose the icon display size for items in card views</value>
+  </data>
+  <data name="General_LargeIcons" xml:space="preserve">
+    <value>📏  Large icons</value>
+  </data>
+  <data name="General_MediumIcons" xml:space="preserve">
+    <value>📐  Medium icons</value>
+  </data>
+  <data name="General_SmallIcons" xml:space="preserve">
+    <value>📌  Small icons</value>
+  </data>
+  <data name="General_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="General_Save" xml:space="preserve">
+    <value>💾  Save</value>
+  </data>
+  <data name="Preview_Title" xml:space="preserve">
+    <value>Ticket Preview</value>
+  </data>
+  <data name="Preview_Header" xml:space="preserve">
+    <value>TICKET PREVIEW</value>
+  </data>
+  <data name="Preview_Close" xml:space="preserve">
+    <value>CLOSE</value>
+  </data>
+  <data name="Perm_ConfigTitle" xml:space="preserve">
+    <value>Configure Permissions</value>
+  </data>
+  <data name="Perm_ManageDesc" xml:space="preserve">
+    <value>Manage permissions by user type</value>
+  </data>
+  <data name="Perm_ActivateAll" xml:space="preserve">
+    <value>Activate All</value>
+  </data>
+  <data name="Perm_DeactivateAll" xml:space="preserve">
+    <value>Deactivate All</value>
+  </data>
+  <data name="Perm_RoleName" xml:space="preserve">
+    <value>Role Name</value>
+  </data>
+  <data name="Perm_PageAccess" xml:space="preserve">
+    <value>Page Access</value>
+  </data>
+  <data name="Perm_Activate" xml:space="preserve">
+    <value>Activate</value>
+  </data>
+  <data name="Perm_Deactivate" xml:space="preserve">
+    <value>Deactivate</value>
+  </data>
+  <data name="Perm_ClientsPage" xml:space="preserve">
+    <value>Clients Page</value>
+  </data>
+  <data name="Perm_SuppliersPage" xml:space="preserve">
+    <value>Suppliers Page</value>
+  </data>
+  <data name="Perm_InventoryPage" xml:space="preserve">
+    <value>Inventory Page</value>
+  </data>
+  <data name="Perm_SalesPage" xml:space="preserve">
+    <value>Sales Page</value>
+  </data>
+  <data name="Perm_ClientPerms" xml:space="preserve">
+    <value>Client Permissions</value>
+  </data>
+  <data name="Perm_CreateClient" xml:space="preserve">
+    <value>Create Client</value>
+  </data>
+  <data name="Perm_ModifyClient" xml:space="preserve">
+    <value>Modify Client</value>
+  </data>
+  <data name="Perm_DeleteClient" xml:space="preserve">
+    <value>Delete Client</value>
+  </data>
+  <data name="Perm_ViewClient" xml:space="preserve">
+    <value>View Client</value>
+  </data>
+  <data name="Perm_ViewClientOps" xml:space="preserve">
+    <value>View Operations</value>
+  </data>
+  <data name="Perm_PayClient" xml:space="preserve">
+    <value>Pay Client</value>
+  </data>
+  <data name="Perm_ViewClientCredit" xml:space="preserve">
+    <value>View Client Credit</value>
+  </data>
+  <data name="Perm_SupplierPerms" xml:space="preserve">
+    <value>Supplier Permissions</value>
+  </data>
+  <data name="Perm_CreateSupplier" xml:space="preserve">
+    <value>Create Supplier</value>
+  </data>
+  <data name="Perm_ModifySupplier" xml:space="preserve">
+    <value>Modify Supplier</value>
+  </data>
+  <data name="Perm_DeleteSupplier" xml:space="preserve">
+    <value>Delete Supplier</value>
+  </data>
+  <data name="Perm_ViewSupplier" xml:space="preserve">
+    <value>View Supplier</value>
+  </data>
+  <data name="Perm_ViewSupplierOps" xml:space="preserve">
+    <value>View Operations</value>
+  </data>
+  <data name="Perm_PaySupplier" xml:space="preserve">
+    <value>Pay Supplier</value>
+  </data>
+  <data name="Perm_ViewSupplierCredit" xml:space="preserve">
+    <value>View Supplier Credit</value>
+  </data>
+  <data name="Perm_Operations" xml:space="preserve">
+    <value>Operations and Movements</value>
+  </data>
+  <data name="Perm_ReverseOp" xml:space="preserve">
+    <value>Reverse Operation</value>
+  </data>
+  <data name="Perm_ReverseMove" xml:space="preserve">
+    <value>Reverse Movement</value>
+  </data>
+  <data name="Perm_ViewOps" xml:space="preserve">
+    <value>View Operations</value>
+  </data>
+  <data name="Perm_ViewMoves" xml:space="preserve">
+    <value>View Movements</value>
+  </data>
+  <data name="Perm_Management" xml:space="preserve">
+    <value>Management &amp; Settings</value>
+  </data>
+  <data name="Perm_ViewProjMgmt" xml:space="preserve">
+    <value>View Project Management</value>
+  </data>
+  <data name="Perm_ViewSettings" xml:space="preserve">
+    <value>View Settings</value>
+  </data>
+  <data name="Perm_UsersRoles" xml:space="preserve">
+    <value>Users and Roles</value>
+  </data>
+  <data name="Perm_ViewUsers" xml:space="preserve">
+    <value>View Users</value>
+  </data>
+  <data name="Perm_AddUsers" xml:space="preserve">
+    <value>Add Users</value>
+  </data>
+  <data name="Perm_EditUsers" xml:space="preserve">
+    <value>Edit Users</value>
+  </data>
+  <data name="Perm_DeleteUsers" xml:space="preserve">
+    <value>Delete Users</value>
+  </data>
+  <data name="Perm_ViewRoles" xml:space="preserve">
+    <value>View Roles</value>
+  </data>
+  <data name="Perm_AddRoles" xml:space="preserve">
+    <value>Add Roles</value>
+  </data>
+  <data name="Perm_DeleteRoles" xml:space="preserve">
+    <value>Delete Roles</value>
+  </data>
+  <data name="Perm_Families" xml:space="preserve">
+    <value>Families</value>
+  </data>
+  <data name="Perm_ViewFamilies" xml:space="preserve">
+    <value>View Families</value>
+  </data>
+  <data name="Perm_AddFamilies" xml:space="preserve">
+    <value>Add Families</value>
+  </data>
+  <data name="Perm_EditFamilies" xml:space="preserve">
+    <value>Edit Families</value>
+  </data>
+  <data name="Perm_DeleteFamilies" xml:space="preserve">
+    <value>Delete Families</value>
+  </data>
+  <data name="Perm_Articles" xml:space="preserve">
+    <value>Articles</value>
+  </data>
+  <data name="Perm_ViewArticles" xml:space="preserve">
+    <value>View Articles</value>
+  </data>
+  <data name="Perm_AddArticles" xml:space="preserve">
+    <value>Add Articles</value>
+  </data>
+  <data name="Perm_EditArticles" xml:space="preserve">
+    <value>Edit Articles</value>
+  </data>
+  <data name="Perm_DeleteArticles" xml:space="preserve">
+    <value>Delete Articles</value>
+  </data>
+  <data name="Perm_Reports" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="Perm_ViewReports" xml:space="preserve">
+    <value>View Reports</value>
+  </data>
+  <data name="Perm_Settlements" xml:space="preserve">
+    <value>Settlements</value>
+  </data>
+  <data name="Perm_SettleSupplier" xml:space="preserve">
+    <value>Settle Supplier</value>
+  </data>
+  <data name="Perm_SettleClient" xml:space="preserve">
+    <value>Settle Client</value>
+  </data>
+  <data name="Perm_CashClient" xml:space="preserve">
+    <value>Cash Client</value>
+  </data>
+  <data name="Perm_CashSupplier" xml:space="preserve">
+    <value>Cash Supplier</value>
+  </data>
+  <data name="Perm_InvoiceSettings" xml:space="preserve">
+    <value>Ticket Settings</value>
+  </data>
+  <data name="Perm_ViewInvSettings" xml:space="preserve">
+    <value>View Settings</value>
+  </data>
+  <data name="Perm_ModifyInvSettings" xml:space="preserve">
+    <value>Modify Settings</value>
+  </data>
+  <data name="Perm_PaymentMethods" xml:space="preserve">
+    <value>Payment Methods</value>
+  </data>
+  <data name="Perm_ViewPayMethods" xml:space="preserve">
+    <value>View Methods</value>
+  </data>
+  <data name="Perm_AddPayMethods" xml:space="preserve">
+    <value>Add Methods</value>
+  </data>
+  <data name="Perm_ModifyPayMethods" xml:space="preserve">
+    <value>Modify Methods</value>
+  </data>
+  <data name="Perm_DeletePayMethods" xml:space="preserve">
+    <value>Delete Methods</value>
+  </data>
+  <data name="Perm_Invoicing" xml:space="preserve">
+    <value>Invoicing</value>
+  </data>
+  <data name="Perm_AccessInvoicing" xml:space="preserve">
+    <value>Access Invoicing</value>
+  </data>
+  <data name="Perm_CreateInvoice" xml:space="preserve">
+    <value>Create Invoice</value>
+  </data>
+  <data name="Perm_InvoiceHistory" xml:space="preserve">
+    <value>Invoice History</value>
+  </data>
+  <data name="Perm_CheckHistory" xml:space="preserve">
+    <value>Check History</value>
+  </data>
+  <data name="Perm_SavedInvoices" xml:space="preserve">
+    <value>Saved Invoices</value>
+  </data>
+  <data name="Perm_Delivery" xml:space="preserve">
+    <value>Delivery</value>
+  </data>
+  <data name="Perm_AccessDelivery" xml:space="preserve">
+    <value>Access Delivery</value>
+  </data>
+  <data name="Perm_CreateDelivery" xml:space="preserve">
+    <value>Create Delivery</value>
+  </data>
+  <data name="Perm_DeliveryMgmt" xml:space="preserve">
+    <value>Delivery Management</value>
+  </data>
+  <data name="Perm_SystemActions" xml:space="preserve">
+    <value>System Actions</value>
+  </data>
+  <data name="Perm_ViewAbout" xml:space="preserve">
+    <value>View About</value>
+  </data>
+  <data name="Perm_Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Perm_Exit" xml:space="preserve">
+    <value>Exit Application</value>
+  </data>
+  <data name="Perm_Shutdown" xml:space="preserve">
+    <value>Shut Down System</value>
+  </data>
+  <data name="Perm_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Perm_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Keyboard_Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Keyboard_FR" xml:space="preserve">
+    <value>🇫🇷 FR</value>
+  </data>
+  <data name="Keyboard_EN" xml:space="preserve">
+    <value>🇬🇧 EN</value>
+  </data>
+  <data name="Keyboard_AR" xml:space="preserve">
+    <value>🇸🇦 AR</value>
+  </data>
 </root>

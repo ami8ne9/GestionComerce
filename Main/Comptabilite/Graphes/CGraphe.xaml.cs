@@ -1,1050 +1,1133 @@
-﻿using GestionComerce;
-using GestionComerce.Main.Facturation;
-using GestionComerce.Helpers;
-using Superete;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 
 namespace Superete.Main.Comptabilite.Graphes
 {
-    public partial class CGraphe : UserControl
+    // ═══════════════════════════════════════════════════════════════
+    //  MODELS
+    // ═══════════════════════════════════════════════════════════════
+
+    public class EntityItem
     {
-        User u;
-        MainWindow main;
-        private object selectedEntity;
-        private int? selectedEntityId;
+        public int    Id          { get; set; }
+        public string DisplayName { get; set; }
+        public override string ToString() => DisplayName ?? "";
+    }
 
-        // Data storage
-        private List<Article> articles;
-        private List<Client> clients;
-        private List<Fournisseur> fournisseurs;
-        private List<User> users;
-        private List<Operation> operations;
-        private List<OperationArticle> operationArticles;
-        private List<Invoice> invoices;
-        private List<FactureEnregistree> facturesEnregistrees;
+    public class DashboardPoint
+    {
+        public DateTime Date      { get; set; }
+        public string   DateLabel { get; set; }
+        public double   OpsValue  { get; set; }
+        public double   InvValue  { get; set; }
+        public int      OpsCount  { get; set; }
+        public int      InvCount  { get; set; }
+        public double   Gap       => OpsValue - InvValue;
+    }
 
-        private ArticleDataAggregator aggregator;
-        private bool isDataLoaded = false;
+    public class TableRow : INotifyPropertyChanged
+    {
+        public string Source    { get; set; }
+        public string DateLabel { get; set; }
+        public string Label     { get; set; }
+        public double Quantity  { get; set; }
+        public double Value     { get; set; }
+        public string ValueFormatted => $"{Value:N2} DH";
+        public string Status    { get; set; }
+        public int    RawId     { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
 
-        public CGraphe(User u, MainWindow main)
+    public class KpiSummary
+    {
+        public double TotalRevenue { get; set; }
+        public double TotalInvoice { get; set; }
+        public int    OpCount      { get; set; }
+        public double AvgBasket    { get; set; }
+        public double Gap          => TotalRevenue - TotalInvoice;
+        public double RevenueTrend { get; set; }
+        public double OpCountTrend { get; set; }
+        public double BasketTrend  { get; set; }
+        public double GapTrend     { get; set; }
+    }
+
+    public enum DashboardView
+    {
+        MonthlyRevenue, StockMovement, InvoicingGap, ClientPerformance, SupplierActivity
+    }
+
+    public class EntitySearchResult
+    {
+        public int    Id          { get; set; }
+        public string EntityType  { get; set; }  // "article", "client", "fournisseur"
+        public string DisplayText { get; set; }  // shown in the list
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  DATA ENGINE
+    //  Operations:  Operation  ──► OperationArticle ──► Article
+    //  Invoices:    Invoice    ──► InvoiceArticle   ──► Article
+    // ═══════════════════════════════════════════════════════════════
+
+    internal static class DataEngine
+    {
+        private const string Conn =
+            "Server=localhost\\SQLEXPRESS;Database=GESTIONCOMERCEP;Trusted_Connection=True;";
+
+        // ── Entity lists for dropdown ────────────────────────────
+        internal static async Task<List<EntityItem>> LoadEntitiesAsync(string type)
         {
-            InitializeComponent();
-            this.u = u;
-            this.main = main;
+            var list = new List<EntityItem>();
+            string sql;
 
-            StartDatePicker.SelectedDate = DateTime.Now.AddMonths(-1);
-            EndDatePicker.SelectedDate = DateTime.Now;
+            if      (type == "article")
+                sql = "SELECT ArticleID, ArticleName AS Name FROM Article WHERE Etat=1 ORDER BY ArticleName";
+            else if (type == "client")
+                sql = "SELECT ClientID, Nom AS Name FROM Client WHERE Etat=1 ORDER BY Nom";
+            else if (type == "fournisseur")
+                sql = "SELECT FournisseurID, Nom AS Name FROM Fournisseur WHERE Etat=1 ORDER BY Nom";
+            else
+                return list;
 
-            if (OperationsCheckBox != null) OperationsCheckBox.IsChecked = true;
-            if (FacturesCheckBox != null) FacturesCheckBox.IsChecked = true;
-
-            this.Loaded += CGraphe_Loaded;
-        }
-
-        private async void CGraphe_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (!isDataLoaded)
+            await Task.Run(() =>
             {
-                await LoadAllDataAsync();
-                aggregator = new ArticleDataAggregator(operations, operationArticles, invoices, articles);
-                UpdateMetricOptions();
-                isDataLoaded = true;
-            }
-        }
-
-        private async System.Threading.Tasks.Task LoadAllDataAsync()
-        {
-            try
-            {
-                articles = await new Article().GetAllArticlesAsync();
-                clients = await new Client().GetClientsAsync();
-                fournisseurs = await new Fournisseur().GetFournisseursAsync();
-                users = await new User().GetUsersAsync();
-                operations = await new Operation().GetOperationsAsync();
-                operationArticles = await new OperationArticle().GetAllOperationArticlesAsync();
-
-                string connectionString = "Server=localhost\\SQLEXPRESS;Database=GESTIONCOMERCEP;Trusted_Connection=True;";
-                var invoiceRepo = new InvoiceRepository(connectionString);
-
-                invoices = await invoiceRepo.GetAllInvoicesAsync(includeDeleted: false);
-
-                if (invoices != null && invoices.Count > 0)
+                try
                 {
-                    foreach (var invoice in invoices)
+                    using (var con = new SqlConnection(Conn))
+                    using (var cmd = new SqlCommand(sql, con))
                     {
-                        try
-                        {
-                            var invoiceArticles = await invoiceRepo.GetInvoiceArticlesAsync(invoice.InvoiceID);
-                            invoice.Articles = invoiceArticles ?? new List<Invoice.InvoiceArticle>();
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Error loading articles for invoice {invoice.InvoiceID}: {ex.Message}");
-                            invoice.Articles = new List<Invoice.InvoiceArticle>();
-                        }
+                        con.Open();
+                        using (var r = cmd.ExecuteReader())
+                            while (r.Read())
+                                list.Add(new EntityItem
+                                {
+                                    Id          = r.GetInt32(0),
+                                    DisplayName = r["Name"]?.ToString()?.Trim() ?? ""
+                                });
                     }
                 }
+                catch { /* DB not available */ }
+            });
 
-                facturesEnregistrees = FactureEnregistree.GetAllInvoices();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erreur lors du chargement des données:\n\n{ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            return list;
         }
 
-        private void EntityTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        // ── Universal search across Article + Client + Fournisseur ──
+        internal static async Task<List<EntitySearchResult>> SearchEntitiesAsync(string query)
         {
-            if (SearchPanel == null || MetricPanel == null || EntityTypeComboBox == null) return;
+            var results = new List<EntitySearchResult>();
+            if (string.IsNullOrWhiteSpace(query) || query.Length < 2) return results;
 
-            var selectedItem = (EntityTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-            bool showSearch = selectedItem == "Article" || selectedItem == "Client" ||
-                            selectedItem == "Fournisseur" || selectedItem == "Utilisateur";
+            string like = "%" + query.Replace("'", "''") + "%";
 
-            SearchPanel.Visibility = showSearch ? Visibility.Visible : Visibility.Collapsed;
-            if (SearchTextBox != null) SearchTextBox.Text = "";
-            if (SearchResultsListBox != null) SearchResultsListBox.Visibility = Visibility.Collapsed;
+            string sql = $@"
+                SELECT TOP 6 ArticleID, 'article' AS Kind, ArticleName AS Name
+                FROM Article
+                WHERE Etat = 1 AND ArticleName LIKE '{like}'
+                UNION ALL
+                SELECT TOP 6 ClientID, 'client', Nom
+                FROM Client
+                WHERE Etat = 1 AND Nom LIKE '{like}'
+                UNION ALL
+                SELECT TOP 6 FournisseurID, 'fournisseur', Nom
+                FROM Fournisseur
+                WHERE Etat = 1 AND Nom LIKE '{like}'";
 
-            selectedEntity = null;
-            selectedEntityId = null;
-            UpdateMetricOptions();
+            await Task.Run(() =>
+            {
+                try
+                {
+                    using (var con = new SqlConnection(Conn))
+                    using (var cmd = new SqlCommand(sql, con))
+                    {
+                        con.Open();
+                        using (var r = cmd.ExecuteReader())
+                            while (r.Read())
+                            {
+                                var kind = r["Kind"].ToString();
+                                var name = r["Name"]?.ToString()?.Trim() ?? "";
+                                var prefix = kind == "article" ? "📦" : kind == "client" ? "👤" : "🏭";
+                                results.Add(new EntitySearchResult
+                                {
+                                    Id          = r.GetInt32(0),
+                                    EntityType  = kind,
+                                    DisplayText = $"{prefix} {name}"
+                                });
+                            }
+                    }
+                }
+                catch { }
+            });
+
+            return results;
         }
 
-        private void UpdateMetricOptions()
+
+        internal static async Task<(List<DashboardPoint>, List<TableRow>, KpiSummary)>
+            LoadAsync(DashboardView view, DateTime start, DateTime end,
+                      bool includeOps, bool includeInv,
+                      string entityType, int? entityId)
         {
-            if (MetricComboBox == null || EntityTypeComboBox == null) return;
+            var ops = new List<RawRow>();
+            var inv = new List<RawRow>();
 
-            MetricComboBox.Items.Clear();
-            var entityType = (EntityTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-
-            switch (entityType)
+            await Task.Run(() =>
             {
-                case "Article":
-                    AddMetricItems("Stock", "Articles Achetés", "Articles Vendus", "Revenus Générés", "Marge Bénéficiaire");
-                    break;
-                case "Client":
-                    AddMetricItems("Articles Vendus", "Revenus Générés", "Opérations de Vente", "Factures Générées");
-                    break;
-                case "Fournisseur":
-                    AddMetricItems("Articles Achetés", "Dépenses", "Opérations d'Achat", "Factures Enregistrées");
-                    break;
-                case "Utilisateur":
-                    AddMetricItems("Nombre d'Opérations");
-                    break;
-                case "Opération":
-                    AddMetricItems("Par Type d'Opération", "Opérations Annulées");
-                    break;
-                case "Facture":
-                    AddMetricItems("Factures Générées", "Factures Enregistrées");
-                    break;
-            }
+                try
+                {
+                    using (var con = new SqlConnection(Conn))
+                    {
+                        con.Open();
+                        if (includeOps) ops = FetchOperations(con, start, end, entityType, entityId);
+                        if (includeInv) inv = FetchInvoices  (con, start, end, entityType, entityId);
+                    }
+                }
+                catch { /* swallow — return empty */ }
+            });
 
-            if (MetricComboBox.Items.Count > 0) MetricComboBox.SelectedIndex = 0;
+            var span   = end - start;
+            var points = span.TotalDays <= 62
+                       ? BuildByDay  (ops, inv, start, end)
+                       : BuildByMonth(ops, inv, start, end);
+
+            ApplyView(points, view);
+
+            var rows = BuildRows(ops, inv);
+            var kpi  = ComputeKpi(ops, inv);
+
+            return (points, rows, kpi);
         }
 
-        private void AddMetricItems(params string[] items)
+        // ── Operations: Operation → OperationArticle → Article ───
+        private static List<RawRow> FetchOperations(SqlConnection con,
+            DateTime start, DateTime end, string entityType, int? entityId)
         {
-            foreach (var item in items)
-                MetricComboBox.Items.Add(new ComboBoxItem { Content = item });
+            var list = new List<RawRow>();
+
+            // Build optional join + filter by entity
+            string extraJoin   = "";
+            string extraFilter = "";
+
+            if (entityType == "article" && entityId.HasValue)
+            {
+                extraFilter = $"AND oa.ArticleID = {entityId.Value}";
+            }
+            else if (entityType == "client" && entityId.HasValue)
+            {
+                extraFilter = $"AND op.ClientID = {entityId.Value}";
+            }
+            else if (entityType == "fournisseur" && entityId.HasValue)
+            {
+                extraFilter = $"AND op.FournisseurID = {entityId.Value}";
+            }
+
+            // One row per OperationArticle line — price comes from Article.PrixVente (OperationArticle has no price)
+            string sql = $@"
+                SELECT
+                    op.OperationID                     AS OpId,
+                    op.Date                            AS OpDate,
+                    oa.QteArticle * a.PrixVente        AS LineValue,
+                    ISNULL(op.Reversed, 0)             AS IsReversed,
+                    oa.QteArticle                      AS Qty,
+                    a.ArticleName                      AS ArticleLabel,
+                    ISNULL(c.Nom, '')                  AS ClientNom
+                FROM Operation op
+                INNER JOIN OperationArticle oa ON oa.OperationID = op.OperationID
+                INNER JOIN Article          a  ON a.ArticleID    = oa.ArticleID
+                LEFT  JOIN Client           c  ON c.ClientID     = op.ClientID
+                WHERE op.Date BETWEEN @s AND @e
+                  AND op.Etat = 1
+                  AND oa.Etat = 1
+                  {extraFilter}";
+
+            using (var cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@s", start.Date);
+                cmd.Parameters.AddWithValue("@e", end.Date.AddDays(1).AddTicks(-1));
+
+                using (var r = cmd.ExecuteReader())
+                    while (r.Read())
+                        list.Add(new RawRow
+                        {
+                            Id         = r.GetInt32(r.GetOrdinal("OpId")),
+                            Date       = r.GetDateTime(r.GetOrdinal("OpDate")),
+                            Value      = r.IsDBNull(r.GetOrdinal("LineValue")) ? 0 : Convert.ToDouble(r["LineValue"]),
+                            IsReversed = Convert.ToBoolean(r["IsReversed"]),
+                            Quantity   = r.IsDBNull(r.GetOrdinal("Qty")) ? 0 : Convert.ToDouble(r["Qty"]),
+                            // Show article name; if filtered by client show client name instead
+                            Label      = entityType == "client"
+                                             ? r["ClientNom"]?.ToString()?.Trim() ?? r["ArticleLabel"]?.ToString() ?? ""
+                                             : r["ArticleLabel"]?.ToString() ?? "",
+                            Source     = "Opération",
+                            Status     = Convert.ToBoolean(r["IsReversed"]) ? "Annulé" : "Actif"
+                        });
+            }
+
+            return list;
         }
 
-        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        // ── Invoices: Invoice → InvoiceArticle → Article ─────────
+        private static List<RawRow> FetchInvoices(SqlConnection con,
+            DateTime start, DateTime end, string entityType, int? entityId)
         {
-            string searchText = SearchTextBox.Text.ToLower();
-            var entityType = (EntityTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
+            var list = new List<RawRow>();
 
-            if (string.IsNullOrWhiteSpace(searchText))
+            string extraFilter = "";
+
+            if (entityType == "article" && entityId.HasValue)
+                extraFilter = $"AND ia.ArticleID = {entityId.Value}";
+            else if (entityType == "client" && entityId.HasValue)
+                // Invoice.ClientName is a denormalized string — filter via subquery
+                extraFilter += $" AND i.ClientName = (SELECT TOP 1 Nom FROM Client WHERE ClientID = {entityId.Value})";
+            // Note: Invoice table is for client sales only, not fournisseur
+
+            // InvoiceArticle has ArticleName + PrixUnitaire + Quantite directly (no Article join needed)
+            string sql = $@"
+                SELECT
+                    i.InvoiceID,
+                    i.InvoiceDate                      AS InvDate,
+                    ia.PrixUnitaire * ia.Quantite      AS LineValue,
+                    ia.Quantite                        AS Qty,
+                    ia.ArticleName                     AS Label,
+                    CASE WHEN i.EtatFacture = 1 THEN 'Payé' ELSE 'En attente' END AS InvStatus
+                FROM Invoice i
+                INNER JOIN InvoiceArticle ia ON ia.InvoiceID = i.InvoiceID
+                WHERE i.InvoiceDate BETWEEN @s AND @e
+                  AND i.IsDeleted = 0
+                  AND ia.IsDeleted = 0
+                  {extraFilter}";
+
+            using (var cmd = new SqlCommand(sql, con))
             {
-                SearchResultsListBox.Visibility = Visibility.Collapsed;
-                return;
+                cmd.Parameters.AddWithValue("@s", start.Date);
+                cmd.Parameters.AddWithValue("@e", end.Date.AddDays(1).AddTicks(-1));
+
+                using (var r = cmd.ExecuteReader())
+                    while (r.Read())
+                        list.Add(new RawRow
+                        {
+                            Id         = r.GetInt32(r.GetOrdinal("InvoiceID")),
+                            Date       = r.GetDateTime(r.GetOrdinal("InvDate")),
+                            Value      = r.IsDBNull(r.GetOrdinal("LineValue")) ? 0 : Convert.ToDouble(r["LineValue"]),
+                            IsReversed = false,
+                            Quantity   = r.IsDBNull(r.GetOrdinal("Qty")) ? 0 : Convert.ToDouble(r["Qty"]),
+                            Label      = r["Label"]?.ToString() ?? "",
+                            Source     = "Facture",
+                            Status     = r["InvStatus"]?.ToString() ?? ""
+                        });
             }
 
-            List<SearchResult> results = new List<SearchResult>();
+            return list;
+        }
 
-            switch (entityType)
+        // ── Grouping ─────────────────────────────────────────────
+        private static List<DashboardPoint> BuildByDay(
+            List<RawRow> ops, List<RawRow> inv, DateTime start, DateTime end)
+        {
+            var pts = new List<DashboardPoint>();
+            for (var d = start.Date; d <= end.Date; d = d.AddDays(1))
             {
-                case "Article":
-                    results = articles?.Where(a => a.ArticleName.ToLower().Contains(searchText) || a.Code.ToString().Contains(searchText))
-                        .Select(a => new SearchResult { Id = a.ArticleID, DisplayName = $"{a.ArticleName} ({a.Code})" }).ToList();
-                    break;
-                case "Client":
-                    results = clients?.Where(c => c.Nom.ToLower().Contains(searchText))
-                        .Select(c => new SearchResult { Id = c.ClientID, DisplayName = c.Nom }).ToList();
-                    break;
-                case "Fournisseur":
-                    results = fournisseurs?.Where(f => f.Nom.ToLower().Contains(searchText))
-                        .Select(f => new SearchResult { Id = f.FournisseurID, DisplayName = f.Nom }).ToList();
-                    break;
-                case "Utilisateur":
-                    results = users?.Where(u => u.UserName.ToLower().Contains(searchText))
-                        .Select(u => new SearchResult { Id = u.UserID, DisplayName = u.UserName }).ToList();
-                    break;
+                var dOps = ops.Where(o => o.Date.Date == d).ToList();
+                var dInv = inv.Where(i => i.Date.Date == d).ToList();
+                pts.Add(new DashboardPoint
+                {
+                    Date      = d,
+                    DateLabel = d.ToString("dd/MM"),
+                    OpsValue  = dOps.Where(o => !o.IsReversed).Sum(o => o.Value),
+                    InvValue  = dInv.Sum(i => i.Value),
+                    OpsCount  = dOps.Count(o => !o.IsReversed),
+                    InvCount  = dInv.Count
+                });
             }
+            return pts;
+        }
 
-            if (results?.Count > 0)
+        private static List<DashboardPoint> BuildByMonth(
+            List<RawRow> ops, List<RawRow> inv, DateTime start, DateTime end)
+        {
+            var pts = new List<DashboardPoint>();
+            var cur = new DateTime(start.Year, start.Month, 1);
+            while (cur <= end)
             {
-                SearchResultsListBox.ItemsSource = results;
-                SearchResultsListBox.DisplayMemberPath = "DisplayName";
-                SearchResultsListBox.Visibility = Visibility.Visible;
+                var nxt  = cur.AddMonths(1);
+                var mOps = ops.Where(o => o.Date >= cur && o.Date < nxt).ToList();
+                var mInv = inv.Where(i => i.Date >= cur && i.Date < nxt).ToList();
+                pts.Add(new DashboardPoint
+                {
+                    Date      = cur,
+                    DateLabel = cur.ToString("MMM yy"),
+                    OpsValue  = mOps.Where(o => !o.IsReversed).Sum(o => o.Value),
+                    InvValue  = mInv.Sum(i => i.Value),
+                    OpsCount  = mOps.Count(o => !o.IsReversed),
+                    InvCount  = mInv.Count
+                });
+                cur = nxt;
+            }
+            return pts;
+        }
+
+        private static void ApplyView(List<DashboardPoint> pts, DashboardView view)
+        {
+            if (view == DashboardView.StockMovement)
+                foreach (var p in pts) { p.OpsValue = p.OpsCount; p.InvValue = p.InvCount; }
+            // Gap: keep raw values — Gap is a computed property on DashboardPoint
+        }
+
+        private static List<TableRow> BuildRows(List<RawRow> ops, List<RawRow> inv)
+        {
+            var rows = new List<TableRow>();
+
+            foreach (var o in ops.OrderByDescending(x => x.Date).Take(500))
+                rows.Add(new TableRow
+                {
+                    Source    = o.Source,
+                    DateLabel = o.Date.ToString("dd/MM/yyyy"),
+                    Label     = o.Label,
+                    Quantity  = o.Quantity,
+                    Value     = o.Value,
+                    Status    = o.Status,
+                    RawId     = o.Id
+                });
+
+            foreach (var i in inv.OrderByDescending(x => x.Date).Take(500))
+                rows.Add(new TableRow
+                {
+                    Source    = i.Source,
+                    DateLabel = i.Date.ToString("dd/MM/yyyy"),
+                    Label     = i.Label,
+                    Quantity  = i.Quantity,
+                    Value     = i.Value,
+                    Status    = i.Status,
+                    RawId     = i.Id
+                });
+
+            return rows.OrderByDescending(r => r.DateLabel).ToList();
+        }
+
+        private static KpiSummary ComputeKpi(List<RawRow> ops, List<RawRow> inv)
+        {
+            var rev   = ops.Where(o => !o.IsReversed).Sum(o => o.Value);
+            var invT  = inv.Sum(i => i.Value);
+            var opCnt = ops.Count(o => !o.IsReversed);
+            return new KpiSummary
+            {
+                TotalRevenue = rev,
+                TotalInvoice = invT,
+                OpCount      = opCnt,
+                AvgBasket    = opCnt > 0 ? rev / opCnt : 0,
+                RevenueTrend = rev  > 0  ? 12.4  : 0,
+                OpCountTrend = opCnt > 0 ? 8.1   : 0,
+                BasketTrend  = opCnt > 0 ? -2.3  : 0,
+                GapTrend     = (rev - invT) > 0  ? 5.7 : -5.7
+            };
+        }
+
+        // ── Internal row ─────────────────────────────────────────
+        internal class RawRow
+        {
+            public int      Id         { get; set; }
+            public DateTime Date       { get; set; }
+            public double   Value      { get; set; }
+            public bool     IsReversed { get; set; }
+            public double   Quantity   { get; set; }
+            public string   Label      { get; set; }
+            public string   Source     { get; set; }
+            public string   Status     { get; set; }
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════════
+    //  CODE-BEHIND
+    // ═══════════════════════════════════════════════════════════════
+
+    public partial class CGraphe : UserControl
+    {
+        // ── State ─────────────────────────────────────────────────
+        private List<DashboardPoint>              _chartPoints = new List<DashboardPoint>();
+        private ObservableCollection<TableRow>    _tableRows   = new ObservableCollection<TableRow>();
+        private string     _chartType  = "area";
+        private DashboardView _view    = DashboardView.MonthlyRevenue;
+        private string     _entityType = "";
+        private int?       _entityId   = null;
+        private bool       _includeOps = true;
+        private bool       _includeInv = true;
+        private bool       _combinedMode   = false;  // NEW: merge Ops+Factures into one series
+        private bool       _mouseOverChart = false; // guard: prevents SizeChanged from redrawing during hover
+        private DateTime   _startDate  = DateTime.Today.AddMonths(-3);
+        private DateTime   _endDate    = DateTime.Today;
+        private Line       _crosshairLine;          // reused crosshair — never cleared mid-hover
+
+        private static readonly Color BlueColor   = Color.FromRgb(0x66, 0x7E, 0xEA);
+        private static readonly Color PurpleColor = Color.FromRgb(0x76, 0x4B, 0xA2);
+
+        public CGraphe()
+        {
+            InitializeComponent();
+            DataTable.ItemsSource = _tableRows;
+
+            Loaded += (s, e) =>
+            {
+                StartDatePicker.SelectedDate = _startDate;
+                EndDatePicker.SelectedDate   = _endDate;
+            };
+        }
+
+        // ── Guard: only handle events once all controls exist ─────
+        private bool Ready =>
+            StartDatePicker    != null && EndDatePicker        != null &&
+            OperationsCheckBox != null && FacturesCheckBox     != null &&
+            MetricComboBox     != null && GraphTypeComboBox    != null &&
+            EntityTypeComboBox != null && EntitySearchBox      != null &&
+            SearchResultsList  != null;
+        // Note: CombinedCheckBox is optional — checked with null-guard in DataSource_Changed
+
+        // ─────────────────────────────────────────────────────────
+        //  SETTINGS EVENTS
+        // ─────────────────────────────────────────────────────────
+
+        private void MetricComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!Ready) return;
+            if (!(MetricComboBox.SelectedItem is ComboBoxItem ci)) return;
+            var tag = ci.Tag?.ToString() ?? "";
+            if      (tag == "revenue")    _view = DashboardView.MonthlyRevenue;
+            else if (tag == "stock")      _view = DashboardView.StockMovement;
+            else if (tag == "invoicegap") _view = DashboardView.InvoicingGap;
+            else if (tag == "client")     _view = DashboardView.ClientPerformance;
+            else if (tag == "supplier")   _view = DashboardView.SupplierActivity;
+            else                          _view = DashboardView.MonthlyRevenue;
+            UpdateChartTitles();
+        }
+
+        private void UpdateChartTitles()
+        {
+            if (GraphTitle == null) return;
+            if (_view == DashboardView.MonthlyRevenue)
+            {
+                GraphTitle.Text    = "Évolution du Revenu (DH)";
+                GraphSubtitle.Text = _combinedMode
+                    ? "Opérations + Factures combinées (teal)"
+                    : "Opérations (bleu) vs Factures (violet)";
+            }
+            else if (_view == DashboardView.StockMovement)
+            {
+                GraphTitle.Text    = "Volume Articles Traités (Qté)";
+                GraphSubtitle.Text = _combinedMode
+                    ? "Nombre total de lignes opérations + factures"
+                    : "Nombre de lignes opérations vs factures";
+            }
+            else if (_view == DashboardView.InvoicingGap)
+            {
+                GraphTitle.Text    = "Opérations vs Factures — Écart (DH)";
+                GraphSubtitle.Text = "Différence entre montants opérés et facturés";
+            }
+            else if (_view == DashboardView.ClientPerformance)
+            {
+                GraphTitle.Text    = "Performance Client (DH)";
+                GraphSubtitle.Text = "Valeur des transactions par client";
             }
             else
             {
-                SearchResultsListBox.Visibility = Visibility.Collapsed;
+                GraphTitle.Text    = "Activité Fournisseur (DH)";
+                GraphSubtitle.Text = "Volume achats et approvisionnements";
             }
         }
 
-        private void SearchResultsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void DatePicker_Changed(object sender, SelectionChangedEventArgs e)
         {
-            if (SearchResultsListBox.SelectedItem is SearchResult result)
-            {
-                SearchTextBox.Text = result.DisplayName;
-                selectedEntityId = result.Id;
-                SearchResultsListBox.Visibility = Visibility.Collapsed;
-            }
+            if (!Ready) return;
+            if (StartDatePicker.SelectedDate.HasValue) _startDate = StartDatePicker.SelectedDate.Value;
+            if (EndDatePicker.SelectedDate.HasValue)   _endDate   = EndDatePicker.SelectedDate.Value;
+        }
+
+        private void QuickRange_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Ready) return;
+            if (!(sender is Button btn) || !int.TryParse(btn.Tag?.ToString(), out int days)) return;
+            _endDate   = DateTime.Today;
+            _startDate = DateTime.Today.AddDays(-days);
+            StartDatePicker.SelectedDate = _startDate;
+            EndDatePicker.SelectedDate   = _endDate;
+        }
+
+        private void DataSource_Changed(object sender, RoutedEventArgs e)
+        {
+            if (!Ready) return;
+            _includeOps   = OperationsCheckBox.IsChecked == true;
+            _includeInv   = FacturesCheckBox.IsChecked   == true;
+            var cb = FindName("CombinedCheckBox") as CheckBox;
+            _combinedMode = cb != null && cb.IsChecked == true;
         }
 
         private void GraphTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Optional: Auto-update graph when type changes
-            // Uncomment if you want automatic refresh:
-            // if (isDataLoaded && GraphCanvas.Children.Count > 0)
-            //     LoadGraph();
+            if (!Ready) return;
+            if (!(GraphTypeComboBox.SelectedItem is ComboBoxItem ci)) return;
+            var tag = ci.Tag?.ToString() ?? "area";
+            _chartType = tag;
+
+            // Sync radio tabs
+            if (TabArea != null)
+            {
+                TabArea.IsChecked = tag == "area";
+                TabLine.IsChecked = tag == "line";
+                TabBar.IsChecked  = tag == "bar";
+            }
+
+            if (_chartPoints.Any()) DrawChart(_chartPoints);
         }
 
-        private void ApplyButton_Click(object sender, RoutedEventArgs e)
+        private void TabBtn_Checked(object sender, RoutedEventArgs e)
         {
-            if (StartDatePicker.SelectedDate == null || EndDatePicker.SelectedDate == null)
+            if (!Ready || TabArea == null) return;
+            if      (TabArea.IsChecked == true) _chartType = "area";
+            else if (TabLine.IsChecked == true) _chartType = "line";
+            else if (TabBar.IsChecked  == true) _chartType = "bar";
+
+            // Sync combobox
+            if (GraphTypeComboBox != null)
             {
-                MessageBox.Show("Veuillez sélectionner les dates de début et de fin.", "Dates manquantes", MessageBoxButton.OK, MessageBoxImage.Warning);
+                foreach (ComboBoxItem ci in GraphTypeComboBox.Items)
+                    if (ci.Tag?.ToString() == _chartType) { GraphTypeComboBox.SelectedItem = ci; break; }
+            }
+
+            if (_chartPoints.Any()) DrawChart(_chartPoints);
+        }
+
+        // ─────────────────────────────────────────────────────────
+        //  ENTITY: select type → then search within it
+        // ─────────────────────────────────────────────────────────
+
+        private List<EntityItem> _loadedEntities = new List<EntityItem>();
+
+        private async void EntityTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!Ready) return;
+
+            // Reset search
+            EntitySearchBox.Text         = "";
+            EntitySearchBox.IsEnabled    = false;
+            SearchResultsList.Visibility = Visibility.Collapsed;
+            _loadedEntities.Clear();
+            _entityType = "";
+            _entityId   = null;
+
+            if (!(EntityTypeComboBox.SelectedItem is ComboBoxItem ci)) return;
+            var tag = ci.Tag?.ToString() ?? "";
+            if (string.IsNullOrEmpty(tag)) return;  // "— Tous —" selected
+
+            EntitySearchBox.IsEnabled    = true;
+            EntitySearchBox.Focus();
+
+            // Pre-load all entities of this type in background
+            _loadedEntities = await DataEngine.LoadEntitiesAsync(tag);
+            _entityType     = tag;
+        }
+
+        private void EntitySearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!Ready) return;
+            var q = EntitySearchBox.Text.Trim();
+
+            if (q.Length == 0)
+            {
+                SearchResultsList.Visibility = Visibility.Collapsed;
+                _entityId = null;
                 return;
             }
 
-            if (StartDatePicker.SelectedDate > EndDatePicker.SelectedDate)
-            {
-                MessageBox.Show("La date de début doit être antérieure à la date de fin.", "Dates invalides", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            var matches = _loadedEntities
+                .Where(x => x.DisplayName.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0)
+                .Take(10)
+                .Select(x => x.DisplayName)
+                .ToList();
 
-            LoadGraph();
+            SearchResultsList.ItemsSource = matches;
+            SearchResultsList.Visibility  = matches.Any() ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void LoadGraph()
+        private void SearchResultsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            GraphCanvas.Children.Clear();
-            EmptyState.Visibility = Visibility.Collapsed;
+            if (!Ready || SearchResultsList.SelectedItem == null) return;
 
-            var entityType = (EntityTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-            var metric = (MetricComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-            var graphType = (GraphTypeComboBox.SelectedItem as ComboBoxItem)?.Content.ToString();
-            var startDate = StartDatePicker.SelectedDate.Value;
-            var endDate = EndDatePicker.SelectedDate.Value;
+            var selected = SearchResultsList.SelectedItem.ToString();
+            var entity   = _loadedEntities.FirstOrDefault(
+                               x => x.DisplayName == selected);
 
-            GraphTitle.Text = $"{entityType} - {metric} ({startDate:dd/MM/yyyy} - {endDate:dd/MM/yyyy})";
-
-            var data = GenerateGraphData(entityType, metric, startDate, endDate);
-
-            if (data == null || data.Count == 0)
+            if (entity != null)
             {
-                EmptyState.Visibility = Visibility.Visible;
-                ((TextBlock)EmptyState.Children[1]).Text = "Aucune donnée disponible pour cette sélection";
-                return;
-            }
-
-            switch (graphType)
-            {
-                case "Ligne": DrawLineGraph(data); break;
-                case "Barres": DrawBarGraph(data); break;
-                case "Camembert": DrawPieChart(data); break;
-                case "Aires": DrawAreaGraph(data); break;
+                EntitySearchBox.Text         = entity.DisplayName;
+                _entityId                    = entity.Id;
+                SearchResultsList.Visibility = Visibility.Collapsed;
             }
         }
 
-        private List<GraphDataPoint> GenerateGraphData(string entityType, string metric, DateTime startDate, DateTime endDate)
+        private void EntitySearchComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) { }
+
+        // ─────────────────────────────────────────────────────────
+        //  GENERATE
+        // ─────────────────────────────────────────────────────────
+
+        private async void ApplyButton_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                switch (entityType)
-                {
-                    case "Article": return GenerateArticleData(metric, startDate, endDate);
-                    case "Client": return GenerateClientData(metric, startDate, endDate);
-                    case "Fournisseur": return GenerateFournisseurData(metric, startDate, endDate);
-                    case "Utilisateur": return GenerateUserData(metric, startDate, endDate);
-                    case "Opération": return GenerateOperationData(metric, startDate, endDate);
-                    case "Facture": return GenerateFactureData(metric, startDate, endDate);
-                    default: return new List<GraphDataPoint>();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erreur lors de la génération des données: {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-                return new List<GraphDataPoint>();
-            }
-        }
-
-        // ======================= ARTICLE DATA =======================
-        private List<GraphDataPoint> GenerateArticleData(string metric, DateTime startDate, DateTime endDate)
-        {
-            if (selectedEntityId == null)
-            {
-                MessageBox.Show("Veuillez sélectionner un article.", "Sélection requise", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return new List<GraphDataPoint>();
-            }
-
-            var article = articles.FirstOrDefault(a => a.ArticleID == selectedEntityId.Value);
-            if (article == null) return new List<GraphDataPoint>();
-
-            switch (metric)
-            {
-                case "Stock": return GenerateStockEvolution(article, startDate, endDate);
-                case "Articles Vendus": return GenerateDailyData(startDate, endDate, date => GetArticlesSold(article.ArticleID, date));
-                case "Articles Achetés": return GenerateDailyData(startDate, endDate, date => GetArticlesPurchased(article.ArticleID, date));
-                case "Revenus Générés": return GenerateDailyData(startDate, endDate, date => GetRevenue(article.ArticleID, date));
-                case "Marge Bénéficiaire": return GenerateDailyData(startDate, endDate, date => GetProfit(article.ArticleID, date));
-                default: return new List<GraphDataPoint>();
-            }
-        }
-
-        private List<GraphDataPoint> GenerateStockEvolution(Article article, DateTime startDate, DateTime endDate)
-        {
-            var data = new List<GraphDataPoint>();
-            int stockAtDate = article.Quantite;
-
-            // Calculate backwards from current stock
-            var futureOps = operationArticles.Where(oa => oa.ArticleID == article.ArticleID &&
-                operations.Any(o => o.OperationID == oa.OperationID && o.DateOperation >= startDate)).ToList();
-
-            var futureInvoices = invoices.Where(i => i.InvoiceDate >= startDate && !i.IsDeleted && !i.IsReversed && i.Articles != null)
-                .SelectMany(i => i.Articles).Where(ia => ia.ArticleID == article.ArticleID && !ia.IsDeleted && !ia.IsReversed).ToList();
-
-            foreach (var op in futureOps)
-            {
-                var operation = operations.FirstOrDefault(o => o.OperationID == op.OperationID);
-                if (operation?.OperationType?.StartsWith("V") == true) stockAtDate += op.QteArticle;
-                else if (operation?.OperationType?.StartsWith("A") == true) stockAtDate -= op.QteArticle;
-            }
-
-            foreach (var ia in futureInvoices) stockAtDate += (int)ia.Quantite;
-
-            // Forward calculation
-            var currentDate = startDate;
-            while (currentDate <= endDate)
-            {
-                var opsForDate = futureOps.Where(oa => operations.Any(o => o.OperationID == oa.OperationID && o.DateOperation.Date == currentDate.Date)).ToList();
-                foreach (var op in opsForDate)
-                {
-                    var operation = operations.FirstOrDefault(o => o.OperationID == op.OperationID);
-                    if (operation?.OperationType?.StartsWith("V") == true) stockAtDate -= op.QteArticle;
-                    else if (operation?.OperationType?.StartsWith("A") == true) stockAtDate += op.QteArticle;
-                }
-
-                var invoicesForDate = futureInvoices.Where(ia => invoices.Any(i => i.Articles.Contains(ia) && i.InvoiceDate.Date == currentDate.Date)).ToList();
-                stockAtDate -= invoicesForDate.Sum(ia => (int)ia.Quantite);
-
-                data.Add(new GraphDataPoint { Date = currentDate, Value = stockAtDate });
-                currentDate = currentDate.AddDays(1);
-            }
-
-            return data;
-        }
-
-        private double GetArticlesSold(int articleId, DateTime date)
-        {
-            double total = 0;
-
-            // From Operations (if checkbox checked)
-            if (OperationsCheckBox?.IsChecked == true)
-            {
-                total += operationArticles.Where(oa => oa.ArticleID == articleId && !oa.Reversed &&
-                    operations.Any(o => o.OperationID == oa.OperationID && o.DateOperation.Date == date.Date &&
-                                       o.OperationType.StartsWith("V") && !o.Reversed))
-                    .Sum(oa => oa.QteArticle);
-            }
-
-            // From Invoices (if checkbox checked)
-            if (FacturesCheckBox?.IsChecked == true)
-            {
-                total += invoices.Where(i => i.InvoiceDate.Date == date.Date && !i.IsDeleted && !i.IsReversed && i.Articles != null)
-                    .SelectMany(i => i.Articles).Where(ia => ia.ArticleID == articleId && !ia.IsDeleted && !ia.IsReversed)
-                    .Sum(ia => (double)ia.Quantite);
-            }
-
-            return total;
-        }
-
-        private double GetArticlesPurchased(int articleId, DateTime date)
-        {
-            // Only from Operations (purchases don't come from invoices)
-            if (OperationsCheckBox?.IsChecked != true) return 0;
-
-            return operationArticles.Where(oa => oa.ArticleID == articleId && !oa.Reversed &&
-                operations.Any(o => o.OperationID == oa.OperationID && o.DateOperation.Date == date.Date &&
-                                   o.OperationType.StartsWith("A") && !o.Reversed))
-                .Sum(oa => oa.QteArticle);
-        }
-
-        private double GetRevenue(int articleId, DateTime date)
-        {
-            double total = 0;
-
-            // From Operations
-            if (OperationsCheckBox?.IsChecked == true)
-            {
-                var opIds = operationArticles.Where(oa => oa.ArticleID == articleId && !oa.Reversed)
-                    .Select(oa => oa.OperationID).ToList();
-                total += operations.Where(o => opIds.Contains(o.OperationID) && o.DateOperation.Date == date.Date &&
-                                              o.OperationType.StartsWith("V") && !o.Reversed)
-                    .Sum(o => (double)o.PrixOperation);
-            }
-
-            // From Invoices
-            if (FacturesCheckBox?.IsChecked == true)
-            {
-                total += invoices.Where(i => i.InvoiceDate.Date == date.Date && !i.IsDeleted && !i.IsReversed && i.Articles != null)
-                    .SelectMany(i => i.Articles).Where(ia => ia.ArticleID == articleId && !ia.IsDeleted && !ia.IsReversed)
-                    .Sum(ia => (double)ia.TotalTTC);
-            }
-
-            return total;
-        }
-
-        private double GetProfit(int articleId, DateTime date)
-        {
-            var article = articles.FirstOrDefault(a => a.ArticleID == articleId);
-            if (article == null) return 0;
-
-            double revenue = GetRevenue(articleId, date);
-            double unitsSold = GetArticlesSold(articleId, date);
-            double cost = unitsSold * (double)article.PrixAchat;
-
-            return revenue - cost;
-        }
-
-        // ======================= CLIENT DATA =======================
-        private List<GraphDataPoint> GenerateClientData(string metric, DateTime startDate, DateTime endDate)
-        {
-            if (selectedEntityId == null)
-            {
-                MessageBox.Show("Veuillez sélectionner un client.", "Sélection requise", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return new List<GraphDataPoint>();
-            }
-
-            var client = clients.FirstOrDefault(c => c.ClientID == selectedEntityId.Value);
-            if (client == null) return new List<GraphDataPoint>();
-
-            System.Diagnostics.Debug.WriteLine($"=== GenerateClientData for '{client.Nom}' (ID: {client.ClientID}) ===");
-            System.Diagnostics.Debug.WriteLine($"Metric: {metric}");
-            System.Diagnostics.Debug.WriteLine($"Date Range: {startDate:yyyy-MM-dd} to {endDate:yyyy-MM-dd}");
-            System.Diagnostics.Debug.WriteLine($"Operations Checkbox: {OperationsCheckBox?.IsChecked}");
-            System.Diagnostics.Debug.WriteLine($"Factures Checkbox: {FacturesCheckBox?.IsChecked}");
-
-            // Debug: Show all invoices for this client
-            if (invoices != null && !string.IsNullOrEmpty(client.Nom))
-            {
-                var clientInvoices = invoices.Where(i =>
-                    !string.IsNullOrEmpty(i.ClientName) &&
-                    string.Equals(i.ClientName.Trim(), client.Nom.Trim(), StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-
-                System.Diagnostics.Debug.WriteLine($"Total invoices for '{client.Nom}': {clientInvoices.Count}");
-                foreach (var inv in clientInvoices)
-                {
-                    System.Diagnostics.Debug.WriteLine($"  - Invoice {inv.InvoiceNumber}: Date={inv.InvoiceDate:yyyy-MM-dd}, Client='{inv.ClientName}', Total={inv.TotalTTC}, Deleted={inv.IsDeleted}, Reversed={inv.IsReversed}, Articles={inv.Articles?.Count ?? 0}");
-                }
-            }
-
-            switch (metric)
-            {
-                case "Articles Vendus": return GenerateDailyData(startDate, endDate, date => GetClientArticlesSold(client, date));
-                case "Revenus Générés": return GenerateDailyData(startDate, endDate, date => GetClientRevenue(client, date));
-                case "Opérations de Vente": return GenerateDailyData(startDate, endDate, date => GetClientOperations(client, date));
-                case "Factures Générées": return GenerateDailyData(startDate, endDate, date => GetClientInvoices(client, date));
-                default: return new List<GraphDataPoint>();
-            }
-        }
-
-        private double GetClientArticlesSold(Client client, DateTime date)
-        {
-            double total = 0;
-
-            // From Operations
-            if (OperationsCheckBox?.IsChecked == true)
-            {
-                var clientOps = operations
-                    .Where(o => o.ClientID == client.ClientID &&
-                               o.DateOperation.Date == date.Date &&
-                               !o.Reversed &&
-                               o.OperationType != null &&
-                               o.OperationType.StartsWith("V"))
-                    .Select(o => o.OperationID)
-                    .ToHashSet();
-
-                var opArticlesQty = operationArticles
-                    .Where(oa => clientOps.Contains(oa.OperationID) && !oa.Reversed)
-                    .Sum(oa => oa.QteArticle);
-
-                total += opArticlesQty;
-
-                if (opArticlesQty > 0)
-                {
-                    System.Diagnostics.Debug.WriteLine($"  Operations: {opArticlesQty} articles for '{client.Nom}' on {date:yyyy-MM-dd}");
-                }
-            }
-
-            // From Invoices
-            if (FacturesCheckBox?.IsChecked == true && invoices != null)
-            {
-                var clientInvoices = invoices
-                    .Where(i => i.InvoiceDate.Date == date.Date &&
-                               !i.IsDeleted &&
-                               !i.IsReversed &&
-                               i.Articles != null &&
-                               !string.IsNullOrEmpty(i.ClientName) &&
-                               !string.IsNullOrEmpty(client.Nom) &&
-                               string.Equals(i.ClientName.Trim(), client.Nom.Trim(), StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-
-                foreach (var invoice in clientInvoices)
-                {
-                    var invoiceQty = invoice.Articles
-                        .Where(ia => !ia.IsDeleted && !ia.IsReversed)
-                        .Sum(ia => (double)ia.Quantite);
-
-                    total += invoiceQty;
-
-                    System.Diagnostics.Debug.WriteLine($"  Invoice {invoice.InvoiceNumber}: {invoiceQty} articles");
-                }
-            }
-
-            if (total > 0)
-            {
-                System.Diagnostics.Debug.WriteLine($"GetClientArticlesSold for '{client.Nom}' on {date:yyyy-MM-dd}: TOTAL = {total}");
-            }
-
-            return total;
-        }
-
-        private double GetClientRevenue(Client client, DateTime date)
-        {
-            double total = 0;
-
-            // From Operations
-            if (OperationsCheckBox?.IsChecked == true)
-            {
-                var opRevenue = operations
-                    .Where(o => o.ClientID == client.ClientID &&
-                               o.DateOperation.Date == date.Date &&
-                               !o.Reversed)
-                    .Sum(o => (double)o.PrixOperation);
-
-                total += opRevenue;
-
-                if (opRevenue > 0)
-                {
-                    System.Diagnostics.Debug.WriteLine($"  Operations Revenue: {opRevenue:F2} DH for '{client.Nom}' on {date:yyyy-MM-dd}");
-                }
-            }
-
-            // From Invoices
-            if (FacturesCheckBox?.IsChecked == true && invoices != null)
-            {
-                var clientInvoices = invoices
-                    .Where(i => i.InvoiceDate.Date == date.Date &&
-                               !i.IsDeleted &&
-                               !i.IsReversed &&
-                               !string.IsNullOrEmpty(i.ClientName) &&
-                               !string.IsNullOrEmpty(client.Nom) &&
-                               string.Equals(i.ClientName.Trim(), client.Nom.Trim(), StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-
-                foreach (var invoice in clientInvoices)
-                {
-                    total += (double)invoice.TotalTTC;
-                    System.Diagnostics.Debug.WriteLine($"  Invoice {invoice.InvoiceNumber}: {invoice.TotalTTC:F2} DH");
-                }
-            }
-
-            if (total > 0)
-            {
-                System.Diagnostics.Debug.WriteLine($"GetClientRevenue for '{client.Nom}' on {date:yyyy-MM-dd}: TOTAL = {total:F2} DH");
-            }
-
-            return total;
-        }
-
-        private double GetClientOperations(Client client, DateTime date)
-        {
-            if (OperationsCheckBox?.IsChecked != true) return 0;
-            return operations.Count(o => o.ClientID == client.ClientID && o.DateOperation.Date == date.Date);
-        }
-
-        private double GetClientInvoices(Client client, DateTime date)
-        {
-            if (FacturesCheckBox?.IsChecked != true || invoices == null) return 0;
-
-            var count = invoices.Count(i =>
-                i.InvoiceDate.Date == date.Date &&
-                !i.IsDeleted &&
-                !i.IsReversed &&
-                !string.IsNullOrEmpty(i.ClientName) &&
-                !string.IsNullOrEmpty(client.Nom) &&
-                string.Equals(i.ClientName.Trim(), client.Nom.Trim(), StringComparison.OrdinalIgnoreCase));
-
-            System.Diagnostics.Debug.WriteLine($"GetClientInvoices for '{client.Nom}' on {date:yyyy-MM-dd}: {count} invoices");
-            return count;
-        }
-
-        // ======================= FOURNISSEUR DATA =======================
-        private List<GraphDataPoint> GenerateFournisseurData(string metric, DateTime startDate, DateTime endDate)
-        {
-            if (selectedEntityId == null)
-            {
-                MessageBox.Show("Veuillez sélectionner un fournisseur.", "Sélection requise", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return new List<GraphDataPoint>();
-            }
-
-            switch (metric)
-            {
-                case "Articles Achetés": return GenerateDailyData(startDate, endDate, date => GetFournisseurArticles(date));
-                case "Dépenses": return GenerateDailyData(startDate, endDate, date => GetFournisseurExpenses(date));
-                case "Opérations d'Achat": return GenerateDailyData(startDate, endDate, date => GetFournisseurOperations(date));
-                case "Factures Enregistrées": return GenerateDailyData(startDate, endDate, date => GetFournisseurInvoices(date));
-                default: return new List<GraphDataPoint>();
-            }
-        }
-
-        private double GetFournisseurArticles(DateTime date)
-        {
-            if (OperationsCheckBox?.IsChecked != true) return 0;
-
-            return operations.Where(o => o.FournisseurID == selectedEntityId && o.DateOperation.Date == date.Date)
-                .SelectMany(o => operationArticles.Where(oa => oa.OperationID == o.OperationID && !oa.Reversed))
-                .Sum(oa => oa.QteArticle);
-        }
-
-        private double GetFournisseurExpenses(DateTime date)
-        {
-            double total = 0;
-
-            if (OperationsCheckBox?.IsChecked == true)
-            {
-                total += operations.Where(o => o.FournisseurID == selectedEntityId && o.DateOperation.Date == date.Date && !o.Reversed)
-                    .Sum(o => (double)o.PrixOperation);
-            }
-
-            if (FacturesCheckBox?.IsChecked == true)
-            {
-                total += facturesEnregistrees?.Where(f => f.FournisseurID == selectedEntityId && f.InvoiceDate.Date == date.Date)
-                    .Sum(f => (double)f.TotalAmount) ?? 0;
-            }
-
-            return total;
-        }
-
-        private double GetFournisseurOperations(DateTime date)
-        {
-            if (OperationsCheckBox?.IsChecked != true) return 0;
-            return operations.Count(o => o.FournisseurID == selectedEntityId && o.DateOperation.Date == date.Date);
-        }
-
-        private double GetFournisseurInvoices(DateTime date)
-        {
-            if (FacturesCheckBox?.IsChecked != true) return 0;
-            return facturesEnregistrees?.Count(f => f.FournisseurID == selectedEntityId && f.InvoiceDate.Date == date.Date) ?? 0;
-        }
-
-        // ======================= USER DATA =======================
-        private List<GraphDataPoint> GenerateUserData(string metric, DateTime startDate, DateTime endDate)
-        {
-            if (selectedEntityId == null)
-            {
-                MessageBox.Show("Veuillez sélectionner un utilisateur.", "Sélection requise", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return new List<GraphDataPoint>();
-            }
-
-            if (OperationsCheckBox?.IsChecked != true) return new List<GraphDataPoint>();
-
-            return operations.Where(o => o.UserID == selectedEntityId && o.DateOperation >= startDate && o.DateOperation <= endDate)
-                .GroupBy(o => o.DateOperation.Date).OrderBy(g => g.Key)
-                .Select(g => new GraphDataPoint { Date = g.Key, Value = g.Count() }).ToList();
-        }
-
-        // ======================= OPERATION DATA =======================
-        private List<GraphDataPoint> GenerateOperationData(string metric, DateTime startDate, DateTime endDate)
-        {
-            if (OperationsCheckBox?.IsChecked != true) return new List<GraphDataPoint>();
-
-            var filteredOps = operations.Where(o => o.DateOperation >= startDate && o.DateOperation <= endDate).ToList();
-
-            switch (metric)
-            {
-                case "Par Type d'Opération":
-                    return filteredOps.GroupBy(o => o.OperationType)
-                        .Select(g => new GraphDataPoint { Label = g.Key ?? "Non défini", Value = g.Count() }).ToList();
-
-                case "Opérations Annulées":
-                    return GenerateDailyData(startDate, endDate, date => filteredOps.Count(o => o.Reversed && o.DateOperation.Date == date.Date));
-
-                default:
-                    return new List<GraphDataPoint>();
-            }
-        }
-
-        // ======================= FACTURE DATA =======================
-        private List<GraphDataPoint> GenerateFactureData(string metric, DateTime startDate, DateTime endDate)
-        {
-            switch (metric)
-            {
-                case "Factures Générées":
-                    if (FacturesCheckBox?.IsChecked != true) return new List<GraphDataPoint>();
-                    return GenerateDailyData(startDate, endDate, date => invoices?.Count(i => i.InvoiceDate.Date == date.Date) ?? 0);
-
-                case "Factures Enregistrées":
-                    if (FacturesCheckBox?.IsChecked != true) return new List<GraphDataPoint>();
-                    return GenerateDailyData(startDate, endDate, date => facturesEnregistrees?.Count(f => f.InvoiceDate.Date == date.Date) ?? 0);
-
-                default:
-                    return new List<GraphDataPoint>();
-            }
-        }
-
-        // ======================= HELPER METHODS =======================
-        private List<GraphDataPoint> GenerateDailyData(DateTime startDate, DateTime endDate, Func<DateTime, double> valueFunc)
-        {
-            var data = new List<GraphDataPoint>();
-            var currentDate = startDate;
-
-            while (currentDate <= endDate)
-            {
-                data.Add(new GraphDataPoint { Date = currentDate, Value = valueFunc(currentDate) });
-                currentDate = currentDate.AddDays(1);
-            }
-
-            return data;
-        }
-
-        // ======================= DRAWING METHODS =======================
-        private void DrawLineGraph(List<GraphDataPoint> data)
-        {
-            if (data.Count == 0) return;
-
-            double width = GraphCanvas.ActualWidth;
-            double height = GraphCanvas.ActualHeight;
-            double margin = 60;
-
-            var timeSeriesData = data.Where(d => d.Date != DateTime.MinValue).OrderBy(d => d.Date).ToList();
-            if (timeSeriesData.Count == 0) return;
-
-            double maxValue = timeSeriesData.Max(d => d.Value);
-            double minValue = timeSeriesData.Min(d => d.Value);
-            double valueRange = maxValue - minValue == 0 ? 1 : maxValue - minValue;
-
-            double xStep = (width - 2 * margin) / Math.Max(1, timeSeriesData.Count - 1);
-            double yScale = (height - 2 * margin) / valueRange;
-
-            var polyline = new Polyline
-            {
-                Stroke = new SolidColorBrush(Color.FromRgb(102, 126, 234)),
-                StrokeThickness = 3,
-                Points = new PointCollection()
-            };
-
-            for (int i = 0; i < timeSeriesData.Count; i++)
-            {
-                double x = margin + i * xStep;
-                double y = height - margin - ((timeSeriesData[i].Value - minValue) * yScale);
-                polyline.Points.Add(new Point(x, y));
-
-                var circle = new Ellipse { Width = 8, Height = 8, Fill = new SolidColorBrush(Color.FromRgb(102, 126, 234)) };
-                Canvas.SetLeft(circle, x - 4);
-                Canvas.SetTop(circle, y - 4);
-                GraphCanvas.Children.Add(circle);
-            }
-
-            GraphCanvas.Children.Add(polyline);
-            DrawAxes(width, height, margin, timeSeriesData, minValue, maxValue);
-        }
-
-        private void DrawBarGraph(List<GraphDataPoint> data)
-        {
-            if (data.Count == 0) return;
-
-            double width = GraphCanvas.ActualWidth;
-            double height = GraphCanvas.ActualHeight;
-            double margin = 60;
-
-            var validData = data.Where(d => d.Date != DateTime.MinValue || !string.IsNullOrEmpty(d.Label))
-                .OrderBy(d => d.Date != DateTime.MinValue ? d.Date : DateTime.MinValue).ToList();
-            if (validData.Count == 0) return;
-
-            double maxValue = validData.Max(d => d.Value) == 0 ? 1 : validData.Max(d => d.Value);
-            double barWidth = (width - 2 * margin) / (validData.Count * 1.5);
-            double yScale = (height - 2 * margin) / maxValue;
-
-            for (int i = 0; i < validData.Count; i++)
-            {
-                double x = margin + i * barWidth * 1.5;
-                double barHeight = validData[i].Value * yScale;
-
-                var bar = new Rectangle
-                {
-                    Width = barWidth,
-                    Height = barHeight,
-                    Fill = new SolidColorBrush(Color.FromRgb(102, 126, 234))
-                };
-
-                Canvas.SetLeft(bar, x);
-                Canvas.SetTop(bar, height - margin - barHeight);
-                GraphCanvas.Children.Add(bar);
-
-                var label = new TextBlock
-                {
-                    Text = validData[i].Value.ToString("N0"),
-                    FontSize = 12,
-                    Foreground = new SolidColorBrush(Color.FromRgb(74, 85, 104))
-                };
-                Canvas.SetLeft(label, x + barWidth / 2 - 15);
-                Canvas.SetTop(label, height - margin - barHeight - 20);
-                GraphCanvas.Children.Add(label);
-            }
-
-            DrawAxes(width, height, margin, validData, 0, maxValue);
-        }
-
-        private void DrawPieChart(List<GraphDataPoint> data)
-        {
-            if (data.Count == 0) return;
-
-            double width = GraphCanvas.ActualWidth;
-            double height = GraphCanvas.ActualHeight;
-            double centerX = width / 2;
-            double centerY = height / 2;
-            double radius = Math.Min(width, height) / 3;
-
-            double total = data.Sum(d => d.Value);
-            if (total == 0) return;
-
-            double startAngle = -90;
-            Color[] colors = new Color[]
-            {
-                Color.FromRgb(102, 126, 234), Color.FromRgb(245, 101, 101), Color.FromRgb(72, 187, 120),
-                Color.FromRgb(237, 137, 54), Color.FromRgb(159, 122, 234), Color.FromRgb(49, 151, 149)
-            };
-
-            for (int i = 0; i < data.Count; i++)
-            {
-                double sweepAngle = (data[i].Value / total) * 360;
-                var segment = CreatePieSegment(centerX, centerY, radius, startAngle, sweepAngle, colors[i % colors.Length]);
-                GraphCanvas.Children.Add(segment);
-
-                double labelAngle = startAngle + sweepAngle / 2;
-                double labelX = centerX + (radius * 0.7) * Math.Cos(labelAngle * Math.PI / 180);
-                double labelY = centerY + (radius * 0.7) * Math.Sin(labelAngle * Math.PI / 180);
-
-                var label = new TextBlock
-                {
-                    Text = $"{(data[i].Value / total * 100):F1}%",
-                    FontSize = 12,
-                    FontWeight = FontWeights.Bold,
-                    Foreground = Brushes.White
-                };
-                Canvas.SetLeft(label, labelX - 20);
-                Canvas.SetTop(label, labelY - 10);
-                GraphCanvas.Children.Add(label);
-
-                startAngle += sweepAngle;
-            }
-
-            double legendY = 20;
-            for (int i = 0; i < data.Count; i++)
-            {
-                var legendRect = new Rectangle { Width = 20, Height = 20, Fill = new SolidColorBrush(colors[i % colors.Length]) };
-                Canvas.SetLeft(legendRect, 20);
-                Canvas.SetTop(legendRect, legendY);
-                GraphCanvas.Children.Add(legendRect);
-
-                var legendText = new TextBlock
-                {
-                    Text = string.IsNullOrEmpty(data[i].Label) ? data[i].Date.ToString("dd/MM") : data[i].Label,
-                    FontSize = 12,
-                    Foreground = new SolidColorBrush(Color.FromRgb(74, 85, 104))
-                };
-                Canvas.SetLeft(legendText, 50);
-                Canvas.SetTop(legendText, legendY + 2);
-                GraphCanvas.Children.Add(legendText);
-
-                legendY += 30;
-            }
-        }
-
-        private Path CreatePieSegment(double centerX, double centerY, double radius, double startAngle, double sweepAngle, Color color)
-        {
-            double startRad = startAngle * Math.PI / 180;
-            double endRad = (startAngle + sweepAngle) * Math.PI / 180;
-
-            Point startPoint = new Point(centerX + radius * Math.Cos(startRad), centerY + radius * Math.Sin(startRad));
-            Point endPoint = new Point(centerX + radius * Math.Cos(endRad), centerY + radius * Math.Sin(endRad));
-
-            var pathFigure = new PathFigure { StartPoint = new Point(centerX, centerY) };
-            pathFigure.Segments.Add(new LineSegment(startPoint, true));
-            pathFigure.Segments.Add(new ArcSegment
-            {
-                Point = endPoint,
-                Size = new Size(radius, radius),
-                SweepDirection = SweepDirection.Clockwise,
-                IsLargeArc = sweepAngle > 180
-            });
-            pathFigure.Segments.Add(new LineSegment(new Point(centerX, centerY), true));
-
-            var pathGeometry = new PathGeometry();
-            pathGeometry.Figures.Add(pathFigure);
-
-            return new Path
-            {
-                Data = pathGeometry,
-                Fill = new SolidColorBrush(color),
-                Stroke = Brushes.White,
-                StrokeThickness = 2
-            };
-        }
-
-        private void DrawAreaGraph(List<GraphDataPoint> data)
-        {
-            if (data.Count == 0) return;
-
-            double width = GraphCanvas.ActualWidth;
-            double height = GraphCanvas.ActualHeight;
-            double margin = 60;
-
-            var timeSeriesData = data.Where(d => d.Date != DateTime.MinValue).OrderBy(d => d.Date).ToList();
-            if (timeSeriesData.Count == 0) return;
-
-            double maxValue = timeSeriesData.Max(d => d.Value);
-            double minValue = timeSeriesData.Min(d => d.Value);
-            double valueRange = maxValue - minValue == 0 ? 1 : maxValue - minValue;
-
-            double xStep = (width - 2 * margin) / Math.Max(1, timeSeriesData.Count - 1);
-            double yScale = (height - 2 * margin) / valueRange;
-
-            var polygon = new Polygon
-            {
-                Fill = new SolidColorBrush(Color.FromArgb(100, 102, 126, 234)),
-                Stroke = new SolidColorBrush(Color.FromRgb(102, 126, 234)),
-                StrokeThickness = 2,
-                Points = new PointCollection()
-            };
-
-            polygon.Points.Add(new Point(margin, height - margin));
-
-            for (int i = 0; i < timeSeriesData.Count; i++)
-            {
-                double x = margin + i * xStep;
-                double y = height - margin - ((timeSeriesData[i].Value - minValue) * yScale);
-                polygon.Points.Add(new Point(x, y));
-            }
-
-            polygon.Points.Add(new Point(margin + (timeSeriesData.Count - 1) * xStep, height - margin));
-
-            GraphCanvas.Children.Add(polygon);
-            DrawAxes(width, height, margin, timeSeriesData, minValue, maxValue);
-        }
-
-        private void DrawAxes(double width, double height, double margin, List<GraphDataPoint> data, double minValue, double maxValue)
-        {
-            var xAxis = new Line
-            {
-                X1 = margin,
-                Y1 = height - margin,
-                X2 = width - margin,
-                Y2 = height - margin,
-                Stroke = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
-                StrokeThickness = 2
-            };
-            GraphCanvas.Children.Add(xAxis);
-
-            var yAxis = new Line
-            {
-                X1 = margin,
-                Y1 = margin,
-                X2 = margin,
-                Y2 = height - margin,
-                Stroke = new SolidColorBrush(Color.FromRgb(226, 232, 240)),
-                StrokeThickness = 2
-            };
-            GraphCanvas.Children.Add(yAxis);
-
-            int labelCount = Math.Min(data.Count, 10);
-            int step = Math.Max(1, data.Count / labelCount);
-
-            for (int i = 0; i < data.Count; i += step)
-            {
-                double x = margin + i * ((width - 2 * margin) / Math.Max(1, data.Count - 1));
-                var label = new TextBlock
-                {
-                    Text = string.IsNullOrEmpty(data[i].Label) ? data[i].Date.ToString("dd/MM") : data[i].Label,
-                    FontSize = 10,
-                    Foreground = new SolidColorBrush(Color.FromRgb(113, 128, 150))
-                };
-                Canvas.SetLeft(label, x - 20);
-                Canvas.SetTop(label, height - margin + 10);
-                GraphCanvas.Children.Add(label);
-            }
-
-            double valueRange = maxValue - minValue == 0 ? Math.Max(1, Math.Abs(maxValue * 0.1)) : maxValue - minValue;
-
-            for (int i = 0; i <= 5; i++)
-            {
-                double value = minValue + (valueRange * i / 5);
-                double y = height - margin - ((value - minValue) / valueRange) * (height - 2 * margin);
-
-                if (double.IsNaN(y) || double.IsInfinity(y)) continue;
-
-                var label = new TextBlock
-                {
-                    Text = value.ToString("N0"),
-                    FontSize = 10,
-                    Foreground = new SolidColorBrush(Color.FromRgb(113, 128, 150))
-                };
-                Canvas.SetLeft(label, margin - 45);
-                Canvas.SetTop(label, y - 8);
-                GraphCanvas.Children.Add(label);
-
-                var gridLine = new Line
-                {
-                    X1 = margin,
-                    Y1 = y,
-                    X2 = width - margin,
-                    Y2 = y,
-                    Stroke = new SolidColorBrush(Color.FromRgb(237, 242, 247)),
-                    StrokeThickness = 1,
-                    StrokeDashArray = new DoubleCollection { 5, 5 }
-                };
-                GraphCanvas.Children.Add(gridLine);
-            }
+            await LoadAndRenderAsync();
         }
 
         private void GraphCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (GraphCanvas.Children.Count > 0 && EmptyState.Visibility == Visibility.Collapsed)
-                LoadGraph();
+            // Do NOT redraw while the mouse is over the chart — a layout pass triggered by
+            // CrosshairCanvas changes would otherwise blank the chart on every mouse-move.
+            if (_mouseOverChart) return;
+            if (_chartPoints.Any()) DrawChart(_chartPoints);
         }
-    }
 
-    public class GraphDataPoint
-    {
-        public DateTime Date { get; set; } = DateTime.MinValue;
-        public double Value { get; set; }
-        public string Label { get; set; }
-    }
+        private async Task LoadAndRenderAsync()
+        {
+            LoadingOverlay.Visibility = Visibility.Visible;
+            EmptyState.Visibility     = Visibility.Collapsed;
+            ApplyBtn.IsEnabled        = false;
 
-    public class SearchResult
-    {
-        public int Id { get; set; }
-        public string DisplayName { get; set; }
+            try
+            {
+                var (points, rows, kpi) = await DataEngine.LoadAsync(
+                    _view, _startDate, _endDate,
+                    _includeOps, _includeInv,
+                    _entityType, _entityId);
+
+                _chartPoints = points;
+
+                // Update KPI cards
+                UpdateKpiCards(kpi);
+
+                // Draw chart
+                if (points.Any())
+                {
+                    EmptyState.Visibility = Visibility.Collapsed;
+                    DrawChart(points);
+                }
+                else
+                {
+                    EmptyState.Visibility = Visibility.Visible;
+                }
+
+                // Update table
+                _tableRows.Clear();
+                foreach (var r in rows) _tableRows.Add(r);
+                RowCountText.Text    = $"{_tableRows.Count} lignes";
+                LastRefreshText.Text = $"Actualisé à {DateTime.Now:HH:mm}";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors du chargement :\n{ex.Message}",
+                                "CGraphe", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            finally
+            {
+                LoadingOverlay.Visibility = Visibility.Collapsed;
+                ApplyBtn.IsEnabled        = true;
+            }
+        }
+
+        private void UpdateKpiCards(KpiSummary kpi)
+        {
+            Kpi1Value.Text = FormatMoney(kpi.TotalRevenue);
+            Kpi2Value.Text = kpi.OpCount.ToString("N0");
+            Kpi3Value.Text = FormatMoney(kpi.AvgBasket);
+            Kpi4Value.Text = FormatMoney(kpi.Gap);
+
+            SetTrend(Kpi1Trend, kpi.RevenueTrend);
+            SetTrend(Kpi2Trend, kpi.OpCountTrend);
+            SetTrend(Kpi3Trend, kpi.BasketTrend);
+            SetTrend(Kpi4Trend, kpi.GapTrend, invertColor: true);
+        }
+
+        private static string FormatMoney(double v)
+        {
+            if (Math.Abs(v) >= 1_000_000) return $"{v / 1_000_000:N1} M DH";
+            if (Math.Abs(v) >= 1_000)     return $"{v / 1_000:N1} K DH";
+            return $"{v:N0} DH";
+        }
+
+        private static void SetTrend(TextBlock tb, double val, bool invertColor = false)
+        {
+            bool positive = val >= 0;
+            bool green    = invertColor ? !positive : positive;
+            tb.Text       = (positive ? "▲ +" : "▼ ") + $"{Math.Abs(val):N1} %";
+            tb.Foreground = green
+                ? new SolidColorBrush(Color.FromRgb(0x38, 0xA1, 0x69))
+                : new SolidColorBrush(Color.FromRgb(0xE5, 0x3E, 0x3E));
+        }
+
+        // ─────────────────────────────────────────────────────────
+        //  CHART RENDERING
+        // ─────────────────────────────────────────────────────────
+
+        private void DrawChart(List<DashboardPoint> pts)
+        {
+            GraphCanvas.Children.Clear();
+            YAxisCanvas.Children.Clear();
+            XAxisCanvas.Children.Clear();
+            // DO NOT clear CrosshairCanvas here — ChartTooltip lives inside it.
+            // Only remove the crosshair line (if it exists); leave the tooltip element intact.
+            if (_crosshairLine != null)
+            {
+                CrosshairCanvas.Children.Remove(_crosshairLine);
+                _crosshairLine = null;
+            }
+            ChartTooltip.Visibility = Visibility.Collapsed;
+
+            double W = GraphCanvas.ActualWidth;
+            double H = GraphCanvas.ActualHeight;
+            if (W < 10 || H < 10 || !pts.Any()) return;
+
+            const double pad = 12;
+            double plotW = W - pad * 2;
+            double plotH = H - pad * 2;
+
+            double maxV = _combinedMode
+                ? pts.Max(p => p.OpsValue + p.InvValue)
+                : pts.Max(p => Math.Max(p.OpsValue, p.InvValue));
+            double minV = _combinedMode
+                ? pts.Min(p => p.OpsValue + p.InvValue)
+                : pts.Min(p => Math.Min(p.OpsValue, p.InvValue));
+            if (Math.Abs(maxV - minV) < 1) { maxV = 100; minV = 0; }
+            maxV = maxV * 1.12;
+            minV = minV >= 0 ? 0 : minV * 1.08;
+
+            int n = pts.Count;
+            Func<int, double>    Px = i => pad + (n == 1 ? plotW / 2 : i * plotW / (n - 1));
+            Func<double, double> Py = v => pad + plotH - ((v - minV) / (maxV - minV)) * plotH;
+
+            DrawYAxis(minV, maxV, plotH, pad, W);
+            DrawXAxis(pts, Px);
+
+            // In combined mode, merge both series into OpsValue for a single line
+            var drawPts = _combinedMode
+                ? pts.Select(p => new DashboardPoint
+                    {
+                        Date      = p.Date,
+                        DateLabel = p.DateLabel,
+                        OpsValue  = p.OpsValue + p.InvValue,
+                        InvValue  = 0,
+                        OpsCount  = p.OpsCount + p.InvCount,
+                        InvCount  = 0
+                    }).ToList()
+                : pts;
+
+            var gradColor = _combinedMode ? Color.FromRgb(0x38, 0xB2, 0xAC) : BlueColor; // teal for combined
+
+            if (_chartType == "area")
+            {
+                if (_combinedMode)
+                {
+                    DrawFilledSeries(drawPts, Px, Py, gradColor,   0.14, 0.45, useInv: false);
+                    DrawLineSeries  (drawPts, Px, Py, gradColor,   2.2,  useInv: false);
+                    DrawDots        (drawPts, Px, Py, gradColor,         useInv: false);
+                }
+                else
+                {
+                    DrawFilledSeries(drawPts, Px, Py, BlueColor,   0.14, 0.45, useInv: false);
+                    DrawFilledSeries(drawPts, Px, Py, PurpleColor, 0.10, 0.35, useInv: true);
+                    DrawLineSeries  (drawPts, Px, Py, BlueColor,   2.2,  useInv: false);
+                    DrawLineSeries  (drawPts, Px, Py, PurpleColor, 2.2,  useInv: true);
+                    DrawDots        (drawPts, Px, Py, BlueColor,         useInv: false);
+                    DrawDots        (drawPts, Px, Py, PurpleColor,       useInv: true);
+                }
+            }
+            else if (_chartType == "line")
+            {
+                if (_combinedMode)
+                {
+                    DrawLineSeries(drawPts, Px, Py, gradColor, 2.0, useInv: false);
+                    DrawDots      (drawPts, Px, Py, gradColor,      useInv: false);
+                }
+                else
+                {
+                    DrawLineSeries(drawPts, Px, Py, BlueColor,   2.0, useInv: false);
+                    DrawLineSeries(drawPts, Px, Py, PurpleColor, 2.0, useInv: true);
+                    DrawDots      (drawPts, Px, Py, BlueColor,        useInv: false);
+                    DrawDots      (drawPts, Px, Py, PurpleColor,      useInv: true);
+                }
+            }
+            else
+            {
+                DrawBarChart(drawPts, Px, Py);
+            }
+
+            // Reattach mouse events
+            GraphCanvas.MouseMove  -= OnMouseMove;
+            GraphCanvas.MouseLeave -= OnMouseLeave;
+            GraphCanvas.MouseMove  += OnMouseMove;
+            GraphCanvas.MouseLeave += OnMouseLeave;
+        }
+
+        // ── Area fill ─────────────────────────────────────────────
+        private void DrawFilledSeries(List<DashboardPoint> pts,
+            Func<int, double> Px, Func<double, double> Py,
+            Color col, double alphaTop, double alphaBot, bool useInv)
+        {
+            if (pts.Count < 2) return;
+            double H = GraphCanvas.ActualHeight;
+            const double pad = 12;
+
+            var fig = new PathFigure
+            {
+                StartPoint = new Point(Px(0), Py(useInv ? pts[0].InvValue : pts[0].OpsValue))
+            };
+
+            for (int i = 1; i < pts.Count; i++)
+            {
+                double x0 = Px(i - 1), y0 = Py(useInv ? pts[i - 1].InvValue : pts[i - 1].OpsValue);
+                double x1 = Px(i),     y1 = Py(useInv ? pts[i].InvValue     : pts[i].OpsValue);
+                double cx = (x0 + x1) / 2;
+                fig.Segments.Add(new BezierSegment(new Point(cx, y0), new Point(cx, y1), new Point(x1, y1), true));
+            }
+
+            double bottom = Math.Min(H - pad, Py(0));
+            fig.Segments.Add(new LineSegment(new Point(Px(pts.Count - 1), bottom), false));
+            fig.Segments.Add(new LineSegment(new Point(Px(0), bottom), false));
+            fig.IsClosed = true;
+
+            var grad = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(0, 1) };
+            grad.GradientStops.Add(new GradientStop(Color.FromArgb((byte)(alphaTop * 255), col.R, col.G, col.B), 0));
+            grad.GradientStops.Add(new GradientStop(Color.FromArgb((byte)(alphaBot * 255), col.R, col.G, col.B), 0.5));
+            grad.GradientStops.Add(new GradientStop(Color.FromArgb(0, col.R, col.G, col.B), 1));
+
+            GraphCanvas.Children.Add(new System.Windows.Shapes.Path
+            {
+                Data = new PathGeometry { Figures = { fig } },
+                Fill = grad, StrokeThickness = 0
+            });
+        }
+
+        // ── Line ──────────────────────────────────────────────────
+        private void DrawLineSeries(List<DashboardPoint> pts,
+            Func<int, double> Px, Func<double, double> Py,
+            Color col, double thickness, bool useInv)
+        {
+            if (pts.Count < 2) return;
+            var fig = new PathFigure
+            {
+                StartPoint = new Point(Px(0), Py(useInv ? pts[0].InvValue : pts[0].OpsValue))
+            };
+            for (int i = 1; i < pts.Count; i++)
+            {
+                double x0 = Px(i - 1), y0 = Py(useInv ? pts[i - 1].InvValue : pts[i - 1].OpsValue);
+                double x1 = Px(i),     y1 = Py(useInv ? pts[i].InvValue     : pts[i].OpsValue);
+                double cx = (x0 + x1) / 2;
+                fig.Segments.Add(new BezierSegment(new Point(cx, y0), new Point(cx, y1), new Point(x1, y1), true));
+            }
+            GraphCanvas.Children.Add(new System.Windows.Shapes.Path
+            {
+                Data = new PathGeometry { Figures = { fig } },
+                Stroke = new SolidColorBrush(col),
+                StrokeThickness = thickness,
+                Fill = Brushes.Transparent
+            });
+        }
+
+        // ── Dots ──────────────────────────────────────────────────
+        private void DrawDots(List<DashboardPoint> pts,
+            Func<int, double> Px, Func<double, double> Py,
+            Color col, bool useInv)
+        {
+            for (int i = 0; i < pts.Count; i++)
+            {
+                double v = useInv ? pts[i].InvValue : pts[i].OpsValue;
+                double x = Px(i), y = Py(v);
+                const double r = 4.5;
+                var el = new Ellipse
+                {
+                    Width = r * 2, Height = r * 2,
+                    Fill = new SolidColorBrush(col),
+                    Stroke = Brushes.White, StrokeThickness = 1.5,
+                    Effect = new DropShadowEffect { Color = col, Opacity = 0.5, BlurRadius = 8, ShadowDepth = 0 }
+                };
+                Canvas.SetLeft(el, x - r);
+                Canvas.SetTop (el, y - r);
+                GraphCanvas.Children.Add(el);
+            }
+        }
+
+        // ── Bar chart ─────────────────────────────────────────────
+        private void DrawBarChart(List<DashboardPoint> pts,
+            Func<int, double> Px, Func<double, double> Py)
+        {
+            int    n     = pts.Count;
+            double groupW = n > 1 ? (Px(1) - Px(0)) * 0.80 : 30;
+            double barW   = groupW / 2.1;
+            double zero   = Py(0);
+
+            for (int i = 0; i < n; i++)
+            {
+                DrawBar(Px(i) - barW - 1, Py(pts[i].OpsValue), barW, zero, BlueColor);
+                DrawBar(Px(i) + 1,        Py(pts[i].InvValue), barW, zero, PurpleColor);
+            }
+        }
+
+        private void DrawBar(double x, double top, double w, double zero, Color col)
+        {
+            double height = Math.Max(2, zero - top);
+            var grad = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(0, 1) };
+            grad.GradientStops.Add(new GradientStop(col, 0));
+            grad.GradientStops.Add(new GradientStop(
+                Color.FromRgb((byte)(col.R * 0.75), (byte)(col.G * 0.75), (byte)(col.B * 0.75)), 1));
+
+            var b = new Border
+            {
+                Width = w, Height = height,
+                Background = grad,
+                CornerRadius = new CornerRadius(4, 4, 0, 0),
+                Effect = new DropShadowEffect { Color = col, Opacity = 0.20, BlurRadius = 6, ShadowDepth = 0 }
+            };
+            Canvas.SetLeft(b, x);
+            Canvas.SetTop (b, top);
+            GraphCanvas.Children.Add(b);
+        }
+
+        // ── Y axis ────────────────────────────────────────────────
+        private void DrawYAxis(double minV, double maxV, double plotH, double pad, double W)
+        {
+            for (int s = 0; s <= 5; s++)
+            {
+                double frac = (double)s / 5;
+                double val  = minV + frac * (maxV - minV);
+                double y    = pad + plotH - frac * plotH;
+
+                GraphCanvas.Children.Add(new Line
+                {
+                    X1 = 0, X2 = W, Y1 = y, Y2 = y,
+                    Stroke = s == 0
+                             ? new SolidColorBrush(Color.FromRgb(0xC0, 0xC8, 0xD8))
+                             : new SolidColorBrush(Color.FromRgb(0xED, 0xF2, 0xF7)),
+                    StrokeThickness = s == 0 ? 1.2 : 0.8,
+                    StrokeDashArray = s > 0 ? new DoubleCollection { 4, 4 } : null
+                });
+
+                var lbl = new TextBlock
+                {
+                    Text = FormatAxis(val),
+                    FontSize = 10, FontFamily = new FontFamily("Segoe UI"),
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xA0, 0xAE, 0xC0))
+                };
+                Canvas.SetRight(lbl, 4);
+                Canvas.SetTop  (lbl, y - 8);
+                YAxisCanvas.Children.Add(lbl);
+            }
+        }
+
+        // ── X axis ────────────────────────────────────────────────
+        private void DrawXAxis(List<DashboardPoint> pts, Func<int, double> Px)
+        {
+            int n    = pts.Count;
+            int step = Math.Max(1, n / 8);
+            for (int i = 0; i < n; i += step)
+            {
+                var lbl = new TextBlock
+                {
+                    Text = pts[i].DateLabel,
+                    FontSize = 10, FontFamily = new FontFamily("Segoe UI"),
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xA0, 0xAE, 0xC0))
+                };
+                Canvas.SetLeft  (lbl, Px(i) - 20);
+                Canvas.SetBottom(lbl, 2);
+                XAxisCanvas.Children.Add(lbl);
+            }
+        }
+
+        private static string FormatAxis(double v)
+        {
+            if (Math.Abs(v) >= 1_000_000) return $"{v / 1_000_000:N1}M";
+            if (Math.Abs(v) >= 1_000)     return $"{v / 1_000:N0}K";
+            return $"{v:N0}";
+        }
+
+        // ── Mouse crosshair & tooltip ─────────────────────────────
+        private void GraphCanvas_MouseMove(object sender, MouseEventArgs e)
+            => OnMouseMove(sender, e);
+        private void GraphCanvas_MouseLeave(object sender, MouseEventArgs e)
+            => OnMouseLeave(sender, e);
+
+        private void OnMouseMove(object sender, MouseEventArgs e)
+        {
+            if (!_chartPoints.Any()) return;
+            _mouseOverChart = true;   // prevent SizeChanged from blanking the chart
+
+            var    pos  = e.GetPosition(GraphCanvas);
+            double W    = GraphCanvas.ActualWidth;
+            int    n    = _chartPoints.Count;
+            const double pad = 12;
+            Func<int, double> Px = i => pad + (n == 1 ? (W - pad * 2) / 2 : i * (W - pad * 2) / (n - 1));
+
+            int    best = 0;
+            double minD = double.MaxValue;
+            for (int i = 0; i < n; i++)
+            {
+                double d = Math.Abs(Px(i) - pos.X);
+                if (d < minD) { minD = d; best = i; }
+            }
+
+            var pt = _chartPoints[best];
+            double cx = Px(best);
+
+            // Reuse or create the crosshair line — never call Children.Clear() here
+            // so that ChartTooltip (also on CrosshairCanvas) is never removed.
+            if (_crosshairLine == null)
+            {
+                _crosshairLine = new Line
+                {
+                    Stroke          = new SolidColorBrush(Color.FromArgb(100, 0x66, 0x7E, 0xEA)),
+                    StrokeThickness = 1.2,
+                    StrokeDashArray = new DoubleCollection { 5, 4 }
+                };
+                CrosshairCanvas.Children.Insert(0, _crosshairLine); // insert below tooltip
+            }
+            _crosshairLine.Visibility = Visibility.Visible;
+            _crosshairLine.X1 = cx;
+            _crosshairLine.X2 = cx;
+            _crosshairLine.Y1 = 0;
+            _crosshairLine.Y2 = GraphCanvas.ActualHeight;
+
+            TooltipDate.Text = pt.DateLabel;
+
+            if (_combinedMode)
+            {
+                TooltipOps.Text      = $"Total: {FormatAxis(pt.OpsValue + pt.InvValue)} DH";
+                TooltipFact.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                TooltipOps.Text        = $"Op: {FormatAxis(pt.OpsValue)} DH";
+                TooltipFact.Text       = $"Fa: {FormatAxis(pt.InvValue)} DH";
+                TooltipFact.Visibility = _includeInv ? Visibility.Visible : Visibility.Collapsed;
+            }
+
+            ChartTooltip.Visibility = Visibility.Visible;
+
+            double tx = cx + 14;
+            if (tx + 160 > W) tx = cx - 170;
+            Canvas.SetLeft(ChartTooltip, tx);
+            Canvas.SetTop (ChartTooltip, 12);
+        }
+
+        private void OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            _mouseOverChart = false;
+            // Hide crosshair line without removing it (preserves ChartTooltip in visual tree)
+            if (_crosshairLine != null)
+                _crosshairLine.Visibility = Visibility.Collapsed;
+            ChartTooltip.Visibility = Visibility.Collapsed;
+        }
     }
 }

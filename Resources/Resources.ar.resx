@@ -1235,4 +1235,665 @@
   <data name="Year" xml:space="preserve">
     <value>سنة</value>
   </data>
+
+  <data name="Settings_Title" xml:space="preserve">
+    <value>الإعدادات</value>
+  </data>
+  <data name="Settings_UserManagement" xml:space="preserve">
+    <value>إدارة المستخدمين</value>
+  </data>
+  <data name="Settings_TicketSettings" xml:space="preserve">
+    <value>إعدادات التذاكر</value>
+  </data>
+  <data name="Settings_PaymentMethod" xml:space="preserve">
+    <value>طريقة الدفع</value>
+  </data>
+  <data name="Settings_AboutUs" xml:space="preserve">
+    <value>معلومات عنا</value>
+  </data>
+  <data name="Settings_Preferences" xml:space="preserve">
+    <value>التفضيلات</value>
+  </data>
+  <data name="Settings_BackButton" xml:space="preserve">
+    <value>←</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>A&amp;A Software Solution</value>
+  </data>
+  <data name="About_Tagline" xml:space="preserve">
+    <value>شريكك التقني الموثوق</value>
+  </data>
+  <data name="About_SolutionTitle" xml:space="preserve">
+    <value>حول حلنا</value>
+  </data>
+  <data name="About_Description1" xml:space="preserve">
+    <value>مرحبًا بك في A&amp;A Software Solution، شريكك الموثوق لحلول إدارة الأعمال التجارية. تم تصميم نظام نقاط البيع (POS) الخاص بنا لتبسيط وتحسين إدارة عملك، بغض النظر عن حجمه.</value>
+  </data>
+  <data name="About_Description2" xml:space="preserve">
+    <value>نحن نفهم التحديات اليومية التي يواجهها التجار الحديثون. لهذا السبب قمنا بتطوير حل شامل وبديهي وفعال يسمح لك بالتركيز على الأساسيات: تطوير عملك وإرضاء عملائك.</value>
+  </data>
+  <data name="About_MainFeatures" xml:space="preserve">
+    <value>الميزات الرئيسية</value>
+  </data>
+  <data name="About_SalesManagement" xml:space="preserve">
+    <value>إدارة المبيعات</value>
+  </data>
+  <data name="About_SalesManagementDesc" xml:space="preserve">
+    <value>معالجة سريعة للمعاملات بواجهة بديهية</value>
+  </data>
+  <data name="About_StockManagement" xml:space="preserve">
+    <value>إدارة المخزون</value>
+  </data>
+  <data name="About_StockManagementDesc" xml:space="preserve">
+    <value>تتبع في الوقت الفعلي لمخزونك وتنبيهات تلقائية</value>
+  </data>
+  <data name="About_ClientManagement" xml:space="preserve">
+    <value>إدارة العملاء</value>
+  </data>
+  <data name="About_ClientManagementDesc" xml:space="preserve">
+    <value>قاعدة بيانات عملاء كاملة وسجل المشتريات</value>
+  </data>
+  <data name="About_AutoInvoicing" xml:space="preserve">
+    <value>الفوترة التلقائية</value>
+  </data>
+  <data name="About_AutoInvoicingDesc" xml:space="preserve">
+    <value>إنشاء وطباعة الفواتير المهنية بنقرة واحدة</value>
+  </data>
+  <data name="About_DetailedReports" xml:space="preserve">
+    <value>تقارير مفصلة</value>
+  </data>
+  <data name="About_DetailedReportsDesc" xml:space="preserve">
+    <value>تحليلات عميقة لاتخاذ قرارات مستنيرة</value>
+  </data>
+  <data name="About_AdvancedSecurity" xml:space="preserve">
+    <value>أمان متقدم</value>
+  </data>
+  <data name="About_AdvancedSecurityDesc" xml:space="preserve">
+    <value>حماية البيانات مع إدارة حقوق الوصول</value>
+  </data>
+  <data name="About_ContactUs" xml:space="preserve">
+    <value>اتصل بنا</value>
+  </data>
+  <data name="About_ContactDesc" xml:space="preserve">
+    <value>فريقنا في خدمتك للإجابة على جميع أسئلتك، ومساعدتك في استخدام حلنا وتزويدك بدعم فني عالي الجودة.</value>
+  </data>
+  <data name="About_PrimaryContact" xml:space="preserve">
+    <value>جهة الاتصال الرئيسية</value>
+  </data>
+  <data name="About_SecondaryContact" xml:space="preserve">
+    <value>جهة الاتصال الثانوية</value>
+  </data>
+  <data name="About_Phone1" xml:space="preserve">
+    <value>06 17 23 29 32</value>
+  </data>
+  <data name="About_Phone2" xml:space="preserve">
+    <value>06 04 48 17 65</value>
+  </data>
+  <data name="About_Availability" xml:space="preserve">
+    <value>نحن متاحون من الاثنين إلى الجمعة</value>
+  </data>
+  <data name="About_WorkingHours" xml:space="preserve">
+    <value>من 9:00 صباحًا إلى 6:00 مساءً</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>© 2024 A&amp;A Software Solution</value>
+  </data>
+  <data name="About_Rights" xml:space="preserve">
+    <value>جميع الحقوق محفوظة - حل إدارة الأعمال المهنية</value>
+  </data>
+  <data name="Role_Name" xml:space="preserve">
+    <value>اسم الدور</value>
+  </data>
+  <data name="Role_Modify" xml:space="preserve">
+    <value>تعديل</value>
+  </data>
+  <data name="Role_Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="User_ID" xml:space="preserve">
+    <value>معرف المستخدم</value>
+  </data>
+  <data name="User_Name" xml:space="preserve">
+    <value>اسم المستخدم</value>
+  </data>
+  <data name="User_Code" xml:space="preserve">
+    <value>الرمز</value>
+  </data>
+  <data name="User_Role" xml:space="preserve">
+    <value>الدور</value>
+  </data>
+  <data name="User_Actions" xml:space="preserve">
+    <value>الإجراءات</value>
+  </data>
+  <data name="User_Edit" xml:space="preserve">
+    <value>✏ تعديل</value>
+  </data>
+  <data name="User_Delete" xml:space="preserve">
+    <value>🗑 حذف</value>
+  </data>
+  <data name="AddUser_Title" xml:space="preserve">
+    <value>إضافة مستخدم جديد</value>
+  </data>
+  <data name="AddUser_Description" xml:space="preserve">
+    <value>إنشاء حساب مستخدم جديد للنظام</value>
+  </data>
+  <data name="AddUser_FullName" xml:space="preserve">
+    <value>الاسم الكامل</value>
+  </data>
+  <data name="AddUser_Password" xml:space="preserve">
+    <value>كلمة المرور</value>
+  </data>
+  <data name="AddUser_Role" xml:space="preserve">
+    <value>الدور</value>
+  </data>
+  <data name="AddUser_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="AddUser_Create" xml:space="preserve">
+    <value>إنشاء المستخدم</value>
+  </data>
+  <data name="UpdateUser_Title" xml:space="preserve">
+    <value>تحديث مستخدم</value>
+  </data>
+  <data name="UpdateUser_Description" xml:space="preserve">
+    <value>تحديث حساب مستخدم للنظام</value>
+  </data>
+  <data name="UpdateUser_Apply" xml:space="preserve">
+    <value>تطبيق</value>
+  </data>
+  <data name="DeleteUser_Title" xml:space="preserve">
+    <value>تأكيد</value>
+  </data>
+  <data name="DeleteUser_ConfirmTitle" xml:space="preserve">
+    <value>تأكيد الحذف</value>
+  </data>
+  <data name="DeleteUser_Irreversible" xml:space="preserve">
+    <value>هذا الإجراء لا رجعة فيه</value>
+  </data>
+  <data name="DeleteUser_Question" xml:space="preserve">
+    <value>هل أنت متأكد من حذف هذا المستخدم؟</value>
+  </data>
+  <data name="DeleteUser_Warning" xml:space="preserve">
+    <value>سيتم فقدان جميع البيانات المرتبطة نهائيًا.</value>
+  </data>
+  <data name="DeleteUser_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="DeleteUser_Confirm" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="RoleWindow_Title" xml:space="preserve">
+    <value>إدارة الأدوار</value>
+  </data>
+  <data name="RoleWindow_Description" xml:space="preserve">
+    <value>إدارة أدوار المستخدمين والأذونات</value>
+  </data>
+  <data name="RoleWindow_Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="RoleWindow_AddRole" xml:space="preserve">
+    <value>+ إضافة دور</value>
+  </data>
+  <data name="Payment_Title" xml:space="preserve">
+    <value>طرق الدفع</value>
+  </data>
+  <data name="Payment_Description" xml:space="preserve">
+    <value>إدارة طرق الدفع المتاحة في نظامك</value>
+  </data>
+  <data name="Payment_NewMethod" xml:space="preserve">
+    <value>طريقة دفع جديدة</value>
+  </data>
+  <data name="Payment_MethodName" xml:space="preserve">
+    <value>اسم الطريقة:</value>
+  </data>
+  <data name="Payment_ImageIcon" xml:space="preserve">
+    <value>صورة/أيقونة:</value>
+  </data>
+  <data name="Payment_Browse" xml:space="preserve">
+    <value>📁</value>
+  </data>
+  <data name="Payment_AddMethod" xml:space="preserve">
+    <value>➕ إضافة الطريقة</value>
+  </data>
+  <data name="Payment_ExistingMethods" xml:space="preserve">
+    <value>طرق الدفع الموجودة</value>
+  </data>
+  <data name="Payment_Image" xml:space="preserve">
+    <value>صورة</value>
+  </data>
+  <data name="Payment_ID" xml:space="preserve">
+    <value>المعرف</value>
+  </data>
+  <data name="Payment_Name" xml:space="preserve">
+    <value>اسم الطريقة</value>
+  </data>
+  <data name="Payment_Actions" xml:space="preserve">
+    <value>الإجراءات</value>
+  </data>
+  <data name="Payment_Edit" xml:space="preserve">
+    <value>✏ تعديل</value>
+  </data>
+  <data name="Payment_Delete" xml:space="preserve">
+    <value>🗑 حذف</value>
+  </data>
+  <data name="Payment_NoMethods" xml:space="preserve">
+    <value>لا توجد طرق دفع</value>
+  </data>
+  <data name="Payment_AddFirst" xml:space="preserve">
+    <value>أضف طريقة الدفع الأولى أعلاه</value>
+  </data>
+  <data name="General_Title" xml:space="preserve">
+    <value>الإعدادات العامة</value>
+  </data>
+  <data name="General_Description" xml:space="preserve">
+    <value>خصص تجربتك وقم بتكوين الخيارات الافتراضية</value>
+  </data>
+  <data name="General_VirtualKeyboard" xml:space="preserve">
+    <value>عرض لوحة المفاتيح الافتراضية</value>
+  </data>
+  <data name="General_KeyboardDesc" xml:space="preserve">
+    <value>اختر سلوك لوحة المفاتيح باللمس عند الإدخال في حقول النص</value>
+  </data>
+  <data name="General_AlwaysShow" xml:space="preserve">
+    <value>🟢  إظهار لوحة المفاتيح دائمًا</value>
+  </data>
+  <data name="General_NeverShow" xml:space="preserve">
+    <value>🔴  عدم إظهار لوحة المفاتيح أبدًا</value>
+  </data>
+  <data name="General_Automatic" xml:space="preserve">
+    <value>🟡  تلقائي (عند النقر على الحقل)</value>
+  </data>
+  <data name="General_InvoiceDisplay" xml:space="preserve">
+    <value>عرض الفاتورة</value>
+  </data>
+  <data name="General_InvoiceDesc" xml:space="preserve">
+    <value>قم بتحسين مظهر مستنداتك عن طريق إخفاء الحقول الفارغة</value>
+  </data>
+  <data name="General_HideEmpty" xml:space="preserve">
+    <value>إخفاء التسميات الفارغة تلقائيًا في الفواتير</value>
+  </data>
+  <data name="General_StockManagement" xml:space="preserve">
+    <value>إدارة المخزون التلقائية</value>
+  </data>
+  <data name="General_StockDesc" xml:space="preserve">
+    <value>تنظيف مخزونك تلقائيًا عن طريق إزالة المواد غير المتوفرة</value>
+  </data>
+  <data name="General_DeleteZero" xml:space="preserve">
+    <value>حذف المواد ذات الكمية الصفرية تلقائيًا</value>
+  </data>
+  <data name="General_Language" xml:space="preserve">
+    <value>لغة الواجهة</value>
+  </data>
+  <data name="General_LanguageDesc" xml:space="preserve">
+    <value>تغيير لغة التطبيق (ستدخل التغييرات حيز التنفيذ فورًا)</value>
+  </data>
+  <data name="General_French" xml:space="preserve">
+    <value>🇫🇷  الفرنسية</value>
+  </data>
+  <data name="General_English" xml:space="preserve">
+    <value>🇬🇧  الإنجليزية</value>
+  </data>
+  <data name="General_Arabic" xml:space="preserve">
+    <value>🇸🇦  العربية</value>
+  </data>
+  <data name="General_PrintOptions" xml:space="preserve">
+    <value>خيارات الطباعة - البيع</value>
+  </data>
+  <data name="General_PrintDesc" xml:space="preserve">
+    <value>قم بتكوين خيارات الطباعة التلقائية لتوفير الوقت أثناء المبيعات</value>
+  </data>
+  <data name="General_PrintInvoice" xml:space="preserve">
+    <value>✓  تحديد 'طباعة الفاتورة' افتراضيًا</value>
+  </data>
+  <data name="General_PrintTicket" xml:space="preserve">
+    <value>✓  تحديد 'طباعة التذكرة' افتراضيًا</value>
+  </data>
+  <data name="General_DefaultPayment" xml:space="preserve">
+    <value>طريقة الدفع الافتراضية</value>
+  </data>
+  <data name="General_PaymentDesc" xml:space="preserve">
+    <value>حدد طريقة الدفع التي سيتم تحديدها مسبقًا لكل عملية بيع جديدة</value>
+  </data>
+  <data name="General_DefaultView" xml:space="preserve">
+    <value>العرض الافتراضي</value>
+  </data>
+  <data name="General_ViewDesc" xml:space="preserve">
+    <value>اختر وضع العرض المفضل لقائمة المواد</value>
+  </data>
+  <data name="General_CardView" xml:space="preserve">
+    <value>🎴  عرض البطاقات</value>
+  </data>
+  <data name="General_ListView" xml:space="preserve">
+    <value>📋  عرض القائمة (الصفوف)</value>
+  </data>
+  <data name="General_DefaultSort" xml:space="preserve">
+    <value>ترتيب الفرز الافتراضي</value>
+  </data>
+  <data name="General_SortDesc" xml:space="preserve">
+    <value>حدد ترتيب الفرز التلقائي لعرض المواد</value>
+  </data>
+  <data name="General_NameAZ" xml:space="preserve">
+    <value>📝  الاسم (أ-ي)</value>
+  </data>
+  <data name="General_NameZA" xml:space="preserve">
+    <value>📝  الاسم (ي-أ)</value>
+  </data>
+  <data name="General_PriceAsc" xml:space="preserve">
+    <value>💰  السعر تصاعديًا</value>
+  </data>
+  <data name="General_PriceDesc_Sort" xml:space="preserve">
+    <value>💰  السعر تنازليًا</value>
+  </data>
+  <data name="General_QtyAsc" xml:space="preserve">
+    <value>📦  الكمية تصاعديًا</value>
+  </data>
+  <data name="General_QtyDesc" xml:space="preserve">
+    <value>📦  الكمية تنازليًا</value>
+  </data>
+  <data name="General_NewestFirst" xml:space="preserve">
+    <value>🆕  الأحدث إلى الأقدم</value>
+  </data>
+  <data name="General_OldestFirst" xml:space="preserve">
+    <value>⏰  الأقدم إلى الأحدث</value>
+  </data>
+  <data name="General_IconSize" xml:space="preserve">
+    <value>حجم الأيقونة</value>
+  </data>
+  <data name="General_IconDesc" xml:space="preserve">
+    <value>اختر حجم عرض الأيقونة للمواد في عروض البطاقات</value>
+  </data>
+  <data name="General_LargeIcons" xml:space="preserve">
+    <value>📏  أيقونات كبيرة</value>
+  </data>
+  <data name="General_MediumIcons" xml:space="preserve">
+    <value>📐  أيقونات متوسطة</value>
+  </data>
+  <data name="General_SmallIcons" xml:space="preserve">
+    <value>📌  أيقونات صغيرة</value>
+  </data>
+  <data name="General_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="General_Save" xml:space="preserve">
+    <value>💾  حفظ</value>
+  </data>
+  <data name="Preview_Title" xml:space="preserve">
+    <value>معاينة التذكرة</value>
+  </data>
+  <data name="Preview_Header" xml:space="preserve">
+    <value>معاينة التذكرة</value>
+  </data>
+  <data name="Preview_Close" xml:space="preserve">
+    <value>إغلاق</value>
+  </data>
+  <data name="Perm_ConfigTitle" xml:space="preserve">
+    <value>تكوين الأذونات</value>
+  </data>
+  <data name="Perm_ManageDesc" xml:space="preserve">
+    <value>إدارة الأذونات حسب نوع المستخدم</value>
+  </data>
+  <data name="Perm_ActivateAll" xml:space="preserve">
+    <value>تفعيل الكل</value>
+  </data>
+  <data name="Perm_DeactivateAll" xml:space="preserve">
+    <value>إلغاء تفعيل الكل</value>
+  </data>
+  <data name="Perm_RoleName" xml:space="preserve">
+    <value>اسم الدور</value>
+  </data>
+  <data name="Perm_PageAccess" xml:space="preserve">
+    <value>الوصول إلى الصفحات</value>
+  </data>
+  <data name="Perm_Activate" xml:space="preserve">
+    <value>تفعيل</value>
+  </data>
+  <data name="Perm_Deactivate" xml:space="preserve">
+    <value>إلغاء التفعيل</value>
+  </data>
+  <data name="Perm_ClientsPage" xml:space="preserve">
+    <value>صفحة العملاء</value>
+  </data>
+  <data name="Perm_SuppliersPage" xml:space="preserve">
+    <value>صفحة الموردين</value>
+  </data>
+  <data name="Perm_InventoryPage" xml:space="preserve">
+    <value>صفحة المخزون</value>
+  </data>
+  <data name="Perm_SalesPage" xml:space="preserve">
+    <value>صفحة المبيعات</value>
+  </data>
+  <data name="Perm_ClientPerms" xml:space="preserve">
+    <value>أذونات العميل</value>
+  </data>
+  <data name="Perm_CreateClient" xml:space="preserve">
+    <value>إنشاء عميل</value>
+  </data>
+  <data name="Perm_ModifyClient" xml:space="preserve">
+    <value>تعديل عميل</value>
+  </data>
+  <data name="Perm_DeleteClient" xml:space="preserve">
+    <value>حذف عميل</value>
+  </data>
+  <data name="Perm_ViewClient" xml:space="preserve">
+    <value>عرض عميل</value>
+  </data>
+  <data name="Perm_ViewClientOps" xml:space="preserve">
+    <value>عرض العمليات</value>
+  </data>
+  <data name="Perm_PayClient" xml:space="preserve">
+    <value>دفع للعميل</value>
+  </data>
+  <data name="Perm_ViewClientCredit" xml:space="preserve">
+    <value>عرض رصيد العميل</value>
+  </data>
+  <data name="Perm_SupplierPerms" xml:space="preserve">
+    <value>أذونات المورد</value>
+  </data>
+  <data name="Perm_CreateSupplier" xml:space="preserve">
+    <value>إنشاء مورد</value>
+  </data>
+  <data name="Perm_ModifySupplier" xml:space="preserve">
+    <value>تعديل مورد</value>
+  </data>
+  <data name="Perm_DeleteSupplier" xml:space="preserve">
+    <value>حذف مورد</value>
+  </data>
+  <data name="Perm_ViewSupplier" xml:space="preserve">
+    <value>عرض مورد</value>
+  </data>
+  <data name="Perm_ViewSupplierOps" xml:space="preserve">
+    <value>عرض العمليات</value>
+  </data>
+  <data name="Perm_PaySupplier" xml:space="preserve">
+    <value>دفع للمورد</value>
+  </data>
+  <data name="Perm_ViewSupplierCredit" xml:space="preserve">
+    <value>عرض رصيد المورد</value>
+  </data>
+  <data name="Perm_Operations" xml:space="preserve">
+    <value>العمليات والحركات</value>
+  </data>
+  <data name="Perm_ReverseOp" xml:space="preserve">
+    <value>إلغاء العملية</value>
+  </data>
+  <data name="Perm_ReverseMove" xml:space="preserve">
+    <value>إلغاء الحركة</value>
+  </data>
+  <data name="Perm_ViewOps" xml:space="preserve">
+    <value>عرض العمليات</value>
+  </data>
+  <data name="Perm_ViewMoves" xml:space="preserve">
+    <value>عرض الحركات</value>
+  </data>
+  <data name="Perm_Management" xml:space="preserve">
+    <value>الإدارة والإعدادات</value>
+  </data>
+  <data name="Perm_ViewProjMgmt" xml:space="preserve">
+    <value>عرض إدارة المشاريع</value>
+  </data>
+  <data name="Perm_ViewSettings" xml:space="preserve">
+    <value>عرض الإعدادات</value>
+  </data>
+  <data name="Perm_UsersRoles" xml:space="preserve">
+    <value>المستخدمين والأدوار</value>
+  </data>
+  <data name="Perm_ViewUsers" xml:space="preserve">
+    <value>عرض المستخدمين</value>
+  </data>
+  <data name="Perm_AddUsers" xml:space="preserve">
+    <value>إضافة مستخدمين</value>
+  </data>
+  <data name="Perm_EditUsers" xml:space="preserve">
+    <value>تعديل المستخدمين</value>
+  </data>
+  <data name="Perm_DeleteUsers" xml:space="preserve">
+    <value>حذف المستخدمين</value>
+  </data>
+  <data name="Perm_ViewRoles" xml:space="preserve">
+    <value>عرض الأدوار</value>
+  </data>
+  <data name="Perm_AddRoles" xml:space="preserve">
+    <value>إضافة أدوار</value>
+  </data>
+  <data name="Perm_DeleteRoles" xml:space="preserve">
+    <value>حذف الأدوار</value>
+  </data>
+  <data name="Perm_Families" xml:space="preserve">
+    <value>العائلات</value>
+  </data>
+  <data name="Perm_ViewFamilies" xml:space="preserve">
+    <value>عرض العائلات</value>
+  </data>
+  <data name="Perm_AddFamilies" xml:space="preserve">
+    <value>إضافة عائلات</value>
+  </data>
+  <data name="Perm_EditFamilies" xml:space="preserve">
+    <value>تعديل العائلات</value>
+  </data>
+  <data name="Perm_DeleteFamilies" xml:space="preserve">
+    <value>حذف العائلات</value>
+  </data>
+  <data name="Perm_Articles" xml:space="preserve">
+    <value>المواد</value>
+  </data>
+  <data name="Perm_ViewArticles" xml:space="preserve">
+    <value>عرض المواد</value>
+  </data>
+  <data name="Perm_AddArticles" xml:space="preserve">
+    <value>إضافة مواد</value>
+  </data>
+  <data name="Perm_EditArticles" xml:space="preserve">
+    <value>تعديل المواد</value>
+  </data>
+  <data name="Perm_DeleteArticles" xml:space="preserve">
+    <value>حذف المواد</value>
+  </data>
+  <data name="Perm_Reports" xml:space="preserve">
+    <value>التقارير</value>
+  </data>
+  <data name="Perm_ViewReports" xml:space="preserve">
+    <value>عرض التقارير</value>
+  </data>
+  <data name="Perm_Settlements" xml:space="preserve">
+    <value>التسويات</value>
+  </data>
+  <data name="Perm_SettleSupplier" xml:space="preserve">
+    <value>تسوية المورد</value>
+  </data>
+  <data name="Perm_SettleClient" xml:space="preserve">
+    <value>تسوية العميل</value>
+  </data>
+  <data name="Perm_CashClient" xml:space="preserve">
+    <value>نقدي العميل</value>
+  </data>
+  <data name="Perm_CashSupplier" xml:space="preserve">
+    <value>نقدي المورد</value>
+  </data>
+  <data name="Perm_InvoiceSettings" xml:space="preserve">
+    <value>إعدادات التذكرة</value>
+  </data>
+  <data name="Perm_ViewInvSettings" xml:space="preserve">
+    <value>عرض الإعدادات</value>
+  </data>
+  <data name="Perm_ModifyInvSettings" xml:space="preserve">
+    <value>تعديل الإعدادات</value>
+  </data>
+  <data name="Perm_PaymentMethods" xml:space="preserve">
+    <value>طرق الدفع</value>
+  </data>
+  <data name="Perm_ViewPayMethods" xml:space="preserve">
+    <value>عرض الطرق</value>
+  </data>
+  <data name="Perm_AddPayMethods" xml:space="preserve">
+    <value>إضافة طرق</value>
+  </data>
+  <data name="Perm_ModifyPayMethods" xml:space="preserve">
+    <value>تعديل الطرق</value>
+  </data>
+  <data name="Perm_DeletePayMethods" xml:space="preserve">
+    <value>حذف الطرق</value>
+  </data>
+  <data name="Perm_Invoicing" xml:space="preserve">
+    <value>الفوترة</value>
+  </data>
+  <data name="Perm_AccessInvoicing" xml:space="preserve">
+    <value>الوصول إلى الفوترة</value>
+  </data>
+  <data name="Perm_CreateInvoice" xml:space="preserve">
+    <value>إنشاء فاتورة</value>
+  </data>
+  <data name="Perm_InvoiceHistory" xml:space="preserve">
+    <value>سجل الفواتير</value>
+  </data>
+  <data name="Perm_CheckHistory" xml:space="preserve">
+    <value>سجل الشيكات</value>
+  </data>
+  <data name="Perm_SavedInvoices" xml:space="preserve">
+    <value>الفواتير المحفوظة</value>
+  </data>
+  <data name="Perm_Delivery" xml:space="preserve">
+    <value>التوصيل</value>
+  </data>
+  <data name="Perm_AccessDelivery" xml:space="preserve">
+    <value>الوصول إلى التوصيل</value>
+  </data>
+  <data name="Perm_CreateDelivery" xml:space="preserve">
+    <value>إنشاء توصيل</value>
+  </data>
+  <data name="Perm_DeliveryMgmt" xml:space="preserve">
+    <value>إدارة التوصيل</value>
+  </data>
+  <data name="Perm_SystemActions" xml:space="preserve">
+    <value>إجراءات النظام</value>
+  </data>
+  <data name="Perm_ViewAbout" xml:space="preserve">
+    <value>عرض معلومات عنا</value>
+  </data>
+  <data name="Perm_Logout" xml:space="preserve">
+    <value>تسجيل الخروج</value>
+  </data>
+  <data name="Perm_Exit" xml:space="preserve">
+    <value>إنهاء التطبيق</value>
+  </data>
+  <data name="Perm_Shutdown" xml:space="preserve">
+    <value>إيقاف النظام</value>
+  </data>
+  <data name="Perm_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="Perm_Apply" xml:space="preserve">
+    <value>تطبيق</value>
+  </data>
+  <data name="Keyboard_Language" xml:space="preserve">
+    <value>اللغة</value>
+  </data>
+  <data name="Keyboard_FR" xml:space="preserve">
+    <value>🇫🇷 FR</value>
+  </data>
+  <data name="Keyboard_EN" xml:space="preserve">
+    <value>🇬🇧 EN</value>
+  </data>
+  <data name="Keyboard_AR" xml:space="preserve">
+    <value>🇸🇦 AR</value>
+  </data>
 </root>
